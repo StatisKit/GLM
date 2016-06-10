@@ -1,0 +1,34 @@
+about:
+  authors:
+  - Pierre Fernique
+  brief: ''
+  email: statiskit@googlegroups.com
+  name: StatisKit-GLM
+authors:
+  basename: AUTHORS.rst
+  format: '* {name} <{email}> ({score})'
+  plugin: commit
+coveralls:
+  account: StatisKit
+  host: github
+  project: StatisKit-GLM
+landscape:
+  account: StatisKit
+  host: github
+  project: StatisKit-GLM
+license:
+  basename: LICENSE.rst
+  plugin: CeCILL-C
+  width: 78
+readthedocs:
+  project: StatisKit-GLM
+rst:
+  plugin: default
+  target:
+  - README.rst
+  - doc/index.rst
+travis:
+  account: StatisKit
+  project: StatisKit-GLM
+version:
+  plugin: semantic

@@ -1,0 +1,11 @@
+\
+doc/_*
+*.egg-info
+*~
+*.back
+build
+*.pyc
+*.so
+*.so
+*.o
+.coverage
