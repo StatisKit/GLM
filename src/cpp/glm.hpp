@@ -45,7 +45,7 @@ namespace statiskit
 
         template<class T, class L>
             unsigned int GeneralizedLinearModel< T, L >::get_nb_parameters() const
-            { return _family->get_nb_parameters() + _predictor->get_delta().size(); }
+            { return _family->get_nb_parameters() + _predictor->get_delta_size(); }
 
         template<class T, class L>
             const typename L::predictor_type* GeneralizedLinearModel< T, L >::get_predictor() const

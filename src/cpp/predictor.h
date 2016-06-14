@@ -36,6 +36,8 @@ namespace statiskit
         	/// \Brief Get the vector of slopes delta.
 			const arma::colvec& get_delta() const;
 			
+			size_t get_delta_size() const;
+			
 			/** \Brief Set the vector of slopes delta.
 			*   \details The length of \f$\delta\f$ must be equal to the lenght of \f$ \boldsymbol{x} \f$.
 			* */
@@ -70,73 +72,85 @@ namespace statiskit
     class VectorPredictor
     {
         public:
-            VectorPredictor(const std::shared_ptr< MultivariateSampleSpace >& explanatory_space, const size_t& nb_cols);
+            VectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols);
             virtual ~VectorPredictor();
 			VectorPredictor(const VectorPredictor& predictor);
 			
             virtual arma::colvec operator() (const MultivariateEvent& event) const = 0;
 
-            const std::shared_ptr< MultivariateSampleSpace >& get_explanatory_space() const;
+            const MultivariateSampleSpace* get_explanatory_space() const;
             
             const arma::colvec& get_alpha() const;
 			void set_alpha(const arma::colvec& alpha);
 
 			virtual void set_beta(const arma::colvec& beta) = 0;
+			virtual size_t get_delta_size() const = 0;
+						
+            virtual std::unique_ptr< VectorPredictor > copy() const = 0;
 			
         protected:
-            std::shared_ptr< MultivariateSampleSpace > _explanatory_space;	
+            MultivariateSampleSpace* _explanatory_space;	
             arma::colvec _alpha;	
     };
 
-    class CompletePredictor : VectorPredictor
+    class CompletePredictor : public VectorPredictor
     {
         public:
-            CompletePredictor(const std::shared_ptr< MultivariateSampleSpace >& explanatory_space, const size_t& nb_cols);
+            CompletePredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols);
             virtual ~CompletePredictor();
             CompletePredictor(const CompletePredictor& predictor);
 
             virtual arma::colvec operator() (const MultivariateEvent& event) const;
             
             virtual void set_beta(const arma::colvec& beta);
+			virtual size_t get_delta_size() const;
 			
 			const arma::mat& get_delta() const;
 			void set_delta(const arma::mat& delta);
 			
+            virtual std::unique_ptr< VectorPredictor > copy() const;	
+            		
         protected:
             arma::mat _delta;
     };    
     
-    class ProportionalPredictor : VectorPredictor
+    class ProportionalPredictor : public VectorPredictor
     {
         public:
-            ProportionalPredictor(const std::shared_ptr< MultivariateSampleSpace >& explanatory_space, const size_t& nb_cols);
+            ProportionalPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols);
             virtual ~ProportionalPredictor();
             ProportionalPredictor(const ProportionalPredictor& predictor);
 
             virtual arma::colvec operator() (const MultivariateEvent& event) const;
             
             virtual void set_beta(const arma::colvec& beta);
+			virtual size_t get_delta_size() const;
 			
 			const arma::colvec& get_delta() const;
 			void set_delta(const arma::colvec& delta);
 			
+            virtual std::unique_ptr< VectorPredictor > copy() const;	
+            			
         protected:
             arma::colvec _delta;
     }; 
 
-    class ConstrainedVectorPredictor : VectorPredictor
+    class ConstrainedVectorPredictor : public VectorPredictor
     {
         public:
-            ConstrainedVectorPredictor(const std::shared_ptr< MultivariateSampleSpace >& explanatory_space, const size_t& nb_cols, const arma::mat& constraint);
+            ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols, const arma::mat& constraint);
             virtual ~ConstrainedVectorPredictor();
             ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor);
 
             virtual arma::colvec operator() (const MultivariateEvent& event) const;
             
             virtual void set_beta(const arma::colvec& beta);
+            virtual size_t get_delta_size() const;
             
 			const arma::mat& get_constraint() const;
-			void set_constraint(const arma::mat& constraint);            
+			void set_constraint(const arma::mat& constraint);    
+			        
+			virtual std::unique_ptr< VectorPredictor > copy() const;
 
         protected:
         	arma::colvec _delta;

@@ -1,5 +1,6 @@
 #include <statiskit/core/base.h>
 #include <statiskit/glm/predictor.h>
+#include <statiskit/glm/link.h>
 
 #ifndef STATISKIT_GLM_GLM_H
 #define STATISKIT_GLM_GLM_H
@@ -38,33 +39,46 @@ namespace statiskit
                 typename L::predictor_type* _predictor;
                 typename L::family_type* _family;
 
-                virtual void update(const double& value) = 0;
-        };
-
-        struct UnivariateLink
+                virtual void update(const typename L::expectation_type& value) = 0;
+        };            
+       
+        class PoissonRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, PoissonLink >
         {
-            typedef ScalarPredictor predictor_type;
-
-            virtual double inverse(const double& value) const = 0;
-
-        };
-
-        struct BinomialLink : UnivariateLink
-        {
-            typedef BinomialDistribution family_type;
-
-            virtual double inverse(const double& value) const;
-
-            virtual std::unique_ptr< BinomialLink > copy() const;
-        };
+            public:
+                PoissonRegression(const ScalarPredictor& predictor, const PoissonLink& link);
+                
+            private:
+                virtual void update(const double& value);                
+        };          
 
         class BinomialRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, BinomialLink >
         {
             public:
                 BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link);
+                
             private:
                 virtual void update(const double& value);                
         };
+      
+        class NegativeBinomialRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, NegativeBinomialLink >
+        {
+            public:
+                NegativeBinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link);
+                
+            private:
+                virtual void update(const double& value);                
+        };
+        
+        class ReferenceRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >
+        {
+        	typedef CategoricalEvent event_type;
+        	
+            public:
+                ReferenceRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const NominalLink& link);
+                
+            private:
+                virtual void update(const std::vector<double>& values);                
+        };                
     }
 }
 
