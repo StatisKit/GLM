@@ -69,16 +69,27 @@ namespace statiskit
                 virtual void update(const double& value);                
         };
         
-        class ReferenceRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >
+        class NominalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, CategoricalLink >
         {
         	typedef CategoricalEvent event_type;
         	
             public:
-                ReferenceRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const NominalLink& link);
+                NominalRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const CategoricalLink& link);
                 
             private:
                 virtual void update(const std::vector<double>& values);                
-        };                
+        };
+        
+        class ReferenceRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, ReferenceLink >
+        {
+        	typedef CategoricalEvent event_type;
+        	
+            public:
+                ReferenceRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const ReferenceLink& link);
+                
+            private:
+                virtual void update(const std::vector<double>& values);                
+        };                        
     }
 }
 

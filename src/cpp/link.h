@@ -95,19 +95,20 @@ namespace statiskit
             typedef std::vector<double> expectation_type;
             
             virtual std::vector<double> inverse(const arma::colvec& values) const = 0;
-
+            
+//            virtual std::unique_ptr< VectorLink > copy() const = 0;
         };
         
-        struct NominalLink : VectorLink
+        struct CategoricalLink : VectorLink
         {
-            typedef NominalDistribution family_type;
+            typedef CategoricalUnivariateDistribution family_type;
 
             virtual std::vector<double> inverse(const arma::colvec& values) const;
 
-            virtual std::unique_ptr< NominalLink > copy() const;
+            virtual std::unique_ptr< CategoricalLink > copy() const;
         };
         
-        class ReferenceLink : public NominalLink
+        class ReferenceLink : public CategoricalLink
         {
         	public:
 		    	ReferenceLink();
@@ -117,21 +118,37 @@ namespace statiskit
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
-		        virtual std::unique_ptr< NominalLink > copy() const;
+		        virtual std::unique_ptr< CategoricalLink > copy() const;
             
             protected:
             	ContinuousUnivariateDistribution* _distribution;
         };
+        
+//        class AdjacentLink : public CategoricalLink
+//        {
+//        	public:
+//		    	AdjacentLink();
+//		    	virtual ~AdjacentLink();
+//		    	
+//		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+//		        
+//		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+
+//		        virtual std::unique_ptr< VectorLink > copy() const;
+//            
+//            protected:
+//            	ContinuousUnivariateDistribution* _distribution;
+//        };        
  
        
-        struct OrdinalLink : VectorLink
-        {
-            typedef OrdinalDistribution family_type;
+//        struct OrdinalLink : VectorLink
+//        {
+//            typedef OrdinalDistribution family_type;
 
-            virtual std::vector<double> inverse(const arma::colvec& values) const;
+//            virtual std::vector<double> inverse(const arma::colvec& values) const;
 
-            virtual std::unique_ptr< OrdinalLink > copy() const;
-        };                              
+//            virtual std::unique_ptr< OrdinalLink > copy() const;
+//        };                              
 }
 
 #endif

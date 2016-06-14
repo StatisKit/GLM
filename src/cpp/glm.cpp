@@ -25,13 +25,26 @@ namespace statiskit
         { _family->set_pi(value); } 
         
         
-        ReferenceRegression::ReferenceRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const NominalLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >(predictor, link)
+        NominalRegression::NominalRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const CategoricalLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, CategoricalLink >(predictor, link)
+        {
+        	std::vector< double > pi;
+        	_family = new NominalDistribution(values, pi); 
+        }
+
+        void NominalRegression::update(const std::vector< double >& values)
+        { _family->set_pi(values); }   
+        
+        
+        ReferenceRegression::ReferenceRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const ReferenceLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, ReferenceLink >(predictor, link)
         {
         	std::vector< double > pi;
         	_family = new NominalDistribution(values, pi); 
         }
 
         void ReferenceRegression::update(const std::vector< double >& values)
-        { _family->set_pi(values); }                   
+        { _family->set_pi(values); }
+        
+            
+                              
     }
 }

@@ -5,7 +5,7 @@ namespace statiskit
         double PoissonLink::inverse(const double& value) const
         { return exp(value); }
 
-        std::unique_ptr< PoissonLink > PoissonLink::copy() const
+        std::unique_ptr< ScalarLink > PoissonLink::copy() const
         { return std::make_unique< PoissonLink >(*this); } 
 
 
@@ -22,7 +22,7 @@ namespace statiskit
         { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); }
 
         std::unique_ptr< PoissonLink > PoissonFLink::copy() const
-        { return std::make_unique< PoissonLink >(*this); }        
+        { return std::make_unique< PoissonFLink >(*this); }        
 
                    
         double BinomialLink::inverse(const double& value) const
@@ -45,7 +45,7 @@ namespace statiskit
         { return _distribution->cdf(value); }
 
         std::unique_ptr< BinomialLink > BinomialFLink::copy() const
-        { return std::make_unique< BinomialLink >(*this); }  
+        { return std::make_unique< BinomialFLink >(*this); }  
            
            
         double NegativeBinomialLink::inverse(const double& value) const
@@ -68,10 +68,10 @@ namespace statiskit
         { return _distribution->cdf(value); }
 
         std::unique_ptr< NegativeBinomialLink > NegativeBinomialFLink::copy() const
-        { return std::make_unique< NegativeBinomialLink >(*this); }
+        { return std::make_unique< NegativeBinomialFLink >(*this); }
         
         
-        std::vector<double> NominalLink::inverse(const arma::colvec& values) const
+        std::vector<double> CategoricalLink::inverse(const arma::colvec& values) const
         {
         	std::vector<double> pi( values.size() );
         	double norm = 1;
@@ -83,8 +83,8 @@ namespace statiskit
         	return pi; 
         } 
         
-        std::unique_ptr< NominalLink > NominalLink::copy() const
-        { return std::make_unique< NominalLink >(*this); }
+        std::unique_ptr< CategoricalLink > CategoricalLink::copy() const
+        { return std::make_unique< CategoricalLink >(*this); }
         
         
 		ReferenceLink::ReferenceLink()
@@ -108,24 +108,24 @@ namespace statiskit
         	return pi; 
         }        
 
-        std::unique_ptr< NominalLink > ReferenceLink::copy() const
+        std::unique_ptr< CategoricalLink > ReferenceLink::copy() const
         { return std::make_unique< ReferenceLink >(*this); } 
         
-        
-        std::vector<double> OrdinalLink::inverse(const arma::colvec& values) const
-        {
-        	std::vector<double> ordered_pi( values.size() );
-        	double norm = 1;
-        	for(size_t j=0; j<values.size(); ++j)
-        	{ norm += exp( values(j) ); }
-        	for(size_t j=0; j<values.size(); ++j)
-        	{ ordered_pi[j] = exp( values(j) ) / norm; }    
-        	    	
-        	return ordered_pi; 
-        } 
-        
-        std::unique_ptr< OrdinalLink > OrdinalLink::copy() const
-        { return std::make_unique< OrdinalLink >(*this); }                
+//        
+//        std::vector<double> OrdinalLink::inverse(const arma::colvec& values) const
+//        {
+//        	std::vector<double> ordered_pi( values.size() );
+//        	double norm = 1;
+//        	for(size_t j=0; j<values.size(); ++j)
+//        	{ norm += exp( values(j) ); }
+//        	for(size_t j=0; j<values.size(); ++j)
+//        	{ ordered_pi[j] = exp( values(j) ) / norm; }    
+//        	    	
+//        	return ordered_pi; 
+//        } 
+//        
+//        std::unique_ptr< OrdinalLink > OrdinalLink::copy() const
+//        { return std::make_unique< OrdinalLink >(*this); }                
 }
 
 
