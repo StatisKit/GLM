@@ -25,7 +25,7 @@ namespace statiskit
         { _family->set_pi(value); } 
         
         
-        NominalRegression::NominalRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const CategoricalLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, CategoricalLink >(predictor, link)
+        NominalRegression::NominalRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const NominalLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >(predictor, link)
         {
         	std::vector< double > pi;
         	_family = new NominalDistribution(values, pi); 
@@ -44,7 +44,42 @@ namespace statiskit
         void ReferenceRegression::update(const std::vector< double >& values)
         { _family->set_pi(values); }
         
-            
-                              
+        OrdinalRegression::OrdinalRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const OrdinalLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, OrdinalLink >(predictor, link)
+        {
+        	std::vector< double > pi;
+        	_family = new OrdinalDistribution(values, rank, pi); 
+        }
+
+        void OrdinalRegression::update(const std::vector< double >& values)
+        { _family->set_ordered_pi(values); } 
+                
+        AdjacentRegression::AdjacentRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const AdjacentLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, AdjacentLink >(predictor, link)
+        {
+        	std::vector< double > pi;
+        	_family = new OrdinalDistribution(values, rank, pi); 
+        }
+
+        void AdjacentRegression::update(const std::vector< double >& values)
+        { _family->set_ordered_pi(values); }            
+ 
+                
+        CumulativeRegression::CumulativeRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const CumulativeLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, CumulativeLink >(predictor, link)
+        {
+        	std::vector< double > pi;
+        	_family = new OrdinalDistribution(values, rank, pi); 
+        }
+
+        void CumulativeRegression::update(const std::vector< double >& values)
+        { _family->set_ordered_pi(values); }
+        
+                
+        SequentialRegression::SequentialRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const SequentialLink& link) :  GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, SequentialLink >(predictor, link)
+        {
+        	std::vector< double > pi;
+        	_family = new OrdinalDistribution(values, rank, pi); 
+        }
+
+        void SequentialRegression::update(const std::vector< double >& values)
+        { _family->set_ordered_pi(values); }                                 
     }
 }

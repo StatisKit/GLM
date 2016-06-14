@@ -8,7 +8,7 @@ namespace statiskit
         template<class T, class L>
             GeneralizedLinearModel< T, L >::GeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link)
             {
-                _link = link.copy().release();
+                _link = static_cast< L* >( link.copy().release() );
                 _predictor = predictor.copy().release();
             }
 

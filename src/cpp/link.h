@@ -99,16 +99,16 @@ namespace statiskit
 //            virtual std::unique_ptr< VectorLink > copy() const = 0;
         };
         
-        struct CategoricalLink : VectorLink
+        struct NominalLink : VectorLink
         {
-            typedef CategoricalUnivariateDistribution family_type;
+            typedef NominalDistribution family_type;
 
             virtual std::vector<double> inverse(const arma::colvec& values) const;
 
-            virtual std::unique_ptr< CategoricalLink > copy() const;
+            virtual std::unique_ptr< NominalLink > copy() const;
         };
         
-        class ReferenceLink : public CategoricalLink
+        class ReferenceLink : public NominalLink
         {
         	public:
 		    	ReferenceLink();
@@ -118,37 +118,68 @@ namespace statiskit
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
-		        virtual std::unique_ptr< CategoricalLink > copy() const;
+		        virtual std::unique_ptr< NominalLink > copy() const;
             
             protected:
             	ContinuousUnivariateDistribution* _distribution;
         };
         
-//        class AdjacentLink : public CategoricalLink
-//        {
-//        	public:
-//		    	AdjacentLink();
-//		    	virtual ~AdjacentLink();
-//		    	
-//		        virtual std::vector<double> inverse(const arma::colvec& value) const;
-//		        
-//		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+        struct OrdinalLink : VectorLink
+        {
+            typedef OrdinalDistribution family_type;
 
-//		        virtual std::unique_ptr< VectorLink > copy() const;
-//            
-//            protected:
-//            	ContinuousUnivariateDistribution* _distribution;
-//        };        
- 
-       
-//        struct OrdinalLink : VectorLink
-//        {
-//            typedef OrdinalDistribution family_type;
+            virtual std::vector<double> inverse(const arma::colvec& values) const;
 
-//            virtual std::vector<double> inverse(const arma::colvec& values) const;
+            virtual std::unique_ptr< OrdinalLink > copy() const;
+        };
+                
+        class AdjacentLink : public OrdinalLink
+        {
+        	public:
+		    	AdjacentLink();
+		    	virtual ~AdjacentLink();
+		    	
+		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        
+		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
-//            virtual std::unique_ptr< OrdinalLink > copy() const;
-//        };                              
+		        virtual std::unique_ptr< OrdinalLink > copy() const;
+            
+            protected:
+            	ContinuousUnivariateDistribution* _distribution;
+        };  
+        
+        class CumulativeLink : public OrdinalLink
+        {
+        	public:
+		    	CumulativeLink();
+		    	virtual ~CumulativeLink();
+		    	
+		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        
+		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+
+		        virtual std::unique_ptr< OrdinalLink > copy() const;
+            
+            protected:
+            	ContinuousUnivariateDistribution* _distribution;
+        };
+        
+        class SequentialLink : public OrdinalLink
+        {
+        	public:
+		    	SequentialLink();
+		    	virtual ~SequentialLink();
+		    	
+		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        
+		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+
+		        virtual std::unique_ptr< OrdinalLink > copy() const;
+            
+            protected:
+            	ContinuousUnivariateDistribution* _distribution;
+        };                                                   
 }
 
 #endif

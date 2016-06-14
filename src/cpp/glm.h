@@ -69,12 +69,12 @@ namespace statiskit
                 virtual void update(const double& value);                
         };
         
-        class NominalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, CategoricalLink >
+        class NominalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >
         {
         	typedef CategoricalEvent event_type;
         	
             public:
-                NominalRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const CategoricalLink& link);
+                NominalRegression(const std::set< event_type::value_type >& values, const VectorPredictor& predictor, const NominalLink& link);
                 
             private:
                 virtual void update(const std::vector<double>& values);                
@@ -89,7 +89,51 @@ namespace statiskit
                 
             private:
                 virtual void update(const std::vector<double>& values);                
-        };                        
+        };
+        
+        class OrdinalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, OrdinalLink >
+        {
+        	typedef CategoricalEvent event_type;
+        	
+            public:
+                OrdinalRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const OrdinalLink& link);
+                
+            private:
+                virtual void update(const std::vector<double>& values);                
+        };        
+        
+        class AdjacentRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, AdjacentLink >
+        {
+        	typedef CategoricalEvent event_type;
+        	
+            public:
+                AdjacentRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const AdjacentLink& link);
+                
+            private:
+                virtual void update(const std::vector<double>& values);                
+        }; 
+        
+        class CumulativeRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, CumulativeLink >
+        {
+        	typedef CategoricalEvent event_type;
+        	
+            public:
+                CumulativeRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const CumulativeLink& link);
+                
+            private:
+                virtual void update(const std::vector<double>& values);                
+        };
+        
+        class SequentialRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, SequentialLink >
+        {
+        	typedef CategoricalEvent event_type;
+        	
+            public:
+                SequentialRegression(const std::set< event_type::value_type >& values, const std::vector< size_t >& rank, const VectorPredictor& predictor, const SequentialLink& link);
+                
+            private:
+                virtual void update(const std::vector<double>& values);                
+        };                                         
     }
 }
 
