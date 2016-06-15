@@ -43,9 +43,9 @@ namespace statiskit
             const MultivariateSampleSpace* GeneralizedLinearModel< T, L >::get_explanatory_space() const
             { return _predictor->get_explanatory_space(); }
 
-        template<class T, class L>
-            unsigned int GeneralizedLinearModel< T, L >::get_nb_parameters() const
-            { return _family->get_nb_parameters() + _predictor->get_delta_size(); }
+//        template<class T, class L>
+//            unsigned int GeneralizedLinearModel< T, L >::get_nb_parameters() const
+//            { return _family->get_nb_parameters() + _predictor->size(); }
 
         template<class T, class L>
             const typename L::predictor_type* GeneralizedLinearModel< T, L >::get_predictor() const
@@ -61,6 +61,18 @@ namespace statiskit
                 delete _link;
                 _link = static_cast< L* >(link.copy()->release());
             }
+            
+        template< class L >
+            unsigned int DiscreteGeneralizedLinearModel< L >::get_nb_parameters() const
+            { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
+            
+         template< class L >
+            unsigned int ContinuousGeneralizedLinearModel< L >::get_nb_parameters() const
+            { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
+
+         template< class L >
+            unsigned int CategoricalGeneralizedLinearModel< L >::get_nb_parameters() const
+            { return this->_predictor->size(); }                                   
     }
 }
 #endif
