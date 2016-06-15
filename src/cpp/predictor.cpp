@@ -11,58 +11,64 @@
 namespace statiskit
 {
     ScalarPredictor::ScalarPredictor(const MultivariateSampleSpace& explanatory_space)
-    {
-        _explanatory_space = explanatory_space.copy().release();
-        alpha = 0.;
-        _delta = arma::zeros< arma::colvec >(explanatory_space.encode());
-    }
+    { _explanatory_space = explanatory_space.copy().release(); }
 
     ScalarPredictor::~ScalarPredictor()
     { delete _explanatory_space; }
 
     ScalarPredictor::ScalarPredictor(const ScalarPredictor& predictor)
-    {
-        _explanatory_space = predictor._explanatory_space->copy().release();
-        alpha = predictor.alpha;
-        _delta = predictor._delta;
-    }
-     
-    double ScalarPredictor::operator() (const MultivariateEvent& event) const
-    { return alpha + (_explanatory_space->encode(event) * _delta).eval().at(0); }
+    { _explanatory_space = predictor._explanatory_space->copy().release(); }
 
     const MultivariateSampleSpace* ScalarPredictor::get_explanatory_space() const
     { return _explanatory_space; }
 
-	const arma::colvec& ScalarPredictor::get_delta() const
-	{ return _delta; }
-	
-	size_t ScalarPredictor::get_delta_size() const
-	{ return _delta.size(); }
-	
-	void ScalarPredictor::set_delta(const arma::colvec& delta)
+
+    CompleteScalarPredictor::CompleteScalarPredictor(const MultivariateSampleSpace& explanatory_space) : CompleteScalarPredictor(explanatory_space, explanatory_space.encode())
+    {}
+
+    CompleteScalarPredictor::CompleteScalarPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& size) : ScalarPredictor(explanatory_space)
+    {
+        alpha = 0.;
+        _delta = arma::zeros< arma::colvec >(size);
+    }
+
+    CompleteScalarPredictor::CompleteScalarPredictor(const CompleteScalarPredictor& predictor) : ScalarPredictor(predictor)
+    {
+        alpha = predictor.alpha;
+        _delta = predictor._delta;
+    }
+     
+    double CompleteScalarPredictor::operator() (const MultivariateEvent& event) const
+    { return alpha + (_explanatory_space->encode(event) * _delta).eval().at(0); }
+
+	void CompleteScalarPredictor::set_beta(const arma::colvec& beta)
 	{
-		if(delta.n_rows != _delta.n_rows)
-		{ throw statiskit::size_error("delta", delta.n_rows, _delta.n_rows); }
-		_delta = delta;
+		if(beta.n_rows != (1 + _delta.n_rows) )
+		{ throw statiskit::size_error("beta", beta.n_rows, 1+_delta.n_rows); }	
+		alpha = beta(0);
+		_delta = beta.subvec(1, _delta.n_rows);
 	}
+	
+	size_t CompleteScalarPredictor::size() const
+	{ return (1+_delta.size()); }
+	
+	const arma::colvec& CompleteScalarPredictor::get_delta() const
+	{ return _delta; }
 
-    std::unique_ptr< ScalarPredictor > ScalarPredictor::copy() const
-    { return std::make_unique< ScalarPredictor >(*this); }
+    std::unique_ptr< ScalarPredictor > CompleteScalarPredictor::copy() const
+    { return std::make_unique< CompleteScalarPredictor >(*this); }
 
-    ConstrainedScalarPredictor::ConstrainedScalarPredictor(const MultivariateSampleSpace& explanatory_space, const arma::mat& constraint) : ScalarPredictor(explanatory_space)
+
+    ConstrainedScalarPredictor::ConstrainedScalarPredictor(const MultivariateSampleSpace& explanatory_space, const arma::mat& constraint) : CompleteScalarPredictor(explanatory_space, constraint.n_cols)
     { 
-    	if(constraint.n_rows != explanatory_space.encode())
-    	{ throw statiskit::size_error("constraint", constraint.n_rows, explanatory_space.encode()); } 
-    	if(constraint.n_cols <= explanatory_space.encode())
-    	{ throw statiskit::size_error("constraint", constraint.n_cols, explanatory_space.encode(), statiskit::size_error::size_type::inferior); }     	   
-        _delta = arma::zeros< arma::colvec >(constraint.n_cols);    
+    	if(constraint.n_rows != explanatory_space.encode() )
+    	{ throw statiskit::size_error("constraint", constraint.n_rows, explanatory_space.encode() ); } 
+    	if(constraint.n_cols > constraint.n_rows)
+    	{ throw statiskit::size_error("constraint", constraint.n_cols, constraint.n_rows, statiskit::size_error::size_type::superior); }     	   
     	_constraint = constraint; 
     }
 
-    ConstrainedScalarPredictor::~ConstrainedScalarPredictor()
-    {}
-
-    ConstrainedScalarPredictor::ConstrainedScalarPredictor(const ConstrainedScalarPredictor& predictor) : ScalarPredictor(predictor)
+    ConstrainedScalarPredictor::ConstrainedScalarPredictor(const ConstrainedScalarPredictor& predictor) : CompleteScalarPredictor(predictor)
     { _constraint = predictor._constraint; }
      
     double ConstrainedScalarPredictor::operator() (const MultivariateEvent& event) const
@@ -82,152 +88,131 @@ namespace statiskit
 	
     std::unique_ptr< ScalarPredictor > ConstrainedScalarPredictor::copy() const
     { return std::make_unique< ConstrainedScalarPredictor >(*this); }
+    
 
-    VectorPredictor::VectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols)
-    {
-    	_explanatory_space = explanatory_space.copy().release();
-    	_alpha = arma::zeros< arma::colvec >(nb_cols);     	
-    }
+    VectorPredictor::VectorPredictor(const MultivariateSampleSpace& explanatory_space)
+    { _explanatory_space = explanatory_space.copy().release(); }
   
     VectorPredictor::~VectorPredictor()
     {} 
     
     VectorPredictor::VectorPredictor(const VectorPredictor& predictor)
-    {
-    	_explanatory_space = predictor._explanatory_space; 
-    	_alpha = predictor._alpha;
-    }
+    { _explanatory_space = predictor._explanatory_space; }
     
     const MultivariateSampleSpace* VectorPredictor::get_explanatory_space() const
     { return _explanatory_space; }
     
-	
-	const arma::colvec& VectorPredictor::get_alpha() const
-	{ return _alpha; }
-	
-	void VectorPredictor::set_alpha(const arma::colvec& alpha)
-	{
-		if(alpha.n_rows != _alpha.n_rows)
-		{ throw statiskit::size_error("alpha", alpha.n_rows, _alpha.n_rows); }
-		_alpha = alpha;
-	} 
 
-    CompletePredictor::CompletePredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols) : VectorPredictor(explanatory_space, nb_cols)
-    { _delta = arma::zeros< arma::mat >(explanatory_space.encode(), _alpha.n_cols); }
+    CompleteVectorPredictor::CompleteVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension) : VectorPredictor(explanatory_space)
+    {
+    	_alpha = arma::zeros< arma::colvec >(dimension);
+    	_delta = arma::zeros< arma::mat >(dimension, explanatory_space.encode()); 
+    }
     
-    CompletePredictor::~CompletePredictor()
-    {}
-    
-    CompletePredictor::CompletePredictor(const CompletePredictor& predictor) : VectorPredictor(predictor)
-    { _delta = predictor._delta; }
+    CompleteVectorPredictor::CompleteVectorPredictor(const CompleteVectorPredictor& predictor) : VectorPredictor(predictor)
+    {
+    	_alpha = predictor._alpha; 
+    	_delta = predictor._delta; 
+    }
 
-    arma::colvec CompletePredictor::operator() (const MultivariateEvent& event) const
-    { return _alpha + _explanatory_space->encode(event) * _delta; }
+    arma::colvec CompleteVectorPredictor::operator() (const MultivariateEvent& event) const
+    { return _alpha + _delta * (_explanatory_space->encode(event)).t(); }
+    
+    size_t CompleteVectorPredictor::size() const
+    { return _alpha.n_rows + _delta.size(); }
             
-    void CompletePredictor::set_beta(const arma::colvec& beta)
+    void CompleteVectorPredictor::set_beta(const arma::colvec& beta)
 	{
 		if(beta.n_rows != _alpha.n_rows + _delta.n_rows * _delta.n_cols)
 		{ throw statiskit::size_error("beta", beta.n_rows,  _alpha.n_rows + _delta.n_rows * _delta.n_cols); }
 		_alpha = beta.subvec(0, _alpha.n_rows -1);
 		for(size_t j=0; j<_alpha.n_rows; ++j)
-		{ _delta.submat(0, j, _alpha.n_rows -1, j) = beta.subvec(_alpha.n_rows -1 +j, _alpha.n_rows -1 +j + _delta.n_rows); }
+		{ _delta.submat(j, 0, j, _delta.n_cols-1) = ( beta.subvec(_alpha.n_rows + j * _delta.n_cols, _alpha.n_rows + (j+1) * _delta.n_cols - 1) ).t(); }
 	}
-	
-	size_t CompletePredictor::get_delta_size() const
-	{ return _delta.size(); }
 		
-	const arma::mat& CompletePredictor::get_delta() const
+	const arma::colvec& CompleteVectorPredictor::get_alpha() const
+	{ return _alpha; }		
+		
+	const arma::mat& CompleteVectorPredictor::get_delta() const
 	{ return _delta; }
 	
-	void CompletePredictor::set_delta(const arma::mat& delta)
-	{
-		if(delta.n_rows != _delta.n_rows)
-		{ throw statiskit::size_error("delta", delta.n_rows, _delta.n_rows); }
-		if(delta.n_cols != _delta.n_cols)
-		{ throw statiskit::size_error("delta", delta.n_cols, _delta.n_cols); }		
-		_delta = delta;
-	}
-	
-    std::unique_ptr< VectorPredictor > CompletePredictor::copy() const
-    { return std::make_unique< CompletePredictor >(*this); }	
-
-
-    ProportionalPredictor::ProportionalPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols) : VectorPredictor(explanatory_space, nb_cols)
-    { _delta = arma::zeros< arma::colvec >(explanatory_space.encode()); }
+    std::unique_ptr< VectorPredictor > CompleteVectorPredictor::copy() const
+    { return std::make_unique< CompleteVectorPredictor >(*this); }	
     
-    ProportionalPredictor::~ProportionalPredictor()
-    {}
-    
-    ProportionalPredictor::ProportionalPredictor(const ProportionalPredictor& predictor) : VectorPredictor(predictor)
-    { _delta = predictor._delta; }
-
-    arma::colvec ProportionalPredictor::operator() (const MultivariateEvent& event) const
+       
+    ProportionalVectorPredictor::ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension) : VectorPredictor(explanatory_space)
     {
-    	arma::colvec constant(_alpha.n_rows, arma::fill::ones);   
-    	return _alpha + (_explanatory_space->encode(event) * _delta).eval().at(0) * constant; 
+    	_alpha = arma::zeros< arma::colvec >(dimension); 
+    	_delta = arma::zeros< arma::colvec >(explanatory_space.encode());
     }
+    
+    ProportionalVectorPredictor::ProportionalVectorPredictor(const ProportionalVectorPredictor& predictor) : VectorPredictor(predictor)
+    {
+     	_alpha = predictor._alpha;
+    	_delta = predictor._delta; 
+    }
+    
+//	ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& delta_size, const size_t& alpha_size)
+//	{
+//    	_alpha = arma::zeros< arma::colvec >(alpha_size); 
+//    	_delta = arma::zeros< arma::colvec >(delta_size);	
+//	}
+	
+    arma::colvec ProportionalVectorPredictor::operator() (const MultivariateEvent& event) const
+    { return _alpha + _explanatory_space->encode(event) * _delta; }
+    
+    size_t ProportionalVectorPredictor::size() const
+    { return _alpha.n_rows + _delta.n_rows; }
             
-    void ProportionalPredictor::set_beta(const arma::colvec& beta)
+    void ProportionalVectorPredictor::set_beta(const arma::colvec& beta)
 	{
-		if(beta.n_rows != _alpha.n_rows + _delta.n_rows)
-		{ throw statiskit::size_error("beta", beta.n_rows,  _alpha.n_rows + _delta.n_rows); }
+		if(beta.n_rows != _alpha.n_rows + _delta.n_rows * _delta.n_cols)
+		{ throw statiskit::size_error("beta", beta.n_rows,  _alpha.n_rows + _delta.n_rows * _delta.n_cols); }
 		_alpha = beta.subvec(0, _alpha.n_rows -1);
-		_delta = beta.subvec(_alpha.n_rows -1, _alpha.n_rows -1 + _delta.n_rows);
+		_delta = beta.subvec(_alpha.n_rows, _alpha.n_rows + _delta.n_cols - 1);
 	}
-	
-	size_t ProportionalPredictor::get_delta_size() const
-	{ return _delta.size(); }	
-			
-	const arma::colvec& ProportionalPredictor::get_delta() const
+		
+	const arma::colvec& ProportionalVectorPredictor::get_alpha() const
+	{ return _alpha; }		
+		
+	const arma::colvec& ProportionalVectorPredictor::get_delta() const
 	{ return _delta; }
 	
-	void ProportionalPredictor::set_delta(const arma::colvec& delta)
-	{
-		if(delta.n_rows != _delta.n_rows)
-		{ throw statiskit::size_error("delta", delta.n_rows, _delta.n_rows); }		
-		_delta = delta;
-	}
-	
-    std::unique_ptr< VectorPredictor > ProportionalPredictor::copy() const
-    { return std::make_unique< ProportionalPredictor >(*this); }	
-	    
-	    
-    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols, const arma::mat& constraint) : VectorPredictor(explanatory_space, nb_cols)
+    std::unique_ptr< VectorPredictor > ProportionalVectorPredictor::copy() const
+    { return std::make_unique< ProportionalVectorPredictor >(*this); }	
+
+
+    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const arma::mat& constraint) : ProportionalVectorPredictor(explanatory_space, dimension)
     { 
-    	if(constraint.n_rows != explanatory_space.encode() * nb_cols)
-    	{ throw statiskit::size_error("constraint", constraint.n_rows, explanatory_space.encode() * nb_cols); }    
-    	if(constraint.n_cols <= explanatory_space.encode() * nb_cols)
-    	{ throw statiskit::size_error("constraint", constraint.n_cols, explanatory_space.encode() * nb_cols, statiskit::size_error::size_type::inferior); }     	
-        _delta = arma::zeros< arma::colvec >(constraint.n_cols);    
+    	if(constraint.n_rows != ( explanatory_space.encode() * dimension ) )
+    	{ throw statiskit::size_error("constraint", constraint.n_rows,  explanatory_space.encode() * dimension ); } 
+    	if(constraint.n_cols > constraint.n_rows)
+    	{ throw statiskit::size_error("constraint", constraint.n_cols, constraint.n_rows, statiskit::size_error::size_type::superior); }     	   
     	_constraint = constraint; 
+    	_intercept_constraint = arma::eye< arma::mat >(dimension, dimension);
     }
+    
+    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const arma::mat& constraint, const arma::mat& intercept_constraint) : ProportionalVectorPredictor(explanatory_space, intercept_constraint.n_rows)
+    { 
+    	if(constraint.n_rows != ( explanatory_space.encode() * intercept_constraint.n_rows) )
+    	{ throw statiskit::size_error("constraint", constraint.n_rows,  explanatory_space.encode() * intercept_constraint.n_rows); } 
+    	if(constraint.n_cols >  constraint.n_rows)
+    	{ throw statiskit::size_error("constraint", constraint.n_cols, constraint.n_rows, statiskit::size_error::size_type::superior); } 
+    	_constraint = constraint;
+    	if(intercept_constraint.n_cols > intercept_constraint.n_rows )
+    	{ throw statiskit::size_error("intercept_constraint", intercept_constraint.n_cols, intercept_constraint.n_rows, statiskit::size_error::size_type::superior); }     	    	   
+    	_intercept_constraint = intercept_constraint; 
+    }    
 
-    ConstrainedVectorPredictor::~ConstrainedVectorPredictor()
-    {}
-
-    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor) : VectorPredictor(predictor)
-    {
-     	_delta = predictor._delta;
+    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor) : ProportionalVectorPredictor(predictor)
+    { 
     	_constraint = predictor._constraint; 
+    	_intercept_constraint = predictor._intercept_constraint;
     }
      
     arma::colvec ConstrainedVectorPredictor::operator() (const MultivariateEvent& event) const
-    {
-		arma::mat identity(_alpha.n_rows, _alpha.n_rows, arma::fill::eye);
-		return _alpha + kron(identity, _explanatory_space->encode(event)) * _constraint * _delta;
-	}
-	
-    void ConstrainedVectorPredictor::set_beta(const arma::colvec& beta)
-    {
-		if(beta.n_rows != _alpha.n_rows + _delta.n_rows)
-		{ throw statiskit::size_error("beta", beta.n_rows,  _alpha.n_rows + _delta.n_rows); }
-		_alpha = beta.subvec(0, _alpha.n_rows -1);
-		_delta = beta.subvec(_alpha.n_rows, _alpha.n_rows + _delta.n_rows);
-    }
-	
-	size_t ConstrainedVectorPredictor::get_delta_size() const
-	{ return _delta.size(); }    
-	
+    { return _intercept_constraint * _alpha +  kron(arma::eye< arma::mat >(_intercept_constraint.n_rows, _intercept_constraint.n_rows), _explanatory_space->encode(event)) * _constraint * _delta;}
+    
     const arma::mat& ConstrainedVectorPredictor::get_constraint() const
     { return _constraint; }
     
@@ -240,6 +225,18 @@ namespace statiskit
 		_constraint = constraint;
 	}
 	
+    const arma::mat& ConstrainedVectorPredictor::get_intercept_constraint() const
+    { return _intercept_constraint; }
+    
+	void ConstrainedVectorPredictor::set_intercept_constraint(const arma::mat& intercept_constraint)
+	{
+		if(intercept_constraint.n_rows != _intercept_constraint.n_rows)
+		{ throw statiskit::size_error("intercept_constraint", intercept_constraint.n_rows, _intercept_constraint.n_rows); }
+		if(intercept_constraint.n_cols != _intercept_constraint.n_cols)
+		{ throw statiskit::size_error("intercept_constraint", intercept_constraint.n_cols, _intercept_constraint.n_cols); }			
+		_intercept_constraint = intercept_constraint;
+	}	
+	
     std::unique_ptr< VectorPredictor > ConstrainedVectorPredictor::copy() const
-    { return std::make_unique< ConstrainedVectorPredictor >(*this); }	
+    { return std::make_unique< ConstrainedVectorPredictor >(*this); }
 }

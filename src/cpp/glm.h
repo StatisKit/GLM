@@ -27,7 +27,7 @@ namespace statiskit
                 
                 virtual const MultivariateSampleSpace* get_explanatory_space() const;
 
-                virtual unsigned int get_nb_parameters() const;
+                //virtual unsigned int get_nb_parameters() const;
 
                 const typename L::predictor_type* get_predictor() const;
 
@@ -42,6 +42,10 @@ namespace statiskit
                 virtual void update(const typename L::expectation_type& value) = 0;
         };            
        
+        template<class L>
+        struct DiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
+        { virtual unsigned int get_nb_parameters() const; };
+        
         class PoissonRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, PoissonLink >
         {
             public:
@@ -68,6 +72,14 @@ namespace statiskit
             private:
                 virtual void update(const double& value);                
         };
+        
+        template<class L>
+        struct ContinuousGeneralizedLinearModel : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >
+        { virtual unsigned int get_nb_parameters() const; };   
+        
+        template<class L>
+        struct CategoricalGeneralizedLinearModel : GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >
+        { virtual unsigned int get_nb_parameters() const; };               
         
         class NominalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >
         {
