@@ -71,19 +71,12 @@ namespace statiskit
         { return std::make_unique< NegativeBinomialFLink >(*this); }
         
         
-        std::vector<double> NominalLink::inverse(const arma::colvec& values) const
+        arma::colvec NominalLink::inverse(const arma::colvec& values) const
         {
-        	std::vector<double> pi( values.size() );
-        	double norm = 1;
-        	for(size_t j=0; j<values.size(); ++j)
-        	{
-        	 	pi[j] = exp( values(j) ); 
-        		norm += pi[j]; 
-        	}
-        	for(size_t j=0; j<values.size(); ++j)
-        	{ pi[j] = pi[j] / norm; }    
-        	    	
-        	return pi; 
+        	arma::colvec pi( values.size());
+        	pi = arma::exp(values);
+        	double norm = 1 + arma::norm(pi);
+        	return pi/norm; 
         } 
         
         std::unique_ptr< NominalLink > NominalLink::copy() const
@@ -99,19 +92,16 @@ namespace statiskit
 		void ReferenceLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
 		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        std::vector<double> ReferenceLink::inverse(const arma::colvec& values) const
+        arma::colvec ReferenceLink::inverse(const arma::colvec& values) const
         {
-        	std::vector<double> pi( values.size() );
+        	arma::colvec pi( values.size() );
         	double norm = 1;
         	for(size_t j=0; j<values.size(); ++j)
         	{
         		pi[j] = _distribution->cdf( values(j) ) / ( 1-_distribution->cdf( values(j) ) );
         		norm += pi[j];
         	}
-        	for(size_t j=0; j<values.size(); ++j)
-        	{ pi[j] = pi[j] / norm; }    
-        	    	
-        	return pi; 
+        	return pi/norm; 
         }        
 
         std::unique_ptr< NominalLink > ReferenceLink::copy() const
@@ -119,19 +109,12 @@ namespace statiskit
         
         
         
-        std::vector<double> OrdinalLink::inverse(const arma::colvec& values) const
+        arma::colvec OrdinalLink::inverse(const arma::colvec& values) const
         {
-        	std::vector<double> ordered_pi( values.size() );
-        	double norm = 1;
-        	for(size_t j=0; j<values.size(); ++j)
-        	{
-        	 	ordered_pi[j] = exp( values(j) ); 
-        		norm += ordered_pi[j]; 
-        	}
-        	for(size_t j=0; j<values.size(); ++j)
-        	{ ordered_pi[j] = ordered_pi[j] / norm; }    
-        	    	
-        	return ordered_pi; 
+        	arma::colvec pi( values.size());
+        	pi = arma::exp(values);
+        	double norm = 1 + arma::norm(pi);
+        	return pi/norm;  
         } 
         
         std::unique_ptr< OrdinalLink > OrdinalLink::copy() const
@@ -148,20 +131,17 @@ namespace statiskit
 		void AdjacentLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
 		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        std::vector<double> AdjacentLink::inverse(const arma::colvec& values) const
+        arma::colvec AdjacentLink::inverse(const arma::colvec& values) const
         {
-        	std::vector<double> ordered_pi( values.size() );
+        	arma::colvec ordered_pi( values.size() );
         	ordered_pi[values.size()-1] = _distribution->cdf( values(values.size()-1) ) / ( 1-_distribution->cdf( values(values.size()-1) ) );
         	double norm = 1 + ordered_pi[values.size()-1];
         	for(size_t j=values.size()-2; j>=0; --j)
         	{
         		ordered_pi[j] = ordered_pi[j+1] * _distribution->cdf( values(j) ) / ( 1-_distribution->cdf( values(j) ) );
         		norm += ordered_pi[j];
-        	}
-        	for(size_t j=0; j<values.size(); ++j)
-        	{ ordered_pi[j] = ordered_pi[j] / norm; }  
-        	    	
-        	return ordered_pi; 
+        	}         	    	
+        	return ordered_pi/norm; 
         }        
 
         std::unique_ptr< OrdinalLink > AdjacentLink::copy() const
@@ -177,9 +157,9 @@ namespace statiskit
 		void CumulativeLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
 		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        std::vector<double> CumulativeLink::inverse(const arma::colvec& values) const
+        arma::colvec CumulativeLink::inverse(const arma::colvec& values) const
         {
-        	std::vector<double> ordered_pi( values.size() );
+        	arma::colvec ordered_pi( values.size() );
 			ordered_pi[0] = _distribution->cdf( values(0) );
         	for(size_t j=1; j<values.size(); ++j)
         	{ ordered_pi[j] = _distribution->cdf( values(j) ) - _distribution->cdf( values(j-1) ); }
@@ -201,9 +181,9 @@ namespace statiskit
 		void SequentialLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
 		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        std::vector<double> SequentialLink::inverse(const arma::colvec& values) const
+        arma::colvec SequentialLink::inverse(const arma::colvec& values) const
         {
-        	std::vector<double> ordered_pi( values.size() );
+        	arma::colvec ordered_pi( values.size() );
 			double product = 1;
         	for(size_t j=0; j<values.size(); ++j)
         	{ 

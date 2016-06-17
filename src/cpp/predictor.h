@@ -150,8 +150,6 @@ namespace statiskit
         protected:
         	arma::colvec _alpha;
             arma::colvec _delta;
-            
-            //ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& delta_size, const size_t& alpha_size);
     };    
   
     
@@ -175,29 +173,7 @@ namespace statiskit
         protected:
             arma::mat _constraint;
             arma::mat _intercept_constraint;
-    };
-
-//    class ConstrainedVectorPredictor : public VectorPredictor
-//    {
-//        public:
-//            ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& nb_cols, const arma::mat& constraint);
-//            virtual ~ConstrainedVectorPredictor();
-//            ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor);
-
-//            virtual arma::colvec operator() (const MultivariateEvent& event) const;
-//            
-//            virtual void set_beta(const arma::colvec& beta);
-//            virtual size_t get_delta_size() const;
-//            
-//			const arma::mat& get_constraint() const;
-//			void set_constraint(const arma::mat& constraint);    
-//			        
-//			virtual std::unique_ptr< VectorPredictor > copy() const;
-
-//        protected:
-//        	arma::colvec _delta;
-//            arma::mat _constraint;
-//    };    
+    };   
 };
 
 #endif

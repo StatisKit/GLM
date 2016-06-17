@@ -8,10 +8,10 @@ namespace statiskit
 {
     namespace glm
     {
-        template< class L, class B > class ScalarFisherEstimation : ActiveEstimation< typename L::family_type, B >
+        template< class R, class B > class ScalarFisherEstimation : public ActiveEstimation< R, B >
         {
             public:
-                using ActiveEstimation< typename L::family_type, B >::ActiveEstimation;
+                using ActiveEstimation< R, B >::ActiveEstimation;
                
                 class Estimator : public B::Estimator
                 { 
@@ -28,11 +28,11 @@ namespace statiskit
                         const unsigned int& get_maxits() const;
                         void set_maxits(const unsigned int& maxits);
 
-                        const L* get_link() const;
-                        void set_link(const L& link);
+                        const typename R::link_type* get_link() const;
+                        void set_link(const typename R::link_type& link);
                     
                     protected:
-                        L* _link;
+                        typename R::link_type * _link;
                         double _epsilon;
                         unsigned int _maxits;
 
@@ -42,7 +42,7 @@ namespace statiskit
 
                         virtual double sigma_square(const double& mu) const = 0;
 
-                        virtual std::shared_ptr< typename L::family_type > build_estimated(const arma::colvec& beta);
+                        virtual std::shared_ptr< R > build_estimated(const arma::colvec& beta);
                 }; 
 
             private:
@@ -52,14 +52,35 @@ namespace statiskit
                 arma::colvec _w;
         };
 
-        struct PoissonFisherEstimation : public ScalarFisherEstimation< PoissonLink, DiscreteUnivariateConditionalDistributionEstimation >
+        struct PoissonFisherEstimation : ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
-            class Estimator
+            class Estimator : public ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
+            	public:
+
+            		
                 protected:
                     virtual double sigma_square(const double& mu) const;
             };
         };
+        
+        struct BinomialFisherEstimation : ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        {
+            class Estimator : public ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            {
+            	public:
+            		Estimator(const unsigned int& n);
+            		Estimator(const Estimator& estimator);
+            		
+                protected:
+                	unsigned int _n;
+                	
+                    virtual arma::colvec y_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                    virtual arma::colvec w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                    
+                    virtual double sigma_square(const double& mu) const;
+            };
+        };        
     }
 }
 

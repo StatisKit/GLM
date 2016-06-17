@@ -5,59 +5,59 @@ namespace statiskit
 {
     namespace glm
     {
-        template<class L, class B>
-            ScalarFisherEstimation< L, B >::Estimator::Estimator()
+        template<class R, class B>
+            ScalarFisherEstimation< R, B >::Estimator::Estimator()
             {
                 _epsilon = get_epsilon();
                 _maxits = get_maxits();
-                _link = new L();
+                _link = new typename R::link_type();
             }
         
-        template<class L, class B>
-            ScalarFisherEstimation< L, B >::Estimator::~Estimator()
+        template<class R, class B>
+            ScalarFisherEstimation< R, B >::Estimator::~Estimator()
             { delete _link; }
 
-        template<class L, class B>
-            ScalarFisherEstimation< L, B >::Estimator::Estimator(const Estimator& estimator)
+        template<class R, class B>
+            ScalarFisherEstimation< R, B >::Estimator::Estimator(const Estimator& estimator)
             {
                 _epsilon = estimator._epsilon;
                 _maxits = estimator._maxits;
                 _link = estimator._link->copy().release();
             }
 
-        template<class L, class B>
-            const double& ScalarFisherEstimation< L, B >::Estimator::get_epsilon() const
+        template<class R, class B>
+            const double& ScalarFisherEstimation< R, B >::Estimator::get_epsilon() const
             { return _epsilon; }
 
-        template<class L, class B>
-            void ScalarFisherEstimation< L, B >::Estimator::set_epsilon(const double& epsilon)
+        template<class R, class B>
+            void ScalarFisherEstimation< R, B >::Estimator::set_epsilon(const double& epsilon)
             { _epsilon = epsilon; }
 
-        template<class L, class B>
-            const unsigned int& ScalarFisherEstimation< L, B >::Estimator::get_maxits() const
+        template<class R, class B>
+            const unsigned int& ScalarFisherEstimation< R, B >::Estimator::get_maxits() const
             { return _maxits; }
 
-        template<class L, class B>
-            void ScalarFisherEstimation< L, B >::Estimator::set_maxits(const unsigned int& maxits)
+        template<class R, class B>
+            void ScalarFisherEstimation< R, B >::Estimator::set_maxits(const unsigned int& maxits)
             { _maxits = maxits; }
 
-        template<class L, class B>
-            const L* ScalarFisherEstimation< L, B >::Estimator::get_link() const
+        template<class R, class B>
+            const typename R::link_type* ScalarFisherEstimation< R, B >::Estimator::get_link() const
             { return _link; }
 
-        template<class L, class B>
-            void ScalarFisherEstimation< L, B >::Estimator::set_link(const L& link)
+        template<class R, class B>
+            void ScalarFisherEstimation< R, B >::Estimator::set_link(const typename R::link_type& link)
             { _link = link.copy().release(); }
         
-        template<class L, class B>
-            std::shared_ptr< UnivariateConditionalDistributionEstimation > ScalarFisherEstimation< L, B >::Estimator::operator() (const std::shared_ptr< MultivariateData >& data, const size_t& response, const std::set< size_t >& explanatories, const bool& lazy) const
+        template<class R, class B>
+            std::shared_ptr< UnivariateConditionalDistributionEstimation > ScalarFisherEstimation< R, B >::Estimator::operator() (const std::shared_ptr< MultivariateData >& data, const size_t& response, const std::set< size_t >& explanatories, const bool& lazy) const
         {
             std::shared_ptr< UnivariateConditionalDistributionEstimation > estimation;
             if(lazy)
-            { estimation = std::make_shared< LazyEstimation< UnivariateConditionalDistribution, ScalarFisherEstimation< typename L::family_type, B > > >((*this)(data, response, explanatories, false)->get_estimated()); }
+            { estimation = std::make_shared< LazyEstimation< UnivariateConditionalDistribution, ScalarFisherEstimation< R, B > > >((*this)(data, response, explanatories, false)->get_estimated()); }
             else
             {
-                std::shared_ptr< ScalarFisherEstimation< L, B > > _estimation = std::make_shared< ScalarFisherEstimation< L, B > >();
+                std::shared_ptr< ScalarFisherEstimation< R, B > > _estimation = std::make_shared< ScalarFisherEstimation< R, B > >();
                 _estimation->_beta.clear();
                 arma::mat X = X_init(*data, response, explanatories);
                 arma::colvec y = y_init(*data, response, explanatories), w = w_init(*data, response, explanatories);
@@ -89,8 +89,8 @@ namespace statiskit
             return estimation;
         }
 
-        template<class L, class B>
-            arma::mat ScalarFisherEstimation< L, B >::Estimator::X_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
+        template<class R, class B>
+            arma::mat ScalarFisherEstimation< R, B >::Estimator::X_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
             {
                 std::shared_ptr< MultivariateData > _data = data.get_variables(explanatories);
                 const MultivariateSampleSpace* sample_space = _data->get_sample_space();
@@ -106,8 +106,8 @@ namespace statiskit
                 return X;
             }
 
-        template<class L, class B>
-            arma::colvec ScalarFisherEstimation< L, B >::Estimator::y_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
+        template<class R, class B>
+            arma::colvec ScalarFisherEstimation< R, B >::Estimator::y_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
             {
                 std::shared_ptr< UnivariateData > _data = data.get_variable(response);
                 arma::colvec y = arma::ones< arma::colvec >(_data->size());
@@ -115,15 +115,15 @@ namespace statiskit
                 {
                     const UnivariateEvent* event = _data->get_event(index);
                     if(event && event->get_event() == ELEMENTARY)
-                    { y.at(index) = static_cast< ElementaryEvent< typename L::family_type::event_type >* >(event)->get_value(); }
+                    { y.at(index) = static_cast< const ElementaryEvent< typename R::link_type::family_type::event_type >* >(event)->get_value(); }
                     else
                     { y.at(index) = std::numeric_limits< double >::quiet_NaN(); }
                 }
                 return y;
             }
 
-        template<class L, class B>
-            arma::colvec ScalarFisherEstimation< L, B >::Estimator::w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
+        template<class R, class B>
+            arma::colvec ScalarFisherEstimation< R, B >::Estimator::w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
             {
                 arma::colvec w = arma::ones< arma::colvec >(data.size());
                 for(size_t index = 0, max_index = data.size(); index != max_index; ++index)
