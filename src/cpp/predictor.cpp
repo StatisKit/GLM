@@ -151,12 +151,6 @@ namespace statiskit
      	_alpha = predictor._alpha;
     	_delta = predictor._delta; 
     }
-    
-//	ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& delta_size, const size_t& alpha_size)
-//	{
-//    	_alpha = arma::zeros< arma::colvec >(alpha_size); 
-//    	_delta = arma::zeros< arma::colvec >(delta_size);	
-//	}
 	
     arma::colvec ProportionalVectorPredictor::operator() (const MultivariateEvent& event) const
     { return _alpha + _explanatory_space->encode(event) * _delta; }

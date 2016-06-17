@@ -12,6 +12,8 @@ namespace statiskit
             typedef double expectation_type;
 
             virtual double inverse(const double& value) const = 0;
+            
+            virtual double derivative(const double& value) const = 0;
         };        
         
         struct PoissonLink : ScalarLink
@@ -20,6 +22,8 @@ namespace statiskit
 
             virtual double inverse(const double& value) const;
 
+            virtual double derivative(const double& value) const;
+            
             virtual std::unique_ptr< PoissonLink > copy() const;
         };
         
@@ -45,6 +49,8 @@ namespace statiskit
 
             virtual double inverse(const double& value) const;
 
+            virtual double derivative(const double& value) const;
+            
             virtual std::unique_ptr< BinomialLink > copy() const;
         };
         
@@ -70,7 +76,9 @@ namespace statiskit
 
             virtual double inverse(const double& value) const;
 
-            virtual std::unique_ptr< NegativeBinomialLink > copy() const;
+            virtual double derivative(const double& value) const;
+            
+			virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };  
         
         class NegativeBinomialFLink : public NegativeBinomialLink
@@ -92,18 +100,16 @@ namespace statiskit
         struct VectorLink
         {
             typedef VectorPredictor predictor_type;
-            typedef std::vector<double> expectation_type;
+            typedef arma::colvec expectation_type;
             
-            virtual std::vector<double> inverse(const arma::colvec& values) const = 0;
-            
-//            virtual std::unique_ptr< VectorLink > copy() const = 0;
+            virtual arma::colvec inverse(const arma::colvec& values) const = 0;
         };
         
         struct NominalLink : VectorLink
         {
             typedef NominalDistribution family_type;
 
-            virtual std::vector<double> inverse(const arma::colvec& values) const;
+            virtual arma::colvec inverse(const arma::colvec& values) const;
 
             virtual std::unique_ptr< NominalLink > copy() const;
         };
@@ -114,7 +120,7 @@ namespace statiskit
 		    	ReferenceLink();
 		    	virtual ~ReferenceLink();
 		    	
-		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        virtual arma::colvec inverse(const arma::colvec& value) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -128,7 +134,7 @@ namespace statiskit
         {
             typedef OrdinalDistribution family_type;
 
-            virtual std::vector<double> inverse(const arma::colvec& values) const;
+            virtual arma::colvec inverse(const arma::colvec& values) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };
@@ -139,7 +145,7 @@ namespace statiskit
 		    	AdjacentLink();
 		    	virtual ~AdjacentLink();
 		    	
-		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        virtual arma::colvec inverse(const arma::colvec& value) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -155,7 +161,7 @@ namespace statiskit
 		    	CumulativeLink();
 		    	virtual ~CumulativeLink();
 		    	
-		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        virtual arma::colvec inverse(const arma::colvec& value) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -171,7 +177,7 @@ namespace statiskit
 		    	SequentialLink();
 		    	virtual ~SequentialLink();
 		    	
-		        virtual std::vector<double> inverse(const arma::colvec& value) const;
+		        virtual arma::colvec inverse(const arma::colvec& value) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
