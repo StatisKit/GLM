@@ -4,6 +4,9 @@ namespace statiskit
 {
         double PoissonLink::inverse(const double& value) const
         { return exp(value); }
+        
+        double PoissonLink::inverse_derivative(const double& value) const
+        { return exp(value); }
 
         std::unique_ptr< PoissonLink > PoissonLink::copy() const
         { return std::make_unique< PoissonLink >(*this); } 
@@ -20,6 +23,9 @@ namespace statiskit
         
         double PoissonFLink::inverse(const double& value) const
         { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); }
+        
+        double PoissonFLink::inverse_derivative(const double& value) const
+        { return _distribution->pdf(value) / pow( 1-_distribution->cdf(value), 2); }        
 
         std::unique_ptr< PoissonLink > PoissonFLink::copy() const
         { return std::make_unique< PoissonFLink >(*this); }        
@@ -27,6 +33,9 @@ namespace statiskit
                    
         double BinomialLink::inverse(const double& value) const
         { return 1. / (1 + exp(-value)); }
+        
+        double BinomialLink::inverse_derivative(const double& value) const
+        { return exp(-value) / pow(1 + exp(-value), 2); }        
 
         std::unique_ptr< BinomialLink > BinomialLink::copy() const
         { return std::make_unique< BinomialLink >(*this); }
@@ -43,13 +52,19 @@ namespace statiskit
         
         double BinomialFLink::inverse(const double& value) const
         { return _distribution->cdf(value); }
+        
+        double BinomialFLink::inverse_derivative(const double& value) const
+        { return _distribution->pdf(value); }        
 
         std::unique_ptr< BinomialLink > BinomialFLink::copy() const
         { return std::make_unique< BinomialFLink >(*this); }  
            
            
         double NegativeBinomialLink::inverse(const double& value) const
-        { return 1 - exp(value); } // defined if value < 0.
+        { return exp(-value) - 1; } // defined if value < 0.
+        
+        double NegativeBinomialLink::inverse_derivative(const double& value) const
+        { return -exp(-value); } // defined if value < 0.       
 
         std::unique_ptr< NegativeBinomialLink > NegativeBinomialLink::copy() const
         { return std::make_unique< NegativeBinomialLink >(*this); } 
@@ -65,7 +80,10 @@ namespace statiskit
 		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
         double NegativeBinomialFLink::inverse(const double& value) const
-        { return _distribution->cdf(value); }
+        { return _distribution->cdf(value) / (1 - _distribution->cdf(value)); }
+        
+        double NegativeBinomialFLink::inverse_derivative(const double& value) const
+        { return _distribution->pdf(value) / pow(1 - _distribution->cdf(value), 2); }        
 
         std::unique_ptr< NegativeBinomialLink > NegativeBinomialFLink::copy() const
         { return std::make_unique< NegativeBinomialFLink >(*this); }
