@@ -12,8 +12,7 @@ namespace statiskit
             typedef double expectation_type;
 
             virtual double inverse(const double& value) const = 0;
-            
-            virtual double derivative(const double& value) const = 0;
+            virtual double inverse_derivative(const double& value) const = 0;
         };        
         
         struct PoissonLink : ScalarLink
@@ -21,8 +20,7 @@ namespace statiskit
             typedef PoissonDistribution family_type;
 
             virtual double inverse(const double& value) const;
-
-            virtual double derivative(const double& value) const;
+            virtual double inverse_derivative(const double& value) const;
             
             virtual std::unique_ptr< PoissonLink > copy() const;
         };
@@ -34,6 +32,7 @@ namespace statiskit
 		    	virtual ~PoissonFLink();
 		    	
 		        virtual double inverse(const double& value) const;
+		        virtual double inverse_derivative(const double& value) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -48,8 +47,7 @@ namespace statiskit
             typedef BinomialDistribution family_type;
 
             virtual double inverse(const double& value) const;
-
-            virtual double derivative(const double& value) const;
+            virtual double inverse_derivative(const double& value) const;
             
             virtual std::unique_ptr< BinomialLink > copy() const;
         };
@@ -61,6 +59,7 @@ namespace statiskit
 		    	virtual ~BinomialFLink();
 		    	
 		        virtual double inverse(const double& value) const;
+		        virtual double inverse_derivative(const double& value) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -75,8 +74,7 @@ namespace statiskit
             typedef NegativeBinomialDistribution family_type;
 
             virtual double inverse(const double& value) const;
-
-            virtual double derivative(const double& value) const;
+            virtual double inverse_derivative(const double& value) const;
             
 			virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };  
@@ -88,7 +86,8 @@ namespace statiskit
 		    	virtual ~NegativeBinomialFLink();
 		    	
 		        virtual double inverse(const double& value) const;
-		        
+		        virtual double inverse_derivative(const double& value) const;
+		                    
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
 		        virtual std::unique_ptr< NegativeBinomialLink > copy() const;

@@ -69,18 +69,36 @@ namespace statiskit
             class Estimator : public ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
-            		Estimator(const unsigned int& n);
+            		Estimator(const unsigned int& kappa);
             		Estimator(const Estimator& estimator);
             		
                 protected:
-                	unsigned int _n;
+                	unsigned int _kappa;
                 	
                     virtual arma::colvec y_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
                     virtual arma::colvec w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
                     
                     virtual double sigma_square(const double& mu) const;
             };
-        };        
+        };
+        
+        struct NegativeBinomialFisherEstimation : ScalarFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        {
+            class Estimator : public ScalarFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            {
+            	public:
+            		Estimator(const double& kappa);
+            		Estimator(const Estimator& estimator);
+            		
+                protected:
+                	double _kappa;
+                	
+                    virtual arma::colvec y_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                    virtual arma::colvec w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                    
+                    virtual double sigma_square(const double& mu) const;
+            };
+        };
     }
 }
 

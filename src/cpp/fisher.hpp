@@ -71,7 +71,7 @@ namespace statiskit
                     for(unsigned int i = 0; i < eta.n_elem; ++i)
                     { mu.at(i) = _link->inverse(eta.at(i)); }
                     for(unsigned int i = 0; i < mu.n_elem; ++i)
-                    { prime.at(i) = _link->derivative(mu.at(i)); }
+                    { prime.at(i) = _link->inverse_derivative(mu.at(i)); }
                     for(unsigned int i = 0; i < XtWinv.n_cols; ++i)
                     {
                         double temp = w.at(i)/(pow(prime.at(i), 2) * sigma_square(mu.at(i)));
