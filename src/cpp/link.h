@@ -102,6 +102,7 @@ namespace statiskit
             typedef arma::colvec expectation_type;
             
             virtual arma::colvec inverse(const arma::colvec& values) const = 0;
+            virtual arma::mat inverse_derivative(const arma::colvec& values) const = 0;
         };
         
         struct NominalLink : VectorLink
@@ -109,6 +110,7 @@ namespace statiskit
             typedef NominalDistribution family_type;
 
             virtual arma::colvec inverse(const arma::colvec& values) const;
+            virtual arma::mat inverse_derivative(const arma::colvec& values) const;
 
             virtual std::unique_ptr< NominalLink > copy() const;
         };
@@ -120,6 +122,7 @@ namespace statiskit
 		    	virtual ~ReferenceLink();
 		    	
 		        virtual arma::colvec inverse(const arma::colvec& value) const;
+		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -134,6 +137,7 @@ namespace statiskit
             typedef OrdinalDistribution family_type;
 
             virtual arma::colvec inverse(const arma::colvec& values) const;
+			virtual arma::mat inverse_derivative(const arma::colvec& values) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };
@@ -145,6 +149,7 @@ namespace statiskit
 		    	virtual ~AdjacentLink();
 		    	
 		        virtual arma::colvec inverse(const arma::colvec& value) const;
+		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -161,6 +166,7 @@ namespace statiskit
 		    	virtual ~CumulativeLink();
 		    	
 		        virtual arma::colvec inverse(const arma::colvec& value) const;
+		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -177,6 +183,7 @@ namespace statiskit
 		    	virtual ~SequentialLink();
 		    	
 		        virtual arma::colvec inverse(const arma::colvec& value) const;
+		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 

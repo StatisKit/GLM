@@ -205,7 +205,7 @@ namespace statiskit
     }
      
     arma::colvec ConstrainedVectorPredictor::operator() (const MultivariateEvent& event) const
-    { return _intercept_constraint * _alpha +  kron(arma::eye< arma::mat >(_intercept_constraint.n_rows, _intercept_constraint.n_rows), _explanatory_space->encode(event)) * _constraint * _delta;}
+    { return _intercept_constraint * _alpha +  arma::kron(arma::eye< arma::mat >(_intercept_constraint.n_rows, _intercept_constraint.n_rows), _explanatory_space->encode(event)) * _constraint * _delta;}
     
     const arma::mat& ConstrainedVectorPredictor::get_constraint() const
     { return _constraint; }

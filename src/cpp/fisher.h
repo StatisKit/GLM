@@ -99,6 +99,63 @@ namespace statiskit
                     virtual double sigma_square(const double& mu) const;
             };
         };
+        
+        
+        template< class R, class B > class CategoricalFisherEstimation : public ActiveEstimation< R, B >
+        {
+            public:
+                using ActiveEstimation< R, B >::ActiveEstimation;
+               
+                class Estimator : public B::Estimator
+                { 
+                    public:
+                        Estimator();
+                        ~Estimator();
+                        Estimator(const Estimator& estimator);
+
+                        virtual std::shared_ptr< UnivariateConditionalDistributionEstimation > operator() (const std::shared_ptr< MultivariateData >& data, const size_t& response, const std::set< size_t >& explanatories, const bool& lazy=true) const; 
+                
+                        const double& get_epsilon() const;
+                        void set_epsilon(const double& epsilon);
+
+                        const unsigned int& get_maxits() const;
+                        void set_maxits(const unsigned int& maxits);
+
+                        const typename R::link_type* get_link() const;
+                        void set_link(const typename R::link_type& link);
+                    
+                    protected:
+                        typename R::link_type * _link;
+                        double _epsilon;
+                        unsigned int _maxits;
+
+                        virtual std::vector< arma::mat > Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                        virtual std::vector< arma::colvec > y_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                        virtual std::vector< double > w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+                        virtual arma::colvec beta_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+
+                        virtual std::shared_ptr< R > build_estimated(const arma::colvec& beta);
+                }; 
+
+            private:
+                std::vector< arma::colvec > _beta;
+                std::vector< arma::mat > _Z;
+                std::vector< arma::colvec > _y;
+                std::vector< double > _w;
+        };
+        
+        struct NominalFisherEstimation : CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        {
+            class Estimator : public CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            {};
+        };
+         
+        
+        struct OrdinalFisherEstimation : CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        {
+            class Estimator : public CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            {};
+        };                
     }
 }
 
