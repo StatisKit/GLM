@@ -95,7 +95,13 @@ namespace statiskit
         	pi = arma::exp(values);
         	double norm = 1 + arma::norm(pi);
         	return pi/norm; 
-        } 
+        }
+        
+        arma::mat NominalLink::inverse_derivative(const arma::colvec& values) const
+        {
+        	arma::colvec pi = inverse(values);
+        	return ( arma::diagmat(pi) - pi * pi.t() ); 
+        }          
         
         std::unique_ptr< NominalLink > NominalLink::copy() const
         { return std::make_unique< NominalLink >(*this); }
@@ -120,7 +126,16 @@ namespace statiskit
         		norm += pi[j];
         	}
         	return pi/norm; 
-        }        
+        }
+        
+        arma::mat ReferenceLink::inverse_derivative(const arma::colvec& values) const
+        {
+        	arma::colvec pi = inverse(values);
+        	arma::mat D = arma::zeros< arma::mat >(pi.n_rows);
+        	for(size_t j=0; j<pi.n_rows; ++j)
+        	{ D(j,j) = _distribution->cdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
+        	return D * ( arma::diagmat(pi) - pi * pi.t() );
+        }                
 
         std::unique_ptr< NominalLink > ReferenceLink::copy() const
         { return std::make_unique< ReferenceLink >(*this); } 
@@ -135,6 +150,12 @@ namespace statiskit
         	return pi/norm;  
         } 
         
+        arma::mat OrdinalLink::inverse_derivative(const arma::colvec& values) const
+        {
+        	arma::colvec pi = inverse(values);
+        	return ( arma::diagmat(pi) - pi * pi.t() ); 
+        } 
+               
         std::unique_ptr< OrdinalLink > OrdinalLink::copy() const
         { return std::make_unique< OrdinalLink >(*this); }   
         
@@ -160,8 +181,17 @@ namespace statiskit
         		norm += ordered_pi[j];
         	}         	    	
         	return ordered_pi/norm; 
-        }        
-
+        } 
+               
+        arma::mat AdjacentLink::inverse_derivative(const arma::colvec& values) const
+        {
+        	arma::colvec pi = inverse(values);
+        	arma::mat D = arma::zeros< arma::mat >(pi.n_rows);
+        	for(size_t j=0; j<pi.n_rows; ++j)
+        	{ D(j,j) = _distribution->pdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
+        	return D * arma::trimatl( arma::ones< arma::mat >(pi.n_rows) ) *  ( arma::diagmat(pi) - pi * pi.t() );
+        } 
+        
         std::unique_ptr< OrdinalLink > AdjacentLink::copy() const
         { return std::make_unique< AdjacentLink >(*this); }
             
@@ -183,8 +213,18 @@ namespace statiskit
         	{ ordered_pi[j] = _distribution->cdf( values(j) ) - _distribution->cdf( values(j-1) ); }
         	
         	return ordered_pi; 
-        }        
-
+        } 
+               
+        arma::mat CumulativeLink::inverse_derivative(const arma::colvec& values) const
+        {
+        	arma::mat R(values.n_rows, values.n_rows, arma::fill::eye);
+        	R.submat(0, 1, values.n_rows -2, values.n_rows -1) -= arma::mat(values.n_rows -1, values.n_rows-1, arma::fill::eye);
+        	arma::mat F = arma::zeros< arma::mat >(values.n_rows);
+        	for(size_t j=0; j<values.n_rows; ++j)
+        	{ F(j,j) = _distribution->pdf( values(j) ); }        	
+        	return (F * R);
+        } 
+        
         std::unique_ptr< OrdinalLink > CumulativeLink::copy() const
         { return std::make_unique< CumulativeLink >(*this); }
         
@@ -210,7 +250,24 @@ namespace statiskit
         	}			
         	    	
         	return ordered_pi; 
-        }        
+        }
+ 
+        arma::mat SequentialLink::inverse_derivative(const arma::colvec& values) const
+        {
+			arma::mat M = arma::zeros< arma::mat >(values.n_rows);
+			arma::colvec pi = inverse(values);
+			double mu_ref(1), cste(0);
+			for (size_t j=0; j < pi.n_rows; ++j)
+			{
+				mu_ref -= cste;
+				M(j,j) = 1/mu_ref;
+				for (size_t i=0; i<j; ++i)
+				{ M(i,j) = pi(j)/(mu_ref*mu_ref); }
+
+				cste = pi[j];
+			}
+			return arma::inv(M); 
+        }                 
 
         std::unique_ptr< OrdinalLink > SequentialLink::copy() const
         { return std::make_unique< SequentialLink >(*this); }                 

@@ -28,8 +28,6 @@ namespace statiskit
                 
                 virtual const MultivariateSampleSpace* get_explanatory_space() const;
 
-                //virtual unsigned int get_nb_parameters() const;
-
                 const typename L::predictor_type* get_predictor() const;
 
                 const L* get_link() const;
@@ -45,63 +43,85 @@ namespace statiskit
        
         template<class L>
         struct DiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
-        { virtual unsigned int get_nb_parameters() const; };
+        { 
+        	using GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >::GeneralizedLinearModel;
+        	
+        	virtual unsigned int get_nb_parameters() const;
+        };
         
-        class PoissonRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, PoissonLink >
+        class PoissonRegression : public DiscreteGeneralizedLinearModel< PoissonLink >
         {
             public:
                 PoissonRegression(const ScalarPredictor& predictor, const PoissonLink& link);
+                
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;
                 
             private:
                 virtual void update(const double& value);                
         };          
 
-        class BinomialRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, BinomialLink >
+        class BinomialRegression : public DiscreteGeneralizedLinearModel< BinomialLink >
         {
             public:
                 BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link);
                 
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;     
+                           
             private:
                 virtual void update(const double& value);                
         };
       
-        class NegativeBinomialRegression : public GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, NegativeBinomialLink >
+        class NegativeBinomialRegression : public DiscreteGeneralizedLinearModel< NegativeBinomialLink >
         {
             public:
                 NegativeBinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link);
                 
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;
+                                
             private:
                 virtual void update(const double& value);                
         };
         
         template<class L>
         struct ContinuousGeneralizedLinearModel : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >
-        { virtual unsigned int get_nb_parameters() const; };   
+        { 
+        	using GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >::GeneralizedLinearModel;
+        	
+        	virtual unsigned int get_nb_parameters() const;
+        };
         
         template<class L>
         struct CategoricalGeneralizedLinearModel : GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >
-        { virtual unsigned int get_nb_parameters() const; };               
+        { 
+        	using GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >::GeneralizedLinearModel;
+        	
+        	virtual unsigned int get_nb_parameters() const;
+        };             
         
-        class NominalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, NominalLink >
+        class NominalRegression : public CategoricalGeneralizedLinearModel< NominalLink >
         {
         	typedef CategoricalEvent event_type;
         	
             public:
                 NominalRegression(const std::set< std::string >& values, const VectorPredictor& predictor, const NominalLink& link);
-                
+                 
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
+                           
             private:
-                virtual void update(const std::vector<double>& values);                
+                virtual void update(const arma::colvec& values);                
         };
         
-        class OrdinalRegression : public GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, OrdinalLink >
+        class OrdinalRegression : public CategoricalGeneralizedLinearModel< OrdinalLink >
         {
         	typedef CategoricalEvent event_type;
         	
             public:
                 OrdinalRegression(const std::vector< std::string >& values, const VectorPredictor& predictor, const OrdinalLink& link);
-                
+                  
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;   
+                             
             private:
-                virtual void update(const std::vector<double>& values);                
+                virtual void update(const arma::colvec& values);                
         };                                               
     }
 }
