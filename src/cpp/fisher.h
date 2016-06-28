@@ -8,10 +8,10 @@ namespace statiskit
 {
     namespace glm
     {
-        template< class R, class B > class ScalarFisherEstimation : public ActiveEstimation< R, B >
+        template< class D, class B> class ScalarFisherEstimation : public ConditionalActiveEstimation< D, B, size_t >
         {
             public:
-                using ActiveEstimation< R, B >::ActiveEstimation;
+                using ConditionalActiveEstimation< D, B, size_t >::ConditionalActiveEstimation;
                
                 class Estimator : public B::Estimator
                 { 
@@ -28,11 +28,11 @@ namespace statiskit
                         const unsigned int& get_maxits() const;
                         void set_maxits(const unsigned int& maxits);
 
-                        const typename R::link_type* get_link() const;
-                        void set_link(const typename R::link_type& link);
+                        const typename D::link_type* get_link() const;
+                        void set_link(const typename D::link_type& link);
                     
                     protected:
-                        typename R::link_type * _link;
+                        typename D::link_type * _link;
                         double _epsilon;
                         unsigned int _maxits;
 
@@ -42,7 +42,7 @@ namespace statiskit
 
                         virtual double sigma_square(const double& mu) const = 0;
 
-                        virtual std::shared_ptr< R > build_estimated(const arma::colvec& beta);
+                        virtual std::shared_ptr< D > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space) const = 0;
                 }; 
 
             private:
@@ -57,10 +57,12 @@ namespace statiskit
             class Estimator : public ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
-
+            		using ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator::Estimator;
             		
                 protected:
                     virtual double sigma_square(const double& mu) const;
+                    
+                    virtual std::shared_ptr< PoissonRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space) const;
             };
         };
         
@@ -79,6 +81,8 @@ namespace statiskit
                     virtual arma::colvec w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
                     
                     virtual double sigma_square(const double& mu) const;
+                    
+                    virtual std::shared_ptr< BinomialRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space) const;                                        
             };
         };
         
@@ -97,14 +101,16 @@ namespace statiskit
                     virtual arma::colvec w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
                     
                     virtual double sigma_square(const double& mu) const;
+                    
+                    virtual std::shared_ptr< NegativeBinomialRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space) const;                                                            
             };
         };
         
         
-        template< class R, class B > class CategoricalFisherEstimation : public ActiveEstimation< R, B >
+        template< class D, class B > class CategoricalFisherEstimation : public ConditionalActiveEstimation< D, B, size_t >
         {
             public:
-                using ActiveEstimation< R, B >::ActiveEstimation;
+                using ConditionalActiveEstimation< D, B, size_t  >::ConditionalActiveEstimation;
                
                 class Estimator : public B::Estimator
                 { 
@@ -121,11 +127,11 @@ namespace statiskit
                         const unsigned int& get_maxits() const;
                         void set_maxits(const unsigned int& maxits);
 
-                        const typename R::link_type* get_link() const;
-                        void set_link(const typename R::link_type& link);
+                        const typename D::link_type* get_link() const;
+                        void set_link(const typename D::link_type& link);
                     
                     protected:
-                        typename R::link_type * _link;
+                        typename D::link_type * _link;
                         double _epsilon;
                         unsigned int _maxits;
 
@@ -134,7 +140,7 @@ namespace statiskit
                         virtual std::vector< double > w_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
                         virtual arma::colvec beta_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
 
-                        virtual std::shared_ptr< R > build_estimated(const arma::colvec& beta);
+                        virtual std::shared_ptr< D > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const = 0;
                 }; 
 
             private:
@@ -147,14 +153,26 @@ namespace statiskit
         struct NominalFisherEstimation : CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
             class Estimator : public CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
-            {};
+            {
+            	public:
+            		using CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator::Estimator;
+            		
+            	protected:
+                        virtual std::shared_ptr< NominalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
+            };
         };
          
         
         struct OrdinalFisherEstimation : CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
             class Estimator : public CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
-            {};
+            {
+            	public:
+            		using CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator::Estimator;
+            		
+            	protected:
+                        virtual std::shared_ptr< OrdinalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;
+            };
         };                
     }
 }
