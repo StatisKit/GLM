@@ -161,6 +161,38 @@ namespace statiskit
                         virtual std::shared_ptr< NominalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
             };
         };
+        
+        struct ProportionalNominalFisherEstimation : NominalFisherEstimation
+        {
+            class Estimator : public NominalFisherEstimation::Estimator
+            {
+            	public:
+            		using NominalFisherEstimation::Estimator::Estimator;
+            		
+            	protected:
+            			virtual std::vector< arma::mat > Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+            			
+                        virtual std::shared_ptr< NominalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
+            };
+        }; 
+        
+        struct ConstrainedNominalFisherEstimation : NominalFisherEstimation
+        {
+            class Estimator : public NominalFisherEstimation::Estimator
+            {
+            	public:
+            		Estimator(const arma::mat& constrained_matrix);
+                    ~Estimator();
+                    Estimator(const Estimator& estimator);
+            		
+            	protected:
+            			arma::mat _constrained_matrix;
+            	
+            			virtual std::vector< arma::mat > Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+            			
+                        virtual std::shared_ptr< NominalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
+            };
+        };                
          
         
         struct OrdinalFisherEstimation : CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >
@@ -173,7 +205,39 @@ namespace statiskit
             	protected:
                         virtual std::shared_ptr< OrdinalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;
             };
-        };                
+        };
+                
+        struct ProportionalOrdinalFisherEstimation : OrdinalFisherEstimation
+        {
+            class Estimator : public OrdinalFisherEstimation::Estimator
+            {
+            	public:
+            		using OrdinalFisherEstimation::Estimator::Estimator;
+            		
+            	protected:
+            			virtual std::vector< arma::mat > Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+            			
+                        virtual std::shared_ptr< OrdinalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
+            };
+        }; 
+        
+        struct ConstrainedOrdinalFisherEstimation : OrdinalFisherEstimation
+        {
+            class Estimator : public OrdinalFisherEstimation::Estimator
+            {
+            	public:
+            		Estimator(const arma::mat& constrained_matrix);
+                    ~Estimator();
+                    Estimator(const Estimator& estimator);
+            		
+            	protected:
+            			arma::mat _constrained_matrix;
+            	
+            			virtual std::vector< arma::mat > Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
+            			
+                        virtual std::shared_ptr< OrdinalRegression > build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
+            };
+        };                 
     }
 }
 
