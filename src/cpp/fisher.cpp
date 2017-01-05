@@ -201,16 +201,27 @@ namespace statiskit
         	predictor.set_beta(beta);
         	return std::make_shared< OrdinalRegression >(_response_space.get_ordered(), predictor, *_link);
         }
+        
+        ConstrainedOrdinalFisherEstimation::Estimator::Estimator(const arma::mat& constraint, const size_t& dimension) : OrdinalFisherEstimation::Estimator()
+        { 
+        	_constraint = constraint; 
+        	_intercept_constraint = arma::eye< arma::mat >(dimension, dimension);
+        }
 
-
-        ConstrainedOrdinalFisherEstimation::Estimator::Estimator(const arma::mat& constrained_matrix) : OrdinalFisherEstimation::Estimator()
-        { _constrained_matrix = constrained_matrix; }
+        ConstrainedOrdinalFisherEstimation::Estimator::Estimator(const arma::mat& constraint, const arma::mat& intercept_constraint) : OrdinalFisherEstimation::Estimator()
+        { 
+        	_constraint = constraint; 
+        	_intercept_constraint = intercept_constraint;
+        }
     
         ConstrainedOrdinalFisherEstimation::Estimator::~Estimator()
         { delete _link; }
 
         ConstrainedOrdinalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : OrdinalFisherEstimation::Estimator(estimator)
-        { _constrained_matrix = estimator._constrained_matrix; }
+        {
+        	_constraint = estimator._constraint;
+        	_intercept_constraint = estimator._intercept_constraint;
+        }
                              
 		std::vector< arma::mat > ConstrainedOrdinalFisherEstimation::Estimator::Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const
         {
@@ -222,19 +233,17 @@ namespace statiskit
             arma::mat identity = arma::mat(J-1, J-1, arma::fill::eye);
             for(size_t index = 0, max_index = _data->size(); index != max_index; ++index)
             {
-            	arma::mat Z_k_complete = arma::mat(J-1, (J-1) * (1+p) , arma::fill::eye);
-            	arma::mat Z_k;
-            	
+            	arma::mat Z_k  = arma::mat(J-1, _intercept_constraint.n_cols + _constraint.n_cols) ;
+            	Z_k.submat(0, 0, J-1, _intercept_constraint.n_cols) = _intercept_constraint;
                 const MultivariateEvent* event = _data->get_event(index);
                 if(event)
                 {
-                	Z_k_complete.submat(0, J-1, J-1, (J-1) * (1+p) - 1) = arma::kron(identity, sample_space->encode(*event));
-                	Z_k = _constrained_matrix * Z_k_complete;
+                	Z_k.submat(0, J-1, J-1, _constraint.n_cols) = arma::kron(identity, sample_space->encode(*event)) * _constraint;
                 	Z.push_back(Z_k);
                 }
                 else
                 { 
-                	Z_k = std::numeric_limits< double >::quiet_NaN() * arma::ones< arma::mat >(_constrained_matrix.n_rows, _constrained_matrix.n_cols);
+                	Z_k.submat(0, J-1, J-1, _constraint.n_cols) = std::numeric_limits< double >::quiet_NaN() * arma::ones< arma::mat >(J-1, _constraint.n_cols);
                 	Z.push_back(Z_k);
                 }
             }
@@ -244,7 +253,7 @@ namespace statiskit
         std::shared_ptr< OrdinalRegression > ConstrainedOrdinalFisherEstimation::Estimator::build_estimated(const arma::colvec& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const
         {
             const OrdinalSampleSpace& _response_space = static_cast< const OrdinalSampleSpace& >(response_space);
-        	ConstrainedVectorPredictor predictor = ConstrainedVectorPredictor(explanatory_space, _response_space.get_cardinality()-1, _constrained_matrix);
+        	ConstrainedVectorPredictor predictor = ConstrainedVectorPredictor(explanatory_space, _response_space.get_cardinality()-1, _constraint);
         	predictor.set_beta(beta);
         	return std::make_shared< OrdinalRegression >(_response_space.get_ordered(), predictor, *_link);
         }        

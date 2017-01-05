@@ -226,12 +226,14 @@ namespace statiskit
             class Estimator : public OrdinalFisherEstimation::Estimator
             {
             	public:
-            		Estimator(const arma::mat& constrained_matrix);
+            		Estimator(const arma::mat& constraint, const size_t& dimension);
+            		Estimator(const arma::mat& constraint, const arma::mat& intercept_constraint);
                     ~Estimator();
                     Estimator(const Estimator& estimator);
             		
             	protected:
-            			arma::mat _constrained_matrix;
+            			arma::mat _constraint;
+            			arma::mat _intercept_constraint;
             	
             			virtual std::vector< arma::mat > Z_init(const MultivariateData& data, const size_t& response, const std::set< size_t >& explanatories) const;
             			
