@@ -1,0 +1,30 @@
+# -*-python-*-
+
+from SCons.Errors import EnvironmentError
+
+try:
+    Import("env")
+    pyenv = env.Clone(tools = ['boost_python'])
+
+    pyenv.AppendUnique(LIBS  = ['statiskit_glm'])
+
+    exclude = """
+    """.split()
+
+    sources = [source for source in pyenv.Glob('*.*') if source.name not in exclude]
+
+    targets = pyenv.BoostPythonExtension("statiskit/glm/__glm", sources)
+    Alias("py", targets)
+    Alias("install", targets)
+    pyenv.Depends(targets, "cpp")
+    
+    targets = pyenv.PythonPackage('statiskit')
+    Alias("py", targets)
+    Alias("install", targets)
+    pyenv.Depends(targets, "cpp")
+except EnvironmentError:
+    Alias("py", [])
+    Alias("install", [])
+    pass
+except Exception:
+    raise

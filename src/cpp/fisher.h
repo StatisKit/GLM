@@ -52,9 +52,9 @@ namespace statiskit
                 arma::colvec _w;
         };
 
-        struct PoissonFisherEstimation : ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        struct STATISKIT_GLM_API PoissonFisherEstimation : ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
-            class Estimator : public ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
             		using ScalarFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator::Estimator;
@@ -66,9 +66,9 @@ namespace statiskit
             };
         };
         
-        struct BinomialFisherEstimation : ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        struct STATISKIT_GLM_API BinomialFisherEstimation : ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
-            class Estimator : public ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public ScalarFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
             		Estimator(const unsigned int& kappa);
@@ -86,9 +86,9 @@ namespace statiskit
             };
         };
         
-        struct NegativeBinomialFisherEstimation : ScalarFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        struct STATISKIT_GLM_API NegativeBinomialFisherEstimation : ScalarFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
-            class Estimator : public ScalarFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public ScalarFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
             		Estimator(const double& kappa);
@@ -150,9 +150,9 @@ namespace statiskit
                 std::vector< double > _w;
         };
         
-        struct NominalFisherEstimation : CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        struct STATISKIT_GLM_API NominalFisherEstimation : CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
-            class Estimator : public CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
             		using CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator::Estimator;
@@ -162,9 +162,9 @@ namespace statiskit
             };
         };
         
-        struct ProportionalNominalFisherEstimation : NominalFisherEstimation
+        struct STATISKIT_GLM_API ProportionalNominalFisherEstimation : NominalFisherEstimation
         {
-            class Estimator : public NominalFisherEstimation::Estimator
+            class STATISKIT_GLM_API Estimator : public NominalFisherEstimation::Estimator
             {
             	public:
             		using NominalFisherEstimation::Estimator::Estimator;
@@ -176,9 +176,9 @@ namespace statiskit
             };
         }; 
         
-        struct ConstrainedNominalFisherEstimation : NominalFisherEstimation
+        struct STATISKIT_GLM_API ConstrainedNominalFisherEstimation : NominalFisherEstimation
         {
-            class Estimator : public NominalFisherEstimation::Estimator
+            class STATISKIT_GLM_API Estimator : public NominalFisherEstimation::Estimator
             {
             	public:
             		Estimator(const arma::mat& constrained_matrix);
@@ -195,9 +195,9 @@ namespace statiskit
         };                
          
         
-        struct OrdinalFisherEstimation : CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >
+        struct STATISKIT_GLM_API OrdinalFisherEstimation : CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >
         {
-            class Estimator : public CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
             {
             	public:
             		using CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator::Estimator;
@@ -207,9 +207,9 @@ namespace statiskit
             };
         };
                 
-        struct ProportionalOrdinalFisherEstimation : OrdinalFisherEstimation
+        struct STATISKIT_GLM_API ProportionalOrdinalFisherEstimation : OrdinalFisherEstimation
         {
-            class Estimator : public OrdinalFisherEstimation::Estimator
+            class STATISKIT_GLM_API Estimator : public OrdinalFisherEstimation::Estimator
             {
             	public:
             		using OrdinalFisherEstimation::Estimator::Estimator;
@@ -221,9 +221,9 @@ namespace statiskit
             };
         }; 
         
-        struct ConstrainedOrdinalFisherEstimation : OrdinalFisherEstimation
+        struct STATISKIT_GLM_API ConstrainedOrdinalFisherEstimation : OrdinalFisherEstimation
         {
-            class Estimator : public OrdinalFisherEstimation::Estimator
+            class STATISKIT_GLM_API Estimator : public OrdinalFisherEstimation::Estimator
             {
             	public:
             		Estimator(const arma::mat& constraint, const size_t& dimension);

@@ -12,14 +12,14 @@ namespace statiskit
         { return std::make_unique< PoissonLink >(*this); } 
 
 
-		PoissonFLink::PoissonFLink()
-		{ _distribution = new LogisticDistribution(); }
-		
-		PoissonFLink::~PoissonFLink()
-		{ delete _distribution; }
-		
-		void PoissonFLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
-		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
+	PoissonFLink::PoissonFLink()
+	{ _distribution = new LogisticDistribution(); }
+	
+	PoissonFLink::~PoissonFLink()
+	{ delete _distribution; }
+	
+	void PoissonFLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
+	{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
         double PoissonFLink::inverse(const double& value) const
         { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); }
@@ -41,14 +41,14 @@ namespace statiskit
         { return std::make_unique< BinomialLink >(*this); }
 
 
-		BinomialFLink::BinomialFLink()
-		{ _distribution = new LogisticDistribution(); }
-		
-		BinomialFLink::~BinomialFLink()
-		{ delete _distribution; }
-				
-		void BinomialFLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
-		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
+	BinomialFLink::BinomialFLink()
+	{ _distribution = new LogisticDistribution(); }
+	
+	BinomialFLink::~BinomialFLink()
+	{ delete _distribution; }
+			
+	void BinomialFLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
+	{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
         double BinomialFLink::inverse(const double& value) const
         { return _distribution->cdf(value); }
@@ -70,14 +70,14 @@ namespace statiskit
         { return std::make_unique< NegativeBinomialLink >(*this); } 
 
 
-		NegativeBinomialFLink::NegativeBinomialFLink()
-		{ _distribution = new LogisticDistribution(); }
-		
-		NegativeBinomialFLink::~NegativeBinomialFLink()
-		{ delete _distribution; }
-				
-		void NegativeBinomialFLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
-		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
+	NegativeBinomialFLink::NegativeBinomialFLink()
+	{ _distribution = new LogisticDistribution(); }
+	
+	NegativeBinomialFLink::~NegativeBinomialFLink()
+	{ delete _distribution; }
+			
+	void NegativeBinomialFLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
+	{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
         double NegativeBinomialFLink::inverse(const double& value) const
         { return _distribution->cdf(value) / (1 - _distribution->cdf(value)); }
@@ -89,18 +89,17 @@ namespace statiskit
         { return std::make_unique< NegativeBinomialFLink >(*this); }
         
         
-        arma::colvec NominalLink::inverse(const arma::colvec& values) const
+        Eigen::VectorXd NominalLink::inverse(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi( values.size());
-        	pi = arma::exp(values);
-        	double norm = 1 + arma::norm(pi);
+        	Eigen::VectorXd pi = values.array().exp();
+        	double norm = 1 + pi.sum();
         	return pi/norm; 
         }
         
-        arma::mat NominalLink::inverse_derivative(const arma::colvec& values) const
+        Eigen::MatrixXd NominalLink::inverse_derivative(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi = inverse(values);
-        	return ( arma::diagmat(pi) - pi * pi.t() ); 
+        	Eigen::VectorXd pi = inverse(values);
+        	return ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() ); 
         }          
         
         std::unique_ptr< NominalLink > NominalLink::copy() const
@@ -116,9 +115,9 @@ namespace statiskit
 		void ReferenceLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
 		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        arma::colvec ReferenceLink::inverse(const arma::colvec& values) const
+        Eigen::VectorXd ReferenceLink::inverse(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi( values.size() );
+        	Eigen::VectorXd pi( values.size() );
         	double norm = 1;
         	for(size_t j=0; j<values.size(); ++j)
         	{
@@ -128,13 +127,13 @@ namespace statiskit
         	return pi/norm; 
         }
         
-        arma::mat ReferenceLink::inverse_derivative(const arma::colvec& values) const
+        Eigen::MatrixXd ReferenceLink::inverse_derivative(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi = inverse(values);
-        	arma::mat D = arma::zeros< arma::mat >(pi.n_rows);
-        	for(size_t j=0; j<pi.n_rows; ++j)
+        	Eigen::VectorXd pi = inverse(values);
+        	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(pi.rows(),pi.rows());
+        	for(size_t j=0; j<pi.rows(); ++j)
         	{ D(j,j) = _distribution->cdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
-        	return D * ( arma::diagmat(pi) - pi * pi.t() );
+        	return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() );
         }                
 
         std::unique_ptr< NominalLink > ReferenceLink::copy() const
@@ -142,18 +141,17 @@ namespace statiskit
         
         
         
-        arma::colvec OrdinalLink::inverse(const arma::colvec& values) const
+        Eigen::VectorXd OrdinalLink::inverse(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi( values.size());
-        	pi = arma::exp(values);
-        	double norm = 1 + arma::norm(pi);
+        	Eigen::VectorXd pi = values.array().exp();
+        	double norm = 1 + pi.sum();
         	return pi/norm;  
         } 
         
-        arma::mat OrdinalLink::inverse_derivative(const arma::colvec& values) const
+        Eigen::MatrixXd OrdinalLink::inverse_derivative(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi = inverse(values);
-        	return ( arma::diagmat(pi) - pi * pi.t() ); 
+        	Eigen::VectorXd pi = inverse(values);
+        	return ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() ); 
         } 
                
         std::unique_ptr< OrdinalLink > OrdinalLink::copy() const
@@ -161,18 +159,18 @@ namespace statiskit
         
             
 
-		AdjacentLink::AdjacentLink()
-		{ _distribution = new LogisticDistribution(); }
-		
-		AdjacentLink::~AdjacentLink()
-		{ delete _distribution; }
-				
-		void AdjacentLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
-		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
+	AdjacentLink::AdjacentLink()
+	{ _distribution = new LogisticDistribution(); }
+	
+	AdjacentLink::~AdjacentLink()
+	{ delete _distribution; }
+			
+	void AdjacentLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
+	{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        arma::colvec AdjacentLink::inverse(const arma::colvec& values) const
+        Eigen::VectorXd AdjacentLink::inverse(const Eigen::VectorXd& values) const
         {
-        	arma::colvec ordered_pi( values.size() );
+        	Eigen::VectorXd ordered_pi( values.size() );
         	ordered_pi[values.size()-1] = _distribution->cdf( values(values.size()-1) ) / ( 1-_distribution->cdf( values(values.size()-1) ) );
         	double norm = 1 + ordered_pi[values.size()-1];
         	for(size_t j=values.size()-2; j>=0; --j)
@@ -183,44 +181,45 @@ namespace statiskit
         	return ordered_pi/norm; 
         } 
                
-        arma::mat AdjacentLink::inverse_derivative(const arma::colvec& values) const
+        Eigen::MatrixXd AdjacentLink::inverse_derivative(const Eigen::VectorXd& values) const
         {
-        	arma::colvec pi = inverse(values);
-        	arma::mat D = arma::zeros< arma::mat >(pi.n_rows);
-        	for(size_t j=0; j<pi.n_rows; ++j)
+        	Eigen::VectorXd pi = inverse(values);
+        	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(pi.rows(),pi.rows());
+                Eigen::MatrixXd Ones = Eigen::MatrixXd::Ones(pi.rows(),pi.rows());
+        	for(size_t j=0; j<pi.rows(); ++j)
         	{ D(j,j) = _distribution->pdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
-        	return D * arma::trimatl( arma::ones< arma::mat >(pi.n_rows) ) *  ( arma::diagmat(pi) - pi * pi.t() );
+        	return D * Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Lower>(Ones) *  ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() );
         } 
         
         std::unique_ptr< OrdinalLink > AdjacentLink::copy() const
         { return std::make_unique< AdjacentLink >(*this); }
             
 
-		CumulativeLink::CumulativeLink()
-		{ _distribution = new LogisticDistribution(); }
-		
-		CumulativeLink::~CumulativeLink()
-		{ delete _distribution; }
-				
-		void CumulativeLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
-		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
+	CumulativeLink::CumulativeLink()
+	{ _distribution = new LogisticDistribution(); }
+	
+	CumulativeLink::~CumulativeLink()
+	{ delete _distribution; }
+			
+	void CumulativeLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
+	{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        arma::colvec CumulativeLink::inverse(const arma::colvec& values) const
+        Eigen::VectorXd CumulativeLink::inverse(const Eigen::VectorXd& values) const
         {
-        	arma::colvec ordered_pi( values.size() );
-			ordered_pi[0] = _distribution->cdf( values(0) );
+        	Eigen::VectorXd ordered_pi( values.size() );
+		ordered_pi[0] = _distribution->cdf( values(0) );
         	for(size_t j=1; j<values.size(); ++j)
         	{ ordered_pi[j] = _distribution->cdf( values(j) ) - _distribution->cdf( values(j-1) ); }
         	
         	return ordered_pi; 
         } 
                
-        arma::mat CumulativeLink::inverse_derivative(const arma::colvec& values) const
+        Eigen::MatrixXd CumulativeLink::inverse_derivative(const Eigen::VectorXd& values) const
         {
-        	arma::mat R(values.n_rows, values.n_rows, arma::fill::eye);
-        	R.submat(0, 1, values.n_rows -2, values.n_rows -1) -= arma::mat(values.n_rows -1, values.n_rows-1, arma::fill::eye);
-        	arma::mat F = arma::zeros< arma::mat >(values.n_rows);
-        	for(size_t j=0; j<values.n_rows; ++j)
+                Eigen::MatrixXd R = Eigen::MatrixXd::Identity(values.rows(), values.rows());
+                R.block(0, 1, values.rows()-1, values.rows()-1) -= Eigen::MatrixXd::Identity(values.rows() -1, values.rows()-1);
+        	Eigen::MatrixXd F = Eigen::MatrixXd::Zero(values.rows(),values.rows());
+        	for(size_t j=0; j<values.rows(); ++j)
         	{ F(j,j) = _distribution->pdf( values(j) ); }        	
         	return (F * R);
         } 
@@ -230,18 +229,18 @@ namespace statiskit
         
             
 
-		SequentialLink::SequentialLink()
-		{ _distribution = new LogisticDistribution(); }
-		
-		SequentialLink::~SequentialLink()
-		{ delete _distribution; }
-				
-		void SequentialLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
-		{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
+	SequentialLink::SequentialLink()
+	{ _distribution = new LogisticDistribution(); }
+	
+	SequentialLink::~SequentialLink()
+	{ delete _distribution; }
+			
+	void SequentialLink::set_distribution(const ContinuousUnivariateDistribution& distribution)
+	{ _distribution = static_cast< ContinuousUnivariateDistribution* >( distribution.copy().release() ); }
         
-        arma::colvec SequentialLink::inverse(const arma::colvec& values) const
+        Eigen::VectorXd SequentialLink::inverse(const Eigen::VectorXd& values) const
         {
-        	arma::colvec ordered_pi( values.size() );
+        	Eigen::VectorXd ordered_pi( values.size() );
 			double product = 1;
         	for(size_t j=0; j<values.size(); ++j)
         	{ 
@@ -252,21 +251,21 @@ namespace statiskit
         	return ordered_pi; 
         }
  
-        arma::mat SequentialLink::inverse_derivative(const arma::colvec& values) const
+        Eigen::MatrixXd SequentialLink::inverse_derivative(const Eigen::VectorXd& values) const
         {
-			arma::mat M = arma::zeros< arma::mat >(values.n_rows);
-			arma::colvec pi = inverse(values);
-			double mu_ref(1), cste(0);
-			for (size_t j=0; j < pi.n_rows; ++j)
-			{
-				mu_ref -= cste;
-				M(j,j) = 1/mu_ref;
-				for (size_t i=0; i<j; ++i)
-				{ M(i,j) = pi(j)/(mu_ref*mu_ref); }
+		Eigen::MatrixXd M = Eigen::MatrixXd::Zero(values.rows(),values.rows());
+		Eigen::VectorXd pi = inverse(values);
+		double mu_ref(1), cste(0);
+		for (size_t j=0; j < pi.rows(); ++j)
+		{
+			mu_ref -= cste;
+			M(j,j) = 1/mu_ref;
+			for (size_t i=0; i<j; ++i)
+			{ M(i,j) = pi(j)/(mu_ref*mu_ref); }
 
-				cste = pi[j];
-			}
-			return arma::inv(M); 
+			cste = pi[j];
+		}
+		return M.inverse(); 
         }                 
 
         std::unique_ptr< OrdinalLink > SequentialLink::copy() const

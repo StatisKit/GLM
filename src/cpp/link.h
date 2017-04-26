@@ -6,7 +6,7 @@
 
 namespace statiskit
 {
-        struct ScalarLink
+        struct STATISKIT_GLM_API ScalarLink
         {
             typedef ScalarPredictor predictor_type;
             typedef double expectation_type;
@@ -15,7 +15,7 @@ namespace statiskit
             virtual double inverse_derivative(const double& value) const = 0;
         };        
         
-        struct PoissonLink : ScalarLink
+        struct STATISKIT_GLM_API PoissonLink : ScalarLink
         {
             typedef PoissonDistribution family_type;
 
@@ -25,7 +25,7 @@ namespace statiskit
             virtual std::unique_ptr< PoissonLink > copy() const;
         };
         
-        class PoissonFLink : public PoissonLink
+        class STATISKIT_GLM_API PoissonFLink : public PoissonLink
         {
         	public:
 		    	PoissonFLink();
@@ -42,7 +42,7 @@ namespace statiskit
             	ContinuousUnivariateDistribution* _distribution;
         };
         
-        struct BinomialLink : ScalarLink
+        struct STATISKIT_GLM_API BinomialLink : ScalarLink
         {
             typedef BinomialDistribution family_type;
 
@@ -52,7 +52,7 @@ namespace statiskit
             virtual std::unique_ptr< BinomialLink > copy() const;
         };
         
-        class BinomialFLink : public BinomialLink
+        class STATISKIT_GLM_API BinomialFLink : public BinomialLink
         {
         	public:
 		    	BinomialFLink();
@@ -69,7 +69,7 @@ namespace statiskit
             	ContinuousUnivariateDistribution* _distribution;
         };       
         
-        struct NegativeBinomialLink : ScalarLink
+        struct STATISKIT_GLM_API NegativeBinomialLink : ScalarLink
         {
             typedef NegativeBinomialDistribution family_type;
 
@@ -79,7 +79,7 @@ namespace statiskit
 			virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };  
         
-        class NegativeBinomialFLink : public NegativeBinomialLink
+        class STATISKIT_GLM_API NegativeBinomialFLink : public NegativeBinomialLink
         {
         	public:
 		    	NegativeBinomialFLink();
@@ -96,33 +96,33 @@ namespace statiskit
             	ContinuousUnivariateDistribution* _distribution;
         };         
         
-        struct VectorLink
+        struct STATISKIT_GLM_API VectorLink
         {
             typedef VectorPredictor predictor_type;
-            typedef arma::colvec expectation_type;
+            typedef Eigen::VectorXd expectation_type;
             
-            virtual arma::colvec inverse(const arma::colvec& values) const = 0;
-            virtual arma::mat inverse_derivative(const arma::colvec& values) const = 0;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const = 0;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const = 0;
         };
         
-        struct NominalLink : VectorLink
+        struct STATISKIT_GLM_API NominalLink : VectorLink
         {
             typedef NominalDistribution family_type;
 
-            virtual arma::colvec inverse(const arma::colvec& values) const;
-            virtual arma::mat inverse_derivative(const arma::colvec& values) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 
             virtual std::unique_ptr< NominalLink > copy() const;
         };
         
-        class ReferenceLink : public NominalLink
+        class STATISKIT_GLM_API ReferenceLink : public NominalLink
         {
         	public:
 		    	ReferenceLink();
 		    	virtual ~ReferenceLink();
 		    	
-		        virtual arma::colvec inverse(const arma::colvec& value) const;
-		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
+		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -132,24 +132,24 @@ namespace statiskit
             	ContinuousUnivariateDistribution* _distribution;
         };
         
-        struct OrdinalLink : VectorLink
+        struct STATISKIT_GLM_API OrdinalLink : VectorLink
         {
             typedef OrdinalDistribution family_type;
 
-            virtual arma::colvec inverse(const arma::colvec& values) const;
-			virtual arma::mat inverse_derivative(const arma::colvec& values) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
+			virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };
                 
-        class AdjacentLink : public OrdinalLink
+        class STATISKIT_GLM_API AdjacentLink : public OrdinalLink
         {
         	public:
 		    	AdjacentLink();
 		    	virtual ~AdjacentLink();
 		    	
-		        virtual arma::colvec inverse(const arma::colvec& value) const;
-		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
+		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -159,14 +159,14 @@ namespace statiskit
             	ContinuousUnivariateDistribution* _distribution;
         };  
         
-        class CumulativeLink : public OrdinalLink
+        class STATISKIT_GLM_API CumulativeLink : public OrdinalLink
         {
         	public:
 		    	CumulativeLink();
 		    	virtual ~CumulativeLink();
 		    	
-		        virtual arma::colvec inverse(const arma::colvec& value) const;
-		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
+		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
@@ -176,14 +176,14 @@ namespace statiskit
             	ContinuousUnivariateDistribution* _distribution;
         };
         
-        class SequentialLink : public OrdinalLink
+        class STATISKIT_GLM_API SequentialLink : public OrdinalLink
         {
         	public:
 		    	SequentialLink();
 		    	virtual ~SequentialLink();
 		    	
-		        virtual arma::colvec inverse(const arma::colvec& value) const;
-		        virtual arma::mat inverse_derivative(const arma::colvec& values) const;
+		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 		        
 		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 

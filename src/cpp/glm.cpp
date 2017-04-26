@@ -40,7 +40,7 @@ namespace statiskit
 		std::unique_ptr< UnivariateConditionalDistribution > NominalRegression::copy() const
 		{ return std::make_unique< NominalRegression >(*this); }
 		
-        void NominalRegression::update(const arma::colvec& values)
+        void NominalRegression::update(const Eigen::VectorXd& values)
         { _family->set_pi(values); }   
 
         
@@ -50,7 +50,7 @@ namespace statiskit
 		std::unique_ptr< UnivariateConditionalDistribution > OrdinalRegression::copy() const
 		{ return std::make_unique< OrdinalRegression >(*this); }
 		
-        void OrdinalRegression::update(const arma::colvec& values)
+        void OrdinalRegression::update(const Eigen::VectorXd& values)
         { _family->set_pi(values); }                                
     }
 }

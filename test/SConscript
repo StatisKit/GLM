@@ -1,0 +1,27 @@
+# -*-python-*-
+
+from SCons.Errors import EnvironmentError
+
+try:
+    Import("env")
+
+    test_env = env.Clone(tools = ['nose'])
+
+    sources = test_env.Glob('*.py')
+
+    exclude = """
+    """.split()
+
+    sources = [source for source in sources if not source.name in exclude]
+
+    targets = test_env.Nosetests(sources, cover_package='statiskit.glm')
+    Alias("test", targets)
+    Alias("install", targets)
+    test_env.Depends(targets, "py")
+except EnvironmentError:
+    raise
+    Alias("test", [])
+    Alias("install", [])
+    pass
+except Exception:
+    raise

@@ -1,27 +1,17 @@
 # -*-python-*-
 
 import os
-from openalea.sconsx import config, environ
 
-ALEASolution = config.ALEASolution
+env = Environment(tools = ['toolchain'])
 
-pj = os.path.join
+env.AppendUnique(LIBS = ['statiskit_linalg', 'statiskit_core'])
 
-SConsignFile()
+VariantDir(os.path.join('build', 'src'), 'src')
+VariantDir(os.path.join('build', 'test'), 'test')
 
-options = Variables(['../options.py', 'options.py'], ARGUMENTS)
-tools = ['boost_python']
+SConscript(os.path.join('build', 'src', 'cpp', 'SConscript'), exports="env")
+SConscript(os.path.join('build', 'src', 'py', 'SConscript'), exports="env")
+SConscript(os.path.join('build', 'test', 'SConscript'), exports="env")
+SConscript(os.path.join('conda', 'SConscript'), exports="env")
 
-env = ALEASolution(options, tools)
-env.AppendUnique(CXXFLAGS=['-x', 'c++', "-std=c++0x"])
-
-env.AppendUnique(LIBS=['blas', 'lapack', 'statiskit_core'])
-env.AppendUnique(CPPPATH=[env.Dir('../StatisKit-Core/build-scons/include').srcnode()])
-env.AppendUnique(LIBPATH=[env.Dir('../StatisKit-Core/build-scons/lib').srcnode()])
-prefix = env['build_prefix']
-
-# Build stage
-SConscript(pj(prefix,"src/cpp/SConscript"), exports="env")
-SConscript(pj(prefix,"src/wrapper/SConscript"), exports="env")
-
-Default("build")
+Default("install")

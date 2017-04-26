@@ -49,7 +49,7 @@ namespace statiskit
         	virtual unsigned int get_nb_parameters() const;
         };
         
-        class PoissonRegression : public DiscreteGeneralizedLinearModel< PoissonLink >
+        class STATISKIT_GLM_API PoissonRegression : public DiscreteGeneralizedLinearModel< PoissonLink >
         {
             public:
                 PoissonRegression(const ScalarPredictor& predictor, const PoissonLink& link);
@@ -60,7 +60,7 @@ namespace statiskit
                 virtual void update(const double& value);                
         };          
 
-        class BinomialRegression : public DiscreteGeneralizedLinearModel< BinomialLink >
+        class STATISKIT_GLM_API BinomialRegression : public DiscreteGeneralizedLinearModel< BinomialLink >
         {
             public:
                 BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link);
@@ -71,7 +71,7 @@ namespace statiskit
                 virtual void update(const double& value);                
         };
       
-        class NegativeBinomialRegression : public DiscreteGeneralizedLinearModel< NegativeBinomialLink >
+        class STATISKIT_GLM_API NegativeBinomialRegression : public DiscreteGeneralizedLinearModel< NegativeBinomialLink >
         {
             public:
                 NegativeBinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link);
@@ -98,7 +98,7 @@ namespace statiskit
         	virtual unsigned int get_nb_parameters() const;
         };             
         
-        class NominalRegression : public CategoricalGeneralizedLinearModel< NominalLink >
+        class STATISKIT_GLM_API NominalRegression : public CategoricalGeneralizedLinearModel< NominalLink >
         {
         	typedef CategoricalEvent event_type;
         	
@@ -108,10 +108,10 @@ namespace statiskit
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
                            
             private:
-                virtual void update(const arma::colvec& values);                
+                virtual void update(const Eigen::VectorXd& values);                
         };
         
-        class OrdinalRegression : public CategoricalGeneralizedLinearModel< OrdinalLink >
+        class STATISKIT_GLM_API OrdinalRegression : public CategoricalGeneralizedLinearModel< OrdinalLink >
         {
         	typedef CategoricalEvent event_type;
         	
@@ -121,7 +121,7 @@ namespace statiskit
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;   
                              
             private:
-                virtual void update(const arma::colvec& values);                
+                virtual void update(const Eigen::VectorXd& values);                
         };                                               
     }
 }
