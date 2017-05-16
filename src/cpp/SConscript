@@ -1,33 +1,43 @@
 # -*-python-*-
 
-import os
-bn = os.path.basename
+from SCons.Errors import EnvironmentError
 
-Import( "env" )
+try:
+    Import("env")
 
-lib_env = env.Clone()
+    cppenv = env.Clone(tools = ['cpp'])
 
-#lib_env.EnableQt4Modules(['QtCore','QtOpenGL', 'QtGui'])
+    cppenv.AppendUnique(CPPDEFINES = ['LIBSTATISKIT_GLM'])
 
-# Import/Export symbols for windows
-if lib_env['compiler'] == 'mingw':
-    LINKFLAGS=["-enable-stdcall-fixup",
-               "-enable-auto-import",
-               "-enable-runtime-pseudo-reloc",
-               "-s"]
-    lib_env.AppendUnique(LINKFLAGS=LINKFLAGS)
+    exclude = """
+    """.split()
 
-includes= lib_env.ALEAGlob('*.h*')
-sources = lib_env.ALEAGlob('*.cpp')
+    sources = [source for source in cppenv.Glob('*.*') if not source.name in exclude]
 
+    targets = cppenv.CppLibrary("statiskit_glm", sources)
+    Alias("cpp", targets)
+    Alias("autowig", targets)
+    Alias("install", targets)
+    try:
+        wigenv = cppenv.Clone(tools = ['wig'])
 
-
-# Add defines to export symbols on Windows
-#lib_env.AppendUnique(CPPDEFINES=['MESSAGE'])
-#lib_env.AppendUnique(LIBS=[''])
-
-inc = lib_env.ALEAIncludes( 'statiskit/glm', includes )
-lib = lib_env.ALEALibrary( 'statiskit_glm', sources )
-
-#Alias('autowig', lib_env.BoostPython(['../statiskit/core', '../wrapper'], includes))
-#exe = lib_env.ALEAProgram('core', 'main.cpp', LIBS='core')
+        targets = wigenv.BoostPythonWIG('statiskit_glm', [target for target in targets if target.name.endswith('.h')],
+                                        module='../py/_glm.cpp',
+                                        decorator='../py/statiskit/glm/_glm.py',
+                                        parser_bootstrap=1,
+                                        controller='AutoWIG.py',
+                                        depends=['statiskit_linalg', 'statiskit_stl', 'statiskit_core'])
+        Alias("autowig", targets)
+        wigenv.Depends(targets, "cpp")
+    except EnvironmentError:
+        Alias("autowig", [])
+        pass
+    except Exception:
+        raise
+except EnvironmentError:
+    Alias("cpp", [])
+    Alias("autowig", [])
+    Alias("install", [])
+    pass
+except Exception:
+    raise

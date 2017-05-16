@@ -1,0 +1,32 @@
+# -*-python-*-
+
+from SCons.Errors import EnvironmentError
+
+try:
+    Import("env")
+
+    conda_env = env.Clone(tools = ['conda'])
+
+    sources = conda_env.Glob('*')
+
+    exclude = """
+    """.split()
+
+    sources = [source for source in sources if not source.name in exclude]
+
+    targets = conda_env.CondaPackages(sources)
+    Alias("conda-build", targets)
+
+    exclude = """
+    """.split()
+
+    sources = [source for source in sources if not source.name in exclude]
+
+    targets = conda_env.CondaEnvironment(sources)
+    Alias("conda-install", targets)
+except EnvironmentError:
+    Alias("conda-build", [])
+    Alias("conda-install", [])
+    pass
+except Exception:
+    raise

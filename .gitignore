@@ -1,8 +1,12 @@
 doc/html
 doc/latex
 doc/Doxyfile
-build-scons
+build
 *.so
 *.pyc
 *~
 .sconsign.dblite
+ASG.pkl
+.~lock.*
+*.sublime-workspace
+.coverage

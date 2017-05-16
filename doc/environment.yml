@@ -1,0 +1,9 @@
+name: statiskit-core-doc
+channels:
+  - statiskit
+  - conda-forge
+dependencies:
+  - python
+  - python-doc
+  - libstatiskit_core
+  - python-statiskit_core
