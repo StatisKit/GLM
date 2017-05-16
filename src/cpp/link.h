@@ -6,6 +6,21 @@
 
 namespace statiskit
 {
+        template<class T>
+        struct FLink : public T
+        {
+            public:
+                FLink();
+                FLink(const FLink& flink);
+                virtual ~FLink();
+
+                ContinuousUnivariateDistribution* get_distribution();            
+                void set_distribution(const ContinuousUnivariateDistribution& distribution);
+            
+            protected:
+                ContinuousUnivariateDistribution* _distribution;
+        };
+
         struct STATISKIT_GLM_API ScalarLink
         {
             typedef ScalarPredictor predictor_type;
@@ -14,10 +29,18 @@ namespace statiskit
             virtual double inverse(const double& value) const = 0;
             virtual double inverse_derivative(const double& value) const = 0;
         };        
-        
+
         struct STATISKIT_GLM_API PoissonLink : ScalarLink
         {
             typedef PoissonDistribution family_type;
+            
+            virtual std::unique_ptr< PoissonLink > copy() const = 0;
+        };
+
+        struct STATISKIT_GLM_API PoissonCanonicalLink : PoissonLink
+        {
+            PoissonCanonicalLink();
+            virtual ~PoissonCanonicalLink();
 
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
@@ -25,26 +48,29 @@ namespace statiskit
             virtual std::unique_ptr< PoissonLink > copy() const;
         };
         
-        class STATISKIT_GLM_API PoissonFLink : public PoissonLink
+        struct STATISKIT_GLM_API PoissonVLink : FLink<PoissonLink>
         {
-        	public:
-		    	PoissonFLink();
-		    	virtual ~PoissonFLink();
-		    	
-		        virtual double inverse(const double& value) const;
-		        virtual double inverse_derivative(const double& value) const;
-		        
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+            PoissonVLink();
+            PoissonVLink(const PoissonVLink& link);
+            virtual ~PoissonVLink();
 
-		        virtual std::unique_ptr< PoissonLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
+	        virtual double inverse(const double& value) const;
+	        virtual double inverse_derivative(const double& value) const;
+
+	        virtual std::unique_ptr< PoissonLink > copy() const;
         };
-        
+
         struct STATISKIT_GLM_API BinomialLink : ScalarLink
         {
             typedef BinomialDistribution family_type;
+            
+            virtual std::unique_ptr< BinomialLink > copy() const = 0;
+        };
+
+        struct STATISKIT_GLM_API BinomialCanonicalLink : BinomialLink
+        {
+            BinomialCanonicalLink();
+            virtual ~BinomialCanonicalLink();
 
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
@@ -52,26 +78,29 @@ namespace statiskit
             virtual std::unique_ptr< BinomialLink > copy() const;
         };
         
-        class STATISKIT_GLM_API BinomialFLink : public BinomialLink
+        struct STATISKIT_GLM_API BinomialFLink : FLink<BinomialLink>
         {
-        	public:
-		    	BinomialFLink();
-		    	virtual ~BinomialFLink();
-		    	
-		        virtual double inverse(const double& value) const;
-		        virtual double inverse_derivative(const double& value) const;
-		        
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+	    	BinomialFLink();
+            BinomialFLink(const BinomialFLink& link);
+	    	virtual ~BinomialFLink();
+	    	
+	        virtual double inverse(const double& value) const;
+	        virtual double inverse_derivative(const double& value) const;
 
-		        virtual std::unique_ptr< BinomialLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
+	        virtual std::unique_ptr< BinomialLink > copy() const;
         };       
-        
+
         struct STATISKIT_GLM_API NegativeBinomialLink : ScalarLink
         {
             typedef NegativeBinomialDistribution family_type;
+            
+            virtual std::unique_ptr< NegativeBinomialLink > copy() const = 0;
+        };        
+        
+        struct STATISKIT_GLM_API NegativeBinomialCanonicalLink : NegativeBinomialLink
+        {
+            NegativeBinomialCanonicalLink();
+            virtual ~NegativeBinomialCanonicalLink();
 
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
@@ -79,23 +108,30 @@ namespace statiskit
 			virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };  
         
-        class STATISKIT_GLM_API NegativeBinomialFLink : public NegativeBinomialLink
+        struct STATISKIT_GLM_API NegativeBinomialULink : FLink<NegativeBinomialLink>
         {
-        	public:
-		    	NegativeBinomialFLink();
-		    	virtual ~NegativeBinomialFLink();
-		    	
-		        virtual double inverse(const double& value) const;
-		        virtual double inverse_derivative(const double& value) const;
-		                    
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+            NegativeBinomialULink();
+            NegativeBinomialULink(const NegativeBinomialULink& link);
+            virtual ~NegativeBinomialULink();
 
-		        virtual std::unique_ptr< NegativeBinomialLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
-        };         
-        
+            virtual double inverse(const double& value) const;
+            virtual double inverse_derivative(const double& value) const;
+                        
+            virtual std::unique_ptr< NegativeBinomialLink > copy() const;
+        };
+
+        struct STATISKIT_GLM_API NegativeBinomialVLink : FLink<NegativeBinomialLink>
+        {
+            NegativeBinomialVLink();
+            NegativeBinomialVLink(const NegativeBinomialVLink& link);
+            virtual ~NegativeBinomialVLink();
+
+            virtual double inverse(const double& value) const;
+            virtual double inverse_derivative(const double& value) const;
+                        
+            virtual std::unique_ptr< NegativeBinomialLink > copy() const;
+        };
+
         struct STATISKIT_GLM_API VectorLink
         {
             typedef VectorPredictor predictor_type;
@@ -104,10 +140,18 @@ namespace statiskit
             virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const = 0;
             virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const = 0;
         };
-        
+
         struct STATISKIT_GLM_API NominalLink : VectorLink
         {
             typedef NominalDistribution family_type;
+
+            virtual std::unique_ptr< NominalLink > copy() const = 0;
+        };
+
+        struct STATISKIT_GLM_API NominalCanonicalLink : NominalLink
+        {
+            NominalCanonicalLink();
+            virtual ~NominalCanonicalLink();
 
             virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
             virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
@@ -115,83 +159,72 @@ namespace statiskit
             virtual std::unique_ptr< NominalLink > copy() const;
         };
         
-        class STATISKIT_GLM_API ReferenceLink : public NominalLink
+        struct STATISKIT_GLM_API ReferenceLink : FLink<NominalLink>
         {
-        	public:
-		    	ReferenceLink();
-		    	virtual ~ReferenceLink();
-		    	
-		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
-		        
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+            ReferenceLink();
+            ReferenceLink(const ReferenceLink& link);
+            virtual ~ReferenceLink();
 
-		        virtual std::unique_ptr< NominalLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+
+            virtual std::unique_ptr< NominalLink > copy() const;
         };
         
         struct STATISKIT_GLM_API OrdinalLink : VectorLink
         {
             typedef OrdinalDistribution family_type;
 
+            virtual std::unique_ptr< OrdinalLink > copy() const = 0;
+        };
+
+        struct STATISKIT_GLM_API OrdinalCanonicalLink : OrdinalLink
+        {
+            OrdinalCanonicalLink();
+            virtual ~OrdinalCanonicalLink();
+
             virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
-			virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };
-                
-        class STATISKIT_GLM_API AdjacentLink : public OrdinalLink
-        {
-        	public:
-		    	AdjacentLink();
-		    	virtual ~AdjacentLink();
-		    	
-		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
-		        
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
 
-		        virtual std::unique_ptr< OrdinalLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
+        struct STATISKIT_GLM_API AdjacentLink : FLink<OrdinalLink>
+        {
+            AdjacentLink();
+            AdjacentLink(const AdjacentLink& link);
+            virtual ~AdjacentLink();
+
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+
+            virtual std::unique_ptr< OrdinalLink > copy() const;
         };  
         
-        class STATISKIT_GLM_API CumulativeLink : public OrdinalLink
+        struct STATISKIT_GLM_API CumulativeLink : FLink<OrdinalLink>
         {
-        	public:
-		    	CumulativeLink();
-		    	virtual ~CumulativeLink();
-		    	
-		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
-		        
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+            CumulativeLink();
+            CumulativeLink(const CumulativeLink& link);
+            virtual ~CumulativeLink();
 
-		        virtual std::unique_ptr< OrdinalLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+
+            virtual std::unique_ptr< OrdinalLink > copy() const;
         };
         
-        class STATISKIT_GLM_API SequentialLink : public OrdinalLink
+        struct STATISKIT_GLM_API SequentialLink : FLink<OrdinalLink>
         {
-        	public:
-		    	SequentialLink();
-		    	virtual ~SequentialLink();
-		    	
-		        virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-		        virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
-		        
-		        void set_distribution(const ContinuousUnivariateDistribution& distribution);
+            SequentialLink();
+            SequentialLink(const SequentialLink& link);
+            virtual ~SequentialLink();
 
-		        virtual std::unique_ptr< OrdinalLink > copy() const;
-            
-            protected:
-            	ContinuousUnivariateDistribution* _distribution;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+
+            virtual std::unique_ptr< OrdinalLink > copy() const;
         };                                                   
 }
 
+#include "link.hpp"
 #endif

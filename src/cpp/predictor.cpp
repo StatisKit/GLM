@@ -56,6 +56,13 @@ namespace statiskit
 	const Eigen::VectorXd& CompleteScalarPredictor::get_delta() const
 	{ return _delta; }
 
+    void CompleteScalarPredictor::set_delta(const Eigen::VectorXd& delta)
+    {
+        if(delta.rows() != _delta.rows() )
+        { throw statiskit::size_error("delta", delta.rows(), _delta.rows()); }  
+        _delta = delta;
+    }
+
     std::unique_ptr< ScalarPredictor > CompleteScalarPredictor::copy() const
     { return std::make_unique< CompleteScalarPredictor >(*this); }
 
@@ -126,16 +133,32 @@ namespace statiskit
 	{
 		if(beta.rows() != _alpha.rows() + _delta.rows() * _delta.cols())
 		{ throw statiskit::size_error("beta", beta.rows(),  _alpha.rows() + _delta.rows() * _delta.cols()); }
-		_alpha = beta.segment(0, _alpha.rows() -1);
+		_alpha = beta.segment(0, _alpha.rows());
 		for(size_t j=0; j<_alpha.rows(); ++j)
-        { _delta.block(j, 0, 1, _delta.cols()) = ( beta.segment(_alpha.rows() + j * _delta.cols(), _alpha.rows() + (j+1) * _delta.cols() - 1) ).transpose(); }
+        { _delta.block(j, 0, 1, _delta.cols()) = ( beta.segment(_alpha.rows() + j * _delta.cols(),_delta.cols() ) ).transpose(); } //_alpha.rows() + (j+1) * _delta.cols() - 1) ).transpose(); }
 	}
 		
 	const Eigen::VectorXd& CompleteVectorPredictor::get_alpha() const
-	{ return _alpha; }		
-		
+	{ return _alpha; }	
+
+	void CompleteVectorPredictor::set_alpha(const Eigen::VectorXd& alpha)
+    {
+        if(alpha.rows() != _alpha.rows() )
+        { throw statiskit::size_error("alpha", alpha.rows(),  _alpha.rows() ); }
+        _alpha = alpha;
+    }
+
 	const Eigen::MatrixXd& CompleteVectorPredictor::get_delta() const
 	{ return _delta; }
+
+    void CompleteVectorPredictor::set_delta(const Eigen::MatrixXd& delta)
+    {
+        if(delta.rows() != _delta.rows() )
+        { throw statiskit::size_error("delta nb rows", delta.rows(),  _delta.rows() ); }
+        if(delta.cols() != _delta.cols() )
+        { throw statiskit::size_error("delta nb cols", delta.cols(),  _delta.cols() ); }   
+        _delta = delta;
+    }    
 	
     std::unique_ptr< VectorPredictor > CompleteVectorPredictor::copy() const
     { return std::make_unique< CompleteVectorPredictor >(*this); }	
@@ -154,7 +177,7 @@ namespace statiskit
     }
 	
     Eigen::VectorXd ProportionalVectorPredictor::operator() (const MultivariateEvent& event) const
-    { return _alpha + _explanatory_space->encode(event) * _delta; }
+    { return _alpha + _explanatory_space->encode(event) * _delta * Eigen::VectorXd::Ones(_alpha.rows()); }
     
     size_t ProportionalVectorPredictor::size() const
     { return _alpha.rows() + _delta.rows(); }
@@ -163,15 +186,29 @@ namespace statiskit
 	{
 		if(beta.rows() != _alpha.rows() + _delta.rows() * _delta.cols())
 		{ throw statiskit::size_error("beta", beta.rows(),  _alpha.rows() + _delta.rows() * _delta.cols()); }
-		_alpha = beta.segment(0, _alpha.rows() -1);
-		_delta = beta.segment(_alpha.rows(), _alpha.rows() + _delta.cols() - 1);
+		_alpha = beta.segment(0, _alpha.rows() );
+		_delta = beta.segment(_alpha.rows(),  _delta.rows() );
 	}
 		
 	const Eigen::VectorXd& ProportionalVectorPredictor::get_alpha() const
 	{ return _alpha; }		
-		
+	
+    void ProportionalVectorPredictor::set_alpha(const Eigen::VectorXd& alpha)
+    {
+        if(alpha.rows() != _alpha.rows() )
+        { throw statiskit::size_error("alpha", alpha.rows(),  _alpha.rows() ); }
+        _alpha = alpha;
+    }
+
 	const Eigen::VectorXd& ProportionalVectorPredictor::get_delta() const
 	{ return _delta; }
+
+    void ProportionalVectorPredictor::set_delta(const Eigen::VectorXd& delta)
+    {
+        if(delta.rows() != _delta.rows() )
+        { throw statiskit::size_error("delta", delta.rows(),  _delta.rows() ); }
+        _delta = delta;
+    }   
 	
     std::unique_ptr< VectorPredictor > ProportionalVectorPredictor::copy() const
     { return std::make_unique< ProportionalVectorPredictor >(*this); }	

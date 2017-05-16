@@ -61,6 +61,7 @@ namespace statiskit
             
         	/// \Brief Get the vector of slopes delta.
 			const Eigen::VectorXd& get_delta() const;
+            void set_delta(const Eigen::VectorXd& delta);
 
             virtual std::unique_ptr< ScalarPredictor > copy() const;
 			
@@ -122,7 +123,10 @@ namespace statiskit
 			virtual void set_beta(const Eigen::VectorXd& beta);                  
 			
 			const Eigen::VectorXd& get_alpha() const;
+            void set_alpha(const Eigen::VectorXd& alpha);
+
 			const Eigen::MatrixXd& get_delta() const;
+            void set_delta(const Eigen::MatrixXd& delta);
 			
             virtual std::unique_ptr< VectorPredictor > copy() const;	
             		
@@ -144,7 +148,10 @@ namespace statiskit
 			virtual void set_beta(const Eigen::VectorXd& beta);                  
 			
 			const Eigen::VectorXd& get_alpha() const;
+            void set_alpha(const Eigen::VectorXd& alpha);
+
 			const Eigen::VectorXd& get_delta() const;
+            void set_delta(const Eigen::VectorXd& delta);
 			
             virtual std::unique_ptr< VectorPredictor > copy() const;	
             		

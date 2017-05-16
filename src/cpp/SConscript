@@ -10,12 +10,6 @@ try:
     cppenv.AppendUnique(CPPDEFINES = ['LIBSTATISKIT_GLM'])
 
     exclude = """
-    fisher.cpp
-    fisher.h
-    fisher.hpp
-    glm.cpp
-    glm.h
-    glm.hpp
     """.split()
 
     sources = [source for source in cppenv.Glob('*.*') if not source.name in exclude]
