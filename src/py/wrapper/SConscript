@@ -13,12 +13,12 @@ try:
 
     sources = [source for source in pyenv.Glob('*.*') if source.name not in exclude]
 
-    targets = pyenv.BoostPythonExtension("statiskit/glm/__glm", sources)
+    targets = pyenv.BoostPythonExtension("../statiskit/glm/__glm", sources)
     Alias("py", targets)
     Alias("install", targets)
     pyenv.Depends(targets, "cpp")
     
-    targets = pyenv.PythonPackage('statiskit')
+    targets = pyenv.PythonPackage(statiskit = '../statiskit')
     Alias("py", targets)
     Alias("install", targets)
     pyenv.Depends(targets, "cpp")
