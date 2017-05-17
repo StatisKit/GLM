@@ -234,12 +234,19 @@ namespace statiskit
                     
                     std::vector< Eigen::MatrixXd > Z = Z_init(data, response, explanatories);
                     std::cout << "Z init :" << std::endl;
+                    std::cout << "Z_0 :" << std::endl;
+                    std::cout << Z[0] << std::endl;
                     std::vector< Eigen::VectorXd > y = y_init(data, response, explanatories);
                     std::cout << "y init :" << std::endl;
+                    std::cout << "y_0 :" << std::endl;
+                    std::cout << y[0] << std::endl;                    
                     std::vector< double > w = w_init(data, response, explanatories);
                     std::cout << "w init :" << std::endl;
+                    std::cout << "w_0 :" << std::endl;
+                    std::cout << w[0] << std::endl;                    
                     Eigen::VectorXd beta = beta_init(data, response, explanatories);
                     std::cout << "beta init :" << std::endl;
+                    std::cout << beta << std::endl;
                     
                     Eigen::VectorXd eta, pi, b;
                     Eigen::MatrixXd ZG, A;                
@@ -249,13 +256,25 @@ namespace statiskit
                     {
                     	A = Eigen::MatrixXd::Zero(beta.rows(), beta.rows());
                     	b = Eigen::VectorXd::Zero(beta.rows());
+                    std::cout << "Z.size() = " << Z.size() << std::endl;
+                    std::cout << "y.size() = " << y.size() << std::endl;
+                    std::cout << "w.size() = " << w.size() << std::endl;         
+                     
                         for(Index k = 0; k < Z.size(); ++k)
                         {      
     		                eta = Z[k] * beta;
-    		                pi = _link->inverse(eta);                     
-    		                ZG = Z[k].transpose() * _link->inverse_derivative(eta);
-    		                A += w[k] * ZG * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() ).inverse() * ZG.transpose();
-    		                b += w[k] * ZG * (y[k] - pi);                     
+                    std::cout << "eta :" << std::endl;
+                    std::cout << eta << std::endl;                            
+    		                pi = _link->inverse(eta);  
+                    std::cout << "pi :" << std::endl;
+                    std::cout << pi << std::endl;                                               
+    		                ZG = Z[k].transpose().eval() * _link->inverse_derivative(eta);
+    		                A += w[k] * ZG * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ).inverse() * ZG.transpose().eval();
+                    std::cout << "A :" << std::endl;
+                    std::cout << A << std::endl;                             
+    		                b += w[k] * ZG * (y[k] - pi);  
+                    std::cout << "b :" << std::endl;
+                    std::cout << b << std::endl;                                                
                         }
     					b += A * beta;
     					
@@ -283,19 +302,33 @@ namespace statiskit
             std::vector< Eigen::MatrixXd > CategoricalFisherEstimation< D, B >::Estimator::Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
             {
             	Index J = static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() )->get_cardinality();
+                std::cout << " 1 " << std::endl;
                 std::unique_ptr< MultivariateData > _data = data.extract(explanatories);
+                std::cout << " 2 " << std::endl;
                 const MultivariateSampleSpace* sample_space = _data->get_sample_space();
+                std::cout << " 3 " << std::endl;
                 Index p = sample_space->encode();
+                std::cout << " 4 " << std::endl;
                 std::vector< Eigen::MatrixXd > Z;
+                std::cout << " 5 " << std::endl;
                 Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(J-1, J-1);
+                std::cout << " 6 " << std::endl;
                 std::unique_ptr< MultivariateData::Generator > generator = _data->generator();
+                std::cout << " 7 " << std::endl;
                 while(generator->is_valid())
-                {
+                {std::cout << " 8 " << std::endl;
                 	Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));
                     const MultivariateEvent* event = generator->event();
                     if(event)
                     {
-                    	Z_k.block(0, J-1, J-1, (J-1) * p ) = Eigen::kroneckerProduct(identity, sample_space->encode(*event).transpose());
+                        Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose();
+                        // Eigen::MatrixXd X_k = Eigen::kroneckerProduct(identity, x_k);
+                        // std::cout << "X_k : " << std::endl;
+                        // std::cout << X_k << std::endl;     
+                        // Z_k.block(0, J-1, J-1, (J-1) * p ) = X_k;
+                        // std::cout << "Z_k : " << std::endl;
+                        // std::cout << Z_k << std::endl;                                    
+                    	Z_k.block(0, J-1, J-1, (J-1) * p ) = Eigen::kroneckerProduct(identity, xt_k);
                         std::cout << "Z_k : " << std::endl;
                         std::cout << Z_k << std::endl;
                     	Z.push_back(Z_k);
@@ -315,7 +348,7 @@ namespace statiskit
             {
                 std::unique_ptr< UnivariateData > _data = data.extract(response);
                 std::vector< Eigen::VectorXd > y;
-                CategoricalSampleSpace* sample_space = const_cast< CategoricalSampleSpace* >(static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() ));
+                CategoricalSampleSpace* sample_space = const_cast< CategoricalSampleSpace* >(static_cast< const CategoricalSampleSpace* >(_data->get_sample_space() )); // data.extract(response)->get_sample_space() ));
                 encoding_type initial_encoding = sample_space->get_encoding();
                 sample_space->set_encoding(encoding_type::TREATMENT);
                 Index J = sample_space->get_cardinality();
