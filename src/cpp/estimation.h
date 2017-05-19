@@ -17,7 +17,7 @@ namespace statiskit
                 ScalarFisherEstimation(D const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
                 ScalarFisherEstimation(const ScalarFisherEstimation& estimation);
 
-                class Estimator : public B::Estimator
+                class Estimator : public B::Estimator, public Optimization
                 { 
                     public:
                         Estimator();
@@ -26,19 +26,17 @@ namespace statiskit
 
                         virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy=true) const; 
                 
-                        const double& get_epsilon() const;
-                        void set_epsilon(const double& epsilon);
+                        // const double& get_epsilon() const;
+                        // void set_epsilon(const double& epsilon);
 
-                        const unsigned int& get_maxits() const;
-                        void set_maxits(const unsigned int& maxits);
+                        // const unsigned int& get_maxits() const;
+                        // void set_maxits(const unsigned int& maxits);
 
                         const typename D::link_type* get_link() const;
                         void set_link(const typename D::link_type& link);
                     
                     protected:
                         typename D::link_type * _link;
-                        double _epsilon;
-                        unsigned int _maxits;
 
                         virtual Eigen::MatrixXd X_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
                         virtual Eigen::VectorXd y_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
@@ -128,7 +126,7 @@ namespace statiskit
                 CategoricalFisherEstimation(D const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
                 CategoricalFisherEstimation(const CategoricalFisherEstimation& estimation);
 
-                class Estimator : public B::Estimator
+                class Estimator : public B::Estimator, public Optimization
                 { 
                     public:
                         Estimator();
@@ -137,19 +135,17 @@ namespace statiskit
 
                         virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy=true) const; 
                 
-                        const double& get_epsilon() const;
-                        void set_epsilon(const double& epsilon);
+                        // const double& get_epsilon() const;
+                        // void set_epsilon(const double& epsilon);
 
-                        const unsigned int& get_maxits() const;
-                        void set_maxits(const unsigned int& maxits);
+                        // const unsigned int& get_maxits() const;
+                        // void set_maxits(const unsigned int& maxits);
 
                         const typename D::link_type* get_link() const;
                         void set_link(const typename D::link_type& link);
                     
                     protected:
                         typename D::link_type * _link;
-                        double _epsilon;
-                        unsigned int _maxits;
 
                         virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
                         virtual std::vector< Eigen::VectorXd > y_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
@@ -208,15 +204,17 @@ namespace statiskit
             class STATISKIT_GLM_API Estimator : public NominalFisherEstimation::Estimator
             {
             	public:
-            		Estimator(const Eigen::MatrixXd& constrained_matrix);
-                    Estimator(const Estimator& estimator);
-            		
+                    Estimator(const Eigen::MatrixXd& slope_constraint, const Index& dimension);
+                    Estimator(const Eigen::MatrixXd& slope_constraint, const Eigen::MatrixXd& intercept_constraint);
+                    Estimator(const Estimator& estimator);     
+
             	protected:
-            			Eigen::MatrixXd _constrained_matrix;
+                    Eigen::MatrixXd _intercept_constraint;
+            		Eigen::MatrixXd _slope_constraint;
             	
-            			virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+            		virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
             			
-                        virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
+                    virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
             };
         };                
          

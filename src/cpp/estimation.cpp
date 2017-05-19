@@ -141,13 +141,14 @@ namespace statiskit
             Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(J-1, J-1);
             Eigen::VectorXd col_ones = Eigen::VectorXd::Ones(J-1);
             std::unique_ptr< MultivariateData::Generator > generator = data.generator();
+            Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, J-1 + p);
             while(generator->is_valid())
             {
-            	Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, J-1 + p);
                 const MultivariateEvent* event = generator->event();
                 if(event)
                 {
-                	Z_k.block(0, J-1, J-1, p) = Eigen::kroneckerProduct(col_ones, sample_space->encode(*event));
+                    Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose(); 
+                	Z_k.block(0, J-1, J-1, p) = Eigen::kroneckerProduct(col_ones, xt_k);
                 	Z.push_back(Z_k);
                 }
                 else
@@ -174,12 +175,30 @@ namespace statiskit
         ConstrainedNominalFisherEstimation::ConstrainedNominalFisherEstimation(const ConstrainedNominalFisherEstimation& estimation) : NominalFisherEstimation(estimation)
         {}
 
-        ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& constrained_matrix) : NominalFisherEstimation::Estimator()
-        { _constrained_matrix = constrained_matrix; }
+        // ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& constrained_matrix) : NominalFisherEstimation::Estimator()
+        // { _constrained_matrix = constrained_matrix; }
+
+        // ConstrainedNominalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : NominalFisherEstimation::Estimator(estimator)
+        // { _constrained_matrix = estimator._constrained_matrix; }
+
+        ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& slope_constraint, const Index& dimension) : NominalFisherEstimation::Estimator()
+        { 
+            _slope_constraint = slope_constraint; 
+            _intercept_constraint = Eigen::MatrixXd::Identity(dimension, dimension);
+        }
+
+        ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& slope_constraint, const Eigen::MatrixXd& intercept_constraint) : NominalFisherEstimation::Estimator()
+        { 
+            _slope_constraint = slope_constraint; 
+            _intercept_constraint = intercept_constraint;
+        }
 
         ConstrainedNominalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : NominalFisherEstimation::Estimator(estimator)
-        { _constrained_matrix = estimator._constrained_matrix; }
-                             
+        {
+            _slope_constraint = estimator._slope_constraint;
+            _intercept_constraint = estimator._intercept_constraint;
+        }
+
 		std::vector< Eigen::MatrixXd > ConstrainedNominalFisherEstimation::Estimator::Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
         {
         	Index J = static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() )->get_cardinality();
@@ -189,22 +208,22 @@ namespace statiskit
             std::vector< Eigen::MatrixXd > Z;
             Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(J-1, J-1);
             std::unique_ptr< MultivariateData::Generator > generator = _data->generator();
+            Eigen::MatrixXd Z_k_complete = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));            
             while(generator->is_valid())
             {
-            	Eigen::MatrixXd Z_k_complete = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));
-            	Eigen::MatrixXd Z_k;
-            	
+                Eigen::MatrixXd Z_k  = Eigen::MatrixXd::Zero(J-1, _intercept_constraint.cols() + _slope_constraint.cols()) ;
+                Z_k.block(0, 0, J-1, _intercept_constraint.cols()) = _intercept_constraint;
                 const MultivariateEvent* event = generator->event();
                 if(event)
                 {
-                	Z_k_complete.block(0, J-1, J-1, (J-1) * p) = Eigen::kroneckerProduct(identity, sample_space->encode(*event));
-                	Z_k = _constrained_matrix * Z_k_complete;
-                	Z.push_back(Z_k);
+                    Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose(); 
+                    Z_k.block(0, J-1, J-1, _slope_constraint.cols()) = Eigen::kroneckerProduct(identity, xt_k) * _slope_constraint;
+                    Z.push_back(Z_k);
                 }
                 else
                 { 
-                	Z_k = std::numeric_limits< double >::quiet_NaN() * Eigen::MatrixXd::Ones(_constrained_matrix.rows(), _constrained_matrix.cols());
-                	Z.push_back(Z_k);
+                    Z_k.block(0, J-1, J-1, _slope_constraint.cols()) = std::numeric_limits< double >::quiet_NaN() * Eigen::MatrixXd::Ones(J-1, _slope_constraint.cols());
+                    Z.push_back(Z_k);
                 }
                 ++(*generator);
             }
@@ -214,7 +233,7 @@ namespace statiskit
         NominalRegression * ConstrainedNominalFisherEstimation::Estimator::build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const
         {
             const NominalSampleSpace& _response_space = static_cast< const NominalSampleSpace& >(response_space);
-        	ConstrainedVectorPredictor predictor = ConstrainedVectorPredictor(explanatory_space, _response_space.get_cardinality()-1, _constrained_matrix);
+        	ConstrainedVectorPredictor predictor = ConstrainedVectorPredictor(explanatory_space,  _slope_constraint, _intercept_constraint); //ConstrainedVectorPredictor(explanatory_space, _response_space.get_cardinality()-1, _constrained_matrix);
         	predictor.set_beta(beta);
         	return new NominalRegression(_response_space.get_values(), predictor, *_link);
         }
@@ -261,13 +280,14 @@ namespace statiskit
             Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(J-1, J-1);
             Eigen::VectorXd col_ones = Eigen::VectorXd::Ones(J-1);
             std::unique_ptr< MultivariateData::Generator > generator = _data->generator();
+            Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, J-1 + p);
             while(generator->is_valid())
             {
-            	Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, J-1 + p);
                 const MultivariateEvent* event = generator->event();
                 if(event)
                 {
-                	Z_k.block(0, J-1, J-1, p) = Eigen::kroneckerProduct(col_ones, sample_space->encode(*event));
+                    Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose();
+                	Z_k.block(0, J-1, J-1, p) = Eigen::kroneckerProduct(col_ones, xt_k);
                 	Z.push_back(Z_k);
                 }
                 else

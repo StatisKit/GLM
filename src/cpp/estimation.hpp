@@ -19,39 +19,32 @@ namespace statiskit
             {}           
 
         template<class D, class B>
-            ScalarFisherEstimation< D, B >::Estimator::Estimator()
-            {
-                _epsilon = get_epsilon();
-                _maxits = get_maxits();
-            }
+            ScalarFisherEstimation< D, B >::Estimator::Estimator() : Optimization()
+            { _maxits = 1e4; }
         
         template<class D, class B>
             ScalarFisherEstimation< D, B >::Estimator::~Estimator()
             { delete _link; }
 
         template<class D, class B>
-            ScalarFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator)
-            {
-                _epsilon = estimator._epsilon;
-                _maxits = estimator._maxits;
-                _link = estimator._link->copy().release();
-            }
+            ScalarFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
+            { _link = estimator._link->copy().release(); }
 
-        template<class D, class B>
-            const double& ScalarFisherEstimation< D, B >::Estimator::get_epsilon() const
-            { return _epsilon; }
+        // template<class D, class B>
+        //     const double& ScalarFisherEstimation< D, B >::Estimator::get_epsilon() const
+        //     { return _epsilon; }
 
-        template<class D, class B>
-            void ScalarFisherEstimation< D, B >::Estimator::set_epsilon(const double& epsilon)
-            { _epsilon = epsilon; }
+        // template<class D, class B>
+        //     void ScalarFisherEstimation< D, B >::Estimator::set_epsilon(const double& epsilon)
+        //     { _epsilon = epsilon; }
 
-        template<class D, class B>
-            const unsigned int& ScalarFisherEstimation< D, B >::Estimator::get_maxits() const
-            { return _maxits; }
+        // template<class D, class B>
+        //     const unsigned int& ScalarFisherEstimation< D, B >::Estimator::get_maxits() const
+        //     { return _maxits; }
 
-        template<class D, class B>
-            void ScalarFisherEstimation< D, B >::Estimator::set_maxits(const unsigned int& maxits)
-            { _maxits = maxits; }
+        // template<class D, class B>
+        //     void ScalarFisherEstimation< D, B >::Estimator::set_maxits(const unsigned int& maxits)
+        //     { _maxits = maxits; }
 
         template<class D, class B>
             const typename D::link_type* ScalarFisherEstimation< D, B >::Estimator::get_link() const
@@ -92,7 +85,7 @@ namespace statiskit
                         }
                         beta = statiskit::linalg::solve(XtWinv * X, (XtWinv * (eta + (y - mu).cwiseProduct(prime))).eval(), statiskit::linalg::solver_type::jacobiSvd);
                         ++its;
-                    } while(statiskit::__impl::reldiff(_estimation->_beta.back(), beta) > _epsilon && its < _maxits);
+                    } while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
     				_estimation->_X = X;
     				_estimation->_y = y;
     				_estimation->_w = w;
@@ -174,39 +167,32 @@ namespace statiskit
             {}
 
         template<class D, class B>
-            CategoricalFisherEstimation< D, B >::Estimator::Estimator()
-            {
-                _epsilon = get_epsilon();
-                _maxits = get_maxits();
-            }
+            CategoricalFisherEstimation< D, B >::Estimator::Estimator() : Optimization()
+            { _maxits = 1e4; }
         
         template<class D, class B>
             CategoricalFisherEstimation< D, B >::Estimator::~Estimator()
             { delete _link; }
 
         template<class D, class B>
-            CategoricalFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator)
-            {
-                _epsilon = estimator._epsilon;
-                _maxits = estimator._maxits;
-                _link = estimator._link->copy().release();
-            }
+            CategoricalFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
+            { _link = estimator._link->copy().release(); }
 
-        template<class D, class B>
-            const double& CategoricalFisherEstimation< D, B >::Estimator::get_epsilon() const
-            { return _epsilon; }
+        // template<class D, class B>
+        //     const double& CategoricalFisherEstimation< D, B >::Estimator::get_epsilon() const
+        //     { return _epsilon; }
 
-        template<class D, class B>
-            void CategoricalFisherEstimation< D, B >::Estimator::set_epsilon(const double& epsilon)
-            { _epsilon = epsilon; }
+        // template<class D, class B>
+        //     void CategoricalFisherEstimation< D, B >::Estimator::set_epsilon(const double& epsilon)
+        //     { _epsilon = epsilon; }
 
-        template<class D, class B>
-            const unsigned int& CategoricalFisherEstimation< D, B >::Estimator::get_maxits() const
-            { return _maxits; }
+        // template<class D, class B>
+        //     const unsigned int& CategoricalFisherEstimation< D, B >::Estimator::get_maxits() const
+        //     { return _maxits; }
 
-        template<class D, class B>
-            void CategoricalFisherEstimation< D, B >::Estimator::set_maxits(const unsigned int& maxits)
-            { _maxits = maxits; }
+        // template<class D, class B>
+        //     void CategoricalFisherEstimation< D, B >::Estimator::set_maxits(const unsigned int& maxits)
+        //     { _maxits = maxits; }
 
         template<class D, class B>
             const typename D::link_type* CategoricalFisherEstimation< D, B >::Estimator::get_link() const
@@ -221,79 +207,53 @@ namespace statiskit
             {
                 std::unique_ptr< UnivariateConditionalDistributionEstimation > estimation;
                 if(lazy)
-                { std::cout << "lazy 1 " << std::endl;
-                    estimation = std::make_unique< LazyEstimation< UnivariateConditionalDistribution, CategoricalFisherEstimation< D, B > > >((*this)(data, response, explanatories, false)->get_estimated()); 
-                       std::cout << "lazy 2" << std::endl;
-                }
+                { estimation = std::make_unique< LazyEstimation< UnivariateConditionalDistribution, CategoricalFisherEstimation< D, B > > >((*this)(data, response, explanatories, false)->get_estimated()); }
                 else
-                {   std::cout << "debut" << std::endl;
+                {   
                     std::unique_ptr< CategoricalFisherEstimation< D, B > > _estimation = std::make_unique< CategoricalFisherEstimation< D, B > >(nullptr, &data, response, explanatories);
-                    std::cout << "creation " << std::endl;
                     _estimation->_beta.clear();
-                    std::cout << "beta clear " << std::endl;
-                    
                     std::vector< Eigen::MatrixXd > Z = Z_init(data, response, explanatories);
-                    std::cout << "Z init :" << std::endl;
-                    std::cout << "Z_0 :" << std::endl;
-                    std::cout << Z[0] << std::endl;
-                    std::vector< Eigen::VectorXd > y = y_init(data, response, explanatories);
-                    std::cout << "y init :" << std::endl;
-                    std::cout << "y_0 :" << std::endl;
-                    std::cout << y[0] << std::endl;                    
-                    std::vector< double > w = w_init(data, response, explanatories);
-                    std::cout << "w init :" << std::endl;
-                    std::cout << "w_0 :" << std::endl;
-                    std::cout << w[0] << std::endl;                    
+                    std::vector< Eigen::VectorXd > y = y_init(data, response, explanatories);         
+                    std::vector< double > w = w_init(data, response, explanatories);                   
                     Eigen::VectorXd beta = beta_init(data, response, explanatories);
-                    std::cout << "beta init :" << std::endl;
-                    std::cout << beta << std::endl;
-                    
                     Eigen::VectorXd eta, pi, b;
-                    Eigen::MatrixXd ZG, A;                
+                    Eigen::MatrixXd ZG, ZGS, A;                
 
                     unsigned int its = 0;
                     do
                     {
+                        _estimation->_beta.push_back(beta);
                     	A = Eigen::MatrixXd::Zero(beta.rows(), beta.rows());
-                    	b = Eigen::VectorXd::Zero(beta.rows());
-                    std::cout << "Z.size() = " << Z.size() << std::endl;
-                    std::cout << "y.size() = " << y.size() << std::endl;
-                    std::cout << "w.size() = " << w.size() << std::endl;         
+                    	b = Eigen::VectorXd::Zero(beta.rows());         
                      
                         for(Index k = 0; k < Z.size(); ++k)
                         {      
-    		                eta = Z[k] * beta;
-                    std::cout << "eta :" << std::endl;
-                    std::cout << eta << std::endl;                            
+    		                eta = Z[k] * beta;                           
     		                pi = _link->inverse(eta);  
-                    std::cout << "pi :" << std::endl;
-                    std::cout << pi << std::endl;                                               
+                                    // A += w[k] * Z[k].transpose().eval() * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ) * Z[k];
+                                    // b += w[k] * Z[k].transpose().eval() * (y[k] - pi);
     		                ZG = Z[k].transpose().eval() * _link->inverse_derivative(eta);
-    		                A += w[k] * ZG * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ).inverse() * ZG.transpose().eval();
-                    std::cout << "A :" << std::endl;
-                    std::cout << A << std::endl;                             
-    		                b += w[k] * ZG * (y[k] - pi);  
-                    std::cout << "b :" << std::endl;
-                    std::cout << b << std::endl;                                                
+                            ZGS = ZG * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ).inverse();
+    		                A += w[k] * ZGS * ZG.transpose().eval();    
+    		                b += w[k] * ZGS * (y[k] - pi);                                                 
                         }
     					b += A * beta;
     					
-                        beta = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::jacobiSvd);
+                        beta = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::colPivHouseholderQr); //jacobiSvd);
                         ++its;
-                        std::cout << "nb iter :" << its << std::endl;
-                    } while(statiskit::__impl::reldiff(_estimation->_beta.back(), beta) >= _epsilon * beta.size() && its < _maxits);
+                        // std::cout << "iter = " << its << std::endl; 
+                        // std::cout << "beta :" << std::endl;
+                        // std::cout << beta << std::endl;
+                        // std::cout << "distance = " << statiskit::__impl::reldiff(_estimation->_beta.back(), beta) << std::endl;
+
+                    }while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));// while(statiskit::__impl::reldiff(_estimation->_beta.back(), beta) >= _epsilon && its < 100);//_maxits);
     				_estimation->_Z = Z;
     				_estimation->_y = y;
     				_estimation->_w = w;
     				_estimation->_estimated = build_estimated(beta, *( data.extract(explanatories)->get_sample_space() ), *( data.extract(response)->get_sample_space() ) );
-    				// _estimation->set_data(data);
     				_estimation->_response = response;
     				_estimation->_explanatories = explanatories;
-    				estimation = std::move(_estimation);
-
-                    std::cout << "nb iter :" << its << std::endl;
-                    std::cout << "beta :" << std::endl;
-                    std::cout << beta << std::endl;                   
+    				estimation = std::move(_estimation);                 
                 }
                 return estimation;
             }        
@@ -302,35 +262,20 @@ namespace statiskit
             std::vector< Eigen::MatrixXd > CategoricalFisherEstimation< D, B >::Estimator::Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
             {
             	Index J = static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() )->get_cardinality();
-                std::cout << " 1 " << std::endl;
                 std::unique_ptr< MultivariateData > _data = data.extract(explanatories);
-                std::cout << " 2 " << std::endl;
                 const MultivariateSampleSpace* sample_space = _data->get_sample_space();
-                std::cout << " 3 " << std::endl;
                 Index p = sample_space->encode();
-                std::cout << " 4 " << std::endl;
                 std::vector< Eigen::MatrixXd > Z;
-                std::cout << " 5 " << std::endl;
                 Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(J-1, J-1);
-                std::cout << " 6 " << std::endl;
                 std::unique_ptr< MultivariateData::Generator > generator = _data->generator();
-                std::cout << " 7 " << std::endl;
+                Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));
                 while(generator->is_valid())
-                {std::cout << " 8 " << std::endl;
-                	Eigen::MatrixXd Z_k = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));
+                {
                     const MultivariateEvent* event = generator->event();
                     if(event)
-                    {
-                        Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose();
-                        // Eigen::MatrixXd X_k = Eigen::kroneckerProduct(identity, x_k);
-                        // std::cout << "X_k : " << std::endl;
-                        // std::cout << X_k << std::endl;     
-                        // Z_k.block(0, J-1, J-1, (J-1) * p ) = X_k;
-                        // std::cout << "Z_k : " << std::endl;
-                        // std::cout << Z_k << std::endl;                                    
+                    {   
+                        Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose();    
                     	Z_k.block(0, J-1, J-1, (J-1) * p ) = Eigen::kroneckerProduct(identity, xt_k);
-                        std::cout << "Z_k : " << std::endl;
-                        std::cout << Z_k << std::endl;
                     	Z.push_back(Z_k);
                     }
                     else

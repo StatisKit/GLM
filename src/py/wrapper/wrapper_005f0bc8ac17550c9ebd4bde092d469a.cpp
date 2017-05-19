@@ -34,7 +34,8 @@ void wrapper_005f0bc8ac17550c9ebd4bde092d469a()
     boost::python::scope().attr("_constrained_nominal_fisher_estimation") = module_efd514cec17059debd45ea87f68b9065;
     boost::python::scope scope_efd514cec17059debd45ea87f68b9065 = module_efd514cec17059debd45ea87f68b9065;
     boost::python::class_< class ::statiskit::glm::ConstrainedNominalFisherEstimation::Estimator, autowig::Held< class ::statiskit::glm::ConstrainedNominalFisherEstimation::Estimator >::Type, boost::python::bases< class ::statiskit::glm::NominalFisherEstimation::Estimator > > class_005f0bc8ac17550c9ebd4bde092d469a("Estimator", "", boost::python::no_init);
-    class_005f0bc8ac17550c9ebd4bde092d469a.def(boost::python::init< class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & >(""));
+    class_005f0bc8ac17550c9ebd4bde092d469a.def(boost::python::init< class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const &, ::statiskit::Index const & >(""));
+    class_005f0bc8ac17550c9ebd4bde092d469a.def(boost::python::init< class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const &, class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & >(""));
     class_005f0bc8ac17550c9ebd4bde092d469a.def(boost::python::init< class ::statiskit::glm::ConstrainedNominalFisherEstimation::Estimator const & >(""));
 
     if(autowig::Held< class ::statiskit::glm::ConstrainedNominalFisherEstimation::Estimator >::is_class)
