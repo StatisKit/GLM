@@ -30,22 +30,6 @@ namespace statiskit
             ScalarFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
             { _link = estimator._link->copy().release(); }
 
-        // template<class D, class B>
-        //     const double& ScalarFisherEstimation< D, B >::Estimator::get_epsilon() const
-        //     { return _epsilon; }
-
-        // template<class D, class B>
-        //     void ScalarFisherEstimation< D, B >::Estimator::set_epsilon(const double& epsilon)
-        //     { _epsilon = epsilon; }
-
-        // template<class D, class B>
-        //     const unsigned int& ScalarFisherEstimation< D, B >::Estimator::get_maxits() const
-        //     { return _maxits; }
-
-        // template<class D, class B>
-        //     void ScalarFisherEstimation< D, B >::Estimator::set_maxits(const unsigned int& maxits)
-        //     { _maxits = maxits; }
-
         template<class D, class B>
             const typename D::link_type* ScalarFisherEstimation< D, B >::Estimator::get_link() const
             { return _link; }
@@ -178,22 +162,6 @@ namespace statiskit
             CategoricalFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
             { _link = estimator._link->copy().release(); }
 
-        // template<class D, class B>
-        //     const double& CategoricalFisherEstimation< D, B >::Estimator::get_epsilon() const
-        //     { return _epsilon; }
-
-        // template<class D, class B>
-        //     void CategoricalFisherEstimation< D, B >::Estimator::set_epsilon(const double& epsilon)
-        //     { _epsilon = epsilon; }
-
-        // template<class D, class B>
-        //     const unsigned int& CategoricalFisherEstimation< D, B >::Estimator::get_maxits() const
-        //     { return _maxits; }
-
-        // template<class D, class B>
-        //     void CategoricalFisherEstimation< D, B >::Estimator::set_maxits(const unsigned int& maxits)
-        //     { _maxits = maxits; }
-
         template<class D, class B>
             const typename D::link_type* CategoricalFisherEstimation< D, B >::Estimator::get_link() const
             { return _link; }
@@ -213,7 +181,7 @@ namespace statiskit
                     std::unique_ptr< CategoricalFisherEstimation< D, B > > _estimation = std::make_unique< CategoricalFisherEstimation< D, B > >(nullptr, &data, response, explanatories);
                     _estimation->_beta.clear();
                     std::vector< Eigen::MatrixXd > Z = Z_init(data, response, explanatories);
-                    std::vector< Eigen::VectorXd > y = y_init(data, response, explanatories);         
+                    std::vector< Eigen::VectorXd > y = y_init(data, response, explanatories);        
                     std::vector< double > w = w_init(data, response, explanatories);                   
                     Eigen::VectorXd beta = beta_init(data, response, explanatories);
                     Eigen::VectorXd eta, pi, b;
@@ -228,7 +196,7 @@ namespace statiskit
                      
                         for(Index k = 0; k < Z.size(); ++k)
                         {      
-    		                eta = Z[k] * beta;                           
+    		                eta = Z[k] * beta;    
     		                pi = _link->inverse(eta);  
                                     // A += w[k] * Z[k].transpose().eval() * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ) * Z[k];
                                     // b += w[k] * Z[k].transpose().eval() * (y[k] - pi);
@@ -241,12 +209,8 @@ namespace statiskit
     					
                         beta = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::colPivHouseholderQr); //jacobiSvd);
                         ++its;
-                        // std::cout << "iter = " << its << std::endl; 
-                        // std::cout << "beta :" << std::endl;
-                        // std::cout << beta << std::endl;
-                        // std::cout << "distance = " << statiskit::__impl::reldiff(_estimation->_beta.back(), beta) << std::endl;
 
-                    }while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));// while(statiskit::__impl::reldiff(_estimation->_beta.back(), beta) >= _epsilon && its < 100);//_maxits);
+                    }while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
     				_estimation->_Z = Z;
     				_estimation->_y = y;
     				_estimation->_w = w;

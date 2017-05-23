@@ -25,12 +25,6 @@ namespace statiskit
                         Estimator(const Estimator& estimator);
 
                         virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy=true) const; 
-                
-                        // const double& get_epsilon() const;
-                        // void set_epsilon(const double& epsilon);
-
-                        // const unsigned int& get_maxits() const;
-                        // void set_maxits(const unsigned int& maxits);
 
                         const typename D::link_type* get_link() const;
                         void set_link(const typename D::link_type& link);
@@ -134,15 +128,11 @@ namespace statiskit
                         Estimator(const Estimator& estimator);
 
                         virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy=true) const; 
-                
-                        // const double& get_epsilon() const;
-                        // void set_epsilon(const double& epsilon);
-
-                        // const unsigned int& get_maxits() const;
-                        // void set_maxits(const unsigned int& maxits);
 
                         const typename D::link_type* get_link() const;
                         void set_link(const typename D::link_type& link);
+
+                        const Eigen::MatrixXd& get_information_inverse() const;
                     
                     protected:
                         typename D::link_type * _link;
@@ -160,6 +150,7 @@ namespace statiskit
                 std::vector< Eigen::MatrixXd > _Z;
                 std::vector< Eigen::VectorXd > _y;
                 std::vector< double > _w;
+                //Eigen::MatrixXd& information_inverse;
         };
         
         struct STATISKIT_GLM_API NominalFisherEstimation : CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >
@@ -204,15 +195,21 @@ namespace statiskit
             class STATISKIT_GLM_API Estimator : public NominalFisherEstimation::Estimator
             {
             	public:
-                    Estimator(const Eigen::MatrixXd& slope_constraint, const Index& dimension);
-                    Estimator(const Eigen::MatrixXd& slope_constraint, const Eigen::MatrixXd& intercept_constraint);
-                    Estimator(const Estimator& estimator);     
+                    Estimator();
+                    Estimator(const Estimator& estimator);   
+
+                    const Eigen::MatrixXd& get_intercept_constraint() const;
+                    void set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint);
+
+                    const Eigen::MatrixXd get_slope_constraint() const;
+                    void set_slope_constraint(const Eigen::MatrixXd& slope_constraint);
 
             	protected:
-                    Eigen::MatrixXd _intercept_constraint;
-            		Eigen::MatrixXd _slope_constraint;
+                    mutable Eigen::MatrixXd _intercept_constraint;
+            		mutable Eigen::MatrixXd _slope_constraint;
             	
             		virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+                    virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
             			
                     virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
             };

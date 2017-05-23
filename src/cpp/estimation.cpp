@@ -181,17 +181,20 @@ namespace statiskit
         // ConstrainedNominalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : NominalFisherEstimation::Estimator(estimator)
         // { _constrained_matrix = estimator._constrained_matrix; }
 
-        ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& slope_constraint, const Index& dimension) : NominalFisherEstimation::Estimator()
-        { 
-            _slope_constraint = slope_constraint; 
-            _intercept_constraint = Eigen::MatrixXd::Identity(dimension, dimension);
-        }
+        // ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& slope_constraint, const Index& dimension) : NominalFisherEstimation::Estimator()
+        // { 
+        //     _slope_constraint = slope_constraint; 
+        //     _intercept_constraint = Eigen::MatrixXd::Identity(dimension, dimension);
+        // }
 
-        ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& slope_constraint, const Eigen::MatrixXd& intercept_constraint) : NominalFisherEstimation::Estimator()
-        { 
-            _slope_constraint = slope_constraint; 
-            _intercept_constraint = intercept_constraint;
-        }
+        // ConstrainedNominalFisherEstimation::Estimator::Estimator(const Eigen::MatrixXd& slope_constraint, const Eigen::MatrixXd& intercept_constraint) : NominalFisherEstimation::Estimator()
+        // { 
+        //     _slope_constraint = slope_constraint; 
+        //     _intercept_constraint = intercept_constraint;
+        // }
+
+        ConstrainedNominalFisherEstimation::Estimator::Estimator() : NominalFisherEstimation::Estimator()
+        {}
 
         ConstrainedNominalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : NominalFisherEstimation::Estimator(estimator)
         {
@@ -199,16 +202,46 @@ namespace statiskit
             _intercept_constraint = estimator._intercept_constraint;
         }
 
+        const Eigen::MatrixXd& ConstrainedNominalFisherEstimation::Estimator::get_intercept_constraint() const
+        { return _intercept_constraint; }
+
+        void ConstrainedNominalFisherEstimation::Estimator::set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint)
+        { _intercept_constraint = intercept_constraint; }
+
+        const Eigen::MatrixXd ConstrainedNominalFisherEstimation::Estimator::get_slope_constraint() const
+        { return _slope_constraint; }
+
+        void ConstrainedNominalFisherEstimation::Estimator::set_slope_constraint(const Eigen::MatrixXd& slope_constraint)
+        { _slope_constraint = slope_constraint; }
+
 		std::vector< Eigen::MatrixXd > ConstrainedNominalFisherEstimation::Estimator::Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
         {
         	Index J = static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() )->get_cardinality();
             std::unique_ptr< MultivariateData > _data = data.extract(explanatories);
-            const MultivariateSampleSpace* sample_space = _data->get_sample_space();
-            Index p = sample_space->encode();
+            const MultivariateSampleSpace* explanatory_space = _data->get_sample_space();
+            Index p = explanatory_space->encode();
             std::vector< Eigen::MatrixXd > Z;
             Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(J-1, J-1);
             std::unique_ptr< MultivariateData::Generator > generator = _data->generator();
-            Eigen::MatrixXd Z_k_complete = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));            
+            Eigen::MatrixXd Z_k_complete = Eigen::MatrixXd::Identity(J-1, (J-1) * (1+p));       
+            if(_intercept_constraint.size() == 0)
+            { _intercept_constraint = Eigen::MatrixXd::Identity(J-1, J-1); }
+            else
+            {
+                if(_intercept_constraint.rows() != J-1)
+                { throw statiskit::size_error("intercept_constraint", _intercept_constraint.rows(), J-1 ); } 
+                if(_intercept_constraint.cols() > _intercept_constraint.rows())
+                { throw statiskit::size_error("intercept_constraint", _intercept_constraint.cols(), _intercept_constraint.rows(), statiskit::size_error::size_type::superior); } 
+            }
+            if(_slope_constraint.size() == 0)
+            { _slope_constraint = Eigen::MatrixXd::Identity((J-1) * p, (J-1) * p); }
+            else
+            {
+                if(_slope_constraint.rows() != ( p * (J-1) ) )
+                { throw statiskit::size_error("slope_constraint", _slope_constraint.rows(),  p * (J-1) ); } 
+                if(_slope_constraint.cols() > _slope_constraint.rows())
+                { throw statiskit::size_error("slope_constraint", _slope_constraint.cols(), _slope_constraint.rows(), statiskit::size_error::size_type::superior); } 
+            }
             while(generator->is_valid())
             {
                 Eigen::MatrixXd Z_k  = Eigen::MatrixXd::Zero(J-1, _intercept_constraint.cols() + _slope_constraint.cols()) ;
@@ -216,7 +249,7 @@ namespace statiskit
                 const MultivariateEvent* event = generator->event();
                 if(event)
                 {
-                    Eigen::RowVectorXd xt_k = sample_space->encode(*event).transpose(); 
+                    Eigen::RowVectorXd xt_k = explanatory_space->encode(*event).transpose(); 
                     Z_k.block(0, J-1, J-1, _slope_constraint.cols()) = Eigen::kroneckerProduct(identity, xt_k) * _slope_constraint;
                     Z.push_back(Z_k);
                 }
@@ -229,7 +262,13 @@ namespace statiskit
             }
             return Z;
         }
-                    
+
+        Eigen::VectorXd ConstrainedNominalFisherEstimation::Estimator::beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
+        {
+            Eigen::VectorXd beta = Eigen::VectorXd::Zero(_intercept_constraint.cols() + _slope_constraint.cols());
+            return beta;
+        } 
+
         NominalRegression * ConstrainedNominalFisherEstimation::Estimator::build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const
         {
             const NominalSampleSpace& _response_space = static_cast< const NominalSampleSpace& >(response_space);
