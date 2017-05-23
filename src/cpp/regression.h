@@ -44,8 +44,10 @@ namespace statiskit
         template<class L>
         struct DiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
         { 
-        	using GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >::GeneralizedLinearModel;
-        	
+            DiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            DiscreteGeneralizedLinearModel(const DiscreteGeneralizedLinearModel< L >& glm);
+            virtual ~DiscreteGeneralizedLinearModel();
+
         	virtual unsigned int get_nb_parameters() const;
         };
         
