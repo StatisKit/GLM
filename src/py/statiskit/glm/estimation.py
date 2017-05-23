@@ -1,4 +1,5 @@
 from functools import wraps
+from statiskit.core import estimation
 
 import _glm
 from __glm.statiskit.glm import (NominalFisherEstimation,

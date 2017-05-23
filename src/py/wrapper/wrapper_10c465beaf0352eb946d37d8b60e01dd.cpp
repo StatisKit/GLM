@@ -40,7 +40,6 @@ void wrapper_10c465beaf0352eb946d37d8b60e01dd()
     if(autowig::Held< class ::statiskit::glm::ProportionalNominalFisherEstimation::Estimator >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::ProportionalNominalFisherEstimation::Estimator >::Type, autowig::Held< class ::statiskit::glm::NominalFisherEstimation::Estimator >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::ProportionalNominalFisherEstimation::Estimator >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::ProportionalNominalFisherEstimation::Estimator, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::ProportionalNominalFisherEstimation::Estimator >::Type, class ::statiskit::glm::ProportionalNominalFisherEstimation::Estimator > > >();
     }
 
 }

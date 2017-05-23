@@ -53,8 +53,6 @@ void wrapper_102f55caaf1b5a859b5e0a3b0de74253()
     {
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_102f55caaf1b5a859b5e0a3b0de74253 >::Type, autowig::Held< struct ::statiskit::ScalarLink >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::ScalarLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::ScalarLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::ScalarLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::ScalarLink >::Type, struct ::statiskit::ScalarLink > > >();
-        //boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_102f55caaf1b5a859b5e0a3b0de74253 >::Type, autowig::Held< struct ::statiskit::ScalarLink >::Type >();
     }    
 
 }

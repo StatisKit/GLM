@@ -36,7 +36,6 @@ void wrapper_e3f931e4b34f58329130a51d0f0212e8()
     if(autowig::Held< struct ::statiskit::glm::ProportionalNominalFisherEstimation >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::ProportionalNominalFisherEstimation >::Type, autowig::Held< struct ::statiskit::glm::NominalFisherEstimation >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::glm::ProportionalNominalFisherEstimation >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::glm::ProportionalNominalFisherEstimation, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::glm::ProportionalNominalFisherEstimation >::Type, struct ::statiskit::glm::ProportionalNominalFisherEstimation > > >();
     }
 
 }

@@ -41,7 +41,6 @@ void wrapper_7ab3740a5a8750fea3d00a425c1ddd4d()
     if(autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, autowig::Held< class ::statiskit::ProportionalVectorPredictor >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::ConstrainedVectorPredictor, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, class ::statiskit::ConstrainedVectorPredictor > > >();
     }
 
 }

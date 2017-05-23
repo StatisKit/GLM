@@ -37,7 +37,6 @@ void wrapper_3e7e5eaba9225d339f81fff56f0765bc()
     if(autowig::Held< class ::statiskit::glm::PoissonRegression >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::PoissonRegression >::Type, autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::PoissonRegression >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::PoissonRegression, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::PoissonRegression >::Type, class ::statiskit::glm::PoissonRegression > > >();
     }
 
 }
