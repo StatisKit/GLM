@@ -158,6 +158,8 @@ namespace statiskit
         protected:
         	Eigen::VectorXd _alpha;
             Eigen::VectorXd _delta;
+
+            ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space);
     };    
   
     

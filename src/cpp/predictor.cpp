@@ -213,18 +213,22 @@ namespace statiskit
     std::unique_ptr< VectorPredictor > ProportionalVectorPredictor::copy() const
     { return std::make_unique< ProportionalVectorPredictor >(*this); }	
 
+    ProportionalVectorPredictor::ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space) : VectorPredictor(explanatory_space)
+    {}
 
-    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Eigen::MatrixXd& constraint) : ProportionalVectorPredictor(explanatory_space, dimension)
-    { 
+    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Eigen::MatrixXd& constraint) : ProportionalVectorPredictor(explanatory_space)
+    {   
     	if(constraint.rows() != ( explanatory_space.encode() * dimension ) )
     	{ throw statiskit::size_error("constraint", constraint.rows(),  explanatory_space.encode() * dimension ); } 
     	if(constraint.cols() > constraint.rows())
     	{ throw statiskit::size_error("constraint", constraint.cols(), constraint.rows(), statiskit::size_error::size_type::superior); }     	   
     	_constraint = constraint; 
     	_intercept_constraint = Eigen::MatrixXd::Identity(dimension, dimension);
+        _alpha = Eigen::VectorXd::Zero(dimension); 
+        _delta = Eigen::VectorXd::Zero(constraint.cols());  
     }
     
-    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const Eigen::MatrixXd& constraint, const Eigen::MatrixXd& intercept_constraint) : ProportionalVectorPredictor(explanatory_space, intercept_constraint.rows())
+    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const Eigen::MatrixXd& constraint, const Eigen::MatrixXd& intercept_constraint) : ProportionalVectorPredictor(explanatory_space)
     { 
     	if(constraint.rows() != ( explanatory_space.encode() * intercept_constraint.rows()) )
     	{ throw statiskit::size_error("constraint", constraint.rows(),  explanatory_space.encode() * intercept_constraint.rows()); } 
@@ -234,6 +238,8 @@ namespace statiskit
     	if(intercept_constraint.cols() > intercept_constraint.rows() )
     	{ throw statiskit::size_error("intercept_constraint", intercept_constraint.cols(), intercept_constraint.rows(), statiskit::size_error::size_type::superior); }     	    	   
     	_intercept_constraint = intercept_constraint; 
+        _alpha = Eigen::VectorXd::Zero(intercept_constraint.cols()); 
+        _delta = Eigen::VectorXd::Zero(constraint.cols());        
     }    
 
     ConstrainedVectorPredictor::ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor) : ProportionalVectorPredictor(predictor)
@@ -243,7 +249,11 @@ namespace statiskit
     }
      
     Eigen::VectorXd ConstrainedVectorPredictor::operator() (const MultivariateEvent& event) const
-    { return _intercept_constraint * _alpha +  Eigen::kroneckerProduct(Eigen::MatrixXd::Identity(_intercept_constraint.rows(), _intercept_constraint.rows()), _explanatory_space->encode(event)) * _constraint * _delta;}
+    { 
+        Eigen::VectorXd xt = _explanatory_space->encode(event).transpose();
+        Eigen::MatrixXd Identity = Eigen::MatrixXd::Identity(_intercept_constraint.rows(), _intercept_constraint.rows());
+        return _intercept_constraint * _alpha + Eigen::kroneckerProduct(Identity, xt) * _constraint * _delta;
+    }
     
     const Eigen::MatrixXd& ConstrainedVectorPredictor::get_constraint() const
     { return _constraint; }

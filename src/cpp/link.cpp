@@ -143,7 +143,7 @@ namespace statiskit
     Eigen::MatrixXd NominalCanonicalLink::inverse_derivative(const Eigen::VectorXd& values) const
     {
     	Eigen::VectorXd pi = inverse(values);
-    	return ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() ); 
+    	return ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ); 
     }          
     
     std::unique_ptr< NominalLink > NominalCanonicalLink::copy() const
@@ -177,7 +177,7 @@ namespace statiskit
     	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(pi.rows(),pi.rows());
     	for(size_t j=0; j<pi.rows(); ++j)
     	{ D(j,j) = _distribution->pdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
-    	return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() );
+    	return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
     }                
 
     std::unique_ptr< NominalLink > ReferenceLink::copy() const
