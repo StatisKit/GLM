@@ -31,8 +31,8 @@ class TestReferenceRegressionEstimation(unittest.TestCase):
         # for event in self._data.events:
         #     print event, " : ", self._data.sample_space.encode(event)
         mle = glm.nominal_regression_estimation(Z='complete', algo='Fisher', data=self._data, response = 0, explanatories = {1,2})
-        alpha = mle.get_estimated().predictor.alpha
-        deltas = mle.get_estimated().predictor.delta
+        alpha = mle.estimated.predictor.alpha
+        deltas = mle.estimated.predictor.delta
         for i in range(2):
             self.assertAlmostEqual(alpha[i], self._alpha[i], places = self._places)
             for j in range(3):
@@ -78,9 +78,7 @@ class TestReferenceRegressionEstimation(unittest.TestCase):
         [0,0,0,0],
         [0,0,0,0]
         ])
-        mle = glm.nominal_regression_estimation(Z='constrained', algo='Fisher', data=self._data2, response=0, explanatories={1,2,3,4,5,6,7,8,9,10}, slope_constraint=slope_constraint)
-        print mle.get_estimated().predictor.alpha
-        print mle.get_estimated().predictor.delta        
+        mle = glm.nominal_regression_estimation(Z='constrained', algo='Fisher', data=self._data2, response=0, explanatories={1,2,3,4,5,6,7,8,9,10}, slope_constraint=slope_constraint)      
 
     @classmethod
     def tearDownClass(cls):

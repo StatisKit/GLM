@@ -52,7 +52,6 @@ void wrapper_364fe86468a95b2689a98d2ed3389e0d()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_364fe86468a95b2689a98d2ed3389e0d >::Type, autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > >::Type, autowig::Held< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::NominalLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink >, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > >::Type, struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > > > >();
     }
 
 }

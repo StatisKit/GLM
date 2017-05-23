@@ -31,7 +31,6 @@ void wrapper_dd74b7cb9d935a2196feb6ba9f26220b()
     if(autowig::Held< struct ::statiskit::NominalCanonicalLink >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::NominalCanonicalLink >::Type, autowig::Held< struct ::statiskit::NominalLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::NominalCanonicalLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::NominalCanonicalLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::NominalCanonicalLink >::Type, struct ::statiskit::NominalCanonicalLink > > >();
     }
 
 }

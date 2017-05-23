@@ -40,7 +40,6 @@ void wrapper_0902e21e0edb53eca9f09324d00764c7()
     if(autowig::Held< class ::statiskit::glm::NominalFisherEstimation::Estimator >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::NominalFisherEstimation::Estimator >::Type, autowig::Held< class ::statiskit::glm::CategoricalFisherEstimation< class ::statiskit::glm::NominalRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::NominalFisherEstimation::Estimator >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::NominalFisherEstimation::Estimator, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::NominalFisherEstimation::Estimator >::Type, class ::statiskit::glm::NominalFisherEstimation::Estimator > > >();
     }
 
 }

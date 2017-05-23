@@ -19,7 +19,6 @@ try:
     Alias("install", targets)
     test_env.Depends(targets, "py")
 except EnvironmentError:
-    raise
     Alias("test", [])
     Alias("install", [])
     pass

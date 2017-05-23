@@ -59,7 +59,6 @@ void wrapper_1c7c25d5171b5f078e164f41f06ab8b7()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_1c7c25d5171b5f078e164f41f06ab8b7 >::Type, autowig::Held< struct ::statiskit::PoissonLink >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::PoissonLink >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::PoissonLink >::Type, autowig::Held< struct ::statiskit::ScalarLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::PoissonLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::PoissonLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::PoissonLink >::Type, struct ::statiskit::PoissonLink > > >();
     }
 
 }
