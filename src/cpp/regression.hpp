@@ -62,6 +62,18 @@ namespace statiskit
                 _link = static_cast< L* >(link.copy().release());
             }
             
+        template<class L>
+            DiscreteGeneralizedLinearModel< L >::DiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(predictor, link)
+            {}
+
+        template<class L>
+            DiscreteGeneralizedLinearModel< L >::DiscreteGeneralizedLinearModel(const DiscreteGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(glm)
+            {}
+
+        template<class L>
+            DiscreteGeneralizedLinearModel< L >::~DiscreteGeneralizedLinearModel()
+            {}
+
         template< class L >
             unsigned int DiscreteGeneralizedLinearModel< L >::get_nb_parameters() const
             { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
