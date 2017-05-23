@@ -125,10 +125,10 @@ namespace statiskit
         ProportionalNominalFisherEstimation::ProportionalNominalFisherEstimation(const ProportionalNominalFisherEstimation& estimation) : NominalFisherEstimation(estimation)
         {}
 
-        ProportionalNominalFisherEstimation::Estimator::Estimator() : NominalFisherEstimation::Estimator::Estimator()
+        ProportionalNominalFisherEstimation::Estimator::Estimator() : NominalFisherEstimation::Estimator()
         {}
 
-        ProportionalNominalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : NominalFisherEstimation::Estimator::Estimator(estimator)
+        ProportionalNominalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : NominalFisherEstimation::Estimator(estimator)
         {}
 
 		std::vector< Eigen::MatrixXd > ProportionalNominalFisherEstimation::Estimator::Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
@@ -303,10 +303,10 @@ namespace statiskit
         ProportionalOrdinalFisherEstimation::ProportionalOrdinalFisherEstimation(const ProportionalOrdinalFisherEstimation& estimation) : OrdinalFisherEstimation(estimation)
         {}
 
-        ProportionalOrdinalFisherEstimation::Estimator::Estimator() : OrdinalFisherEstimation::Estimator::Estimator()
+        ProportionalOrdinalFisherEstimation::Estimator::Estimator() : OrdinalFisherEstimation::Estimator()
         {}
 
-        ProportionalOrdinalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : OrdinalFisherEstimation::Estimator::Estimator(estimator)
+        ProportionalOrdinalFisherEstimation::Estimator::Estimator(const Estimator& estimator) : OrdinalFisherEstimation::Estimator(estimator)
         {}
 
 		std::vector< Eigen::MatrixXd > ProportionalOrdinalFisherEstimation::Estimator::Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const
