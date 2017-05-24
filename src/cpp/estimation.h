@@ -132,7 +132,7 @@ namespace statiskit
                         const typename D::link_type* get_link() const;
                         void set_link(const typename D::link_type& link);
 
-                        const Eigen::MatrixXd& get_information_inverse() const;
+                        //const Eigen::MatrixXd& get_information_inverse() const;
                     
                     protected:
                         typename D::link_type * _link;

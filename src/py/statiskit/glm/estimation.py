@@ -46,3 +46,16 @@ def nominal_regression_estimation(Z='complete', algo='Fisher', data=None, respon
                             Fisher_proportional = ProportionalNominalFisherEstimation.Estimator,
                             Fisher_constrained = ConstrainedNominalFisherEstimation.Estimator),
                        **kwargs)
+
+def reference_regression_estimation(Z='complete', algo='Fisher', data=None, response=None, explanatories=None, **kwargs):
+    """
+    """
+    algo = algo + '_' + Z
+    return _estimation(algo, 
+                       data,
+                       response,
+                       explanatories,
+                       dict(Fisher_complete = NominalFisherEstimation.Estimator,
+                            Fisher_proportional = ProportionalNominalFisherEstimation.Estimator,
+                            Fisher_constrained = ConstrainedNominalFisherEstimation.Estimator),
+                       **kwargs)
