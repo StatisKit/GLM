@@ -78,9 +78,34 @@ namespace statiskit
             unsigned int DiscreteGeneralizedLinearModel< L >::get_nb_parameters() const
             { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
             
+        template<class L>
+            ContinuousGeneralizedLinearModel< L >::ContinuousGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(predictor, link)
+            {}
+
+        template<class L>
+            ContinuousGeneralizedLinearModel< L >::ContinuousGeneralizedLinearModel(const DiscreteGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(glm)
+            {}
+
+        template<class L>
+            ContinuousGeneralizedLinearModel< L >::~ContinuousGeneralizedLinearModel()
+            {}
+
          template< class L >
             unsigned int ContinuousGeneralizedLinearModel< L >::get_nb_parameters() const
             { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
+
+            
+        template<class L>
+            CategoricalGeneralizedLinearModel< L >::CategoricalGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >(predictor, link)
+            {}
+
+        template<class L>
+            CategoricalGeneralizedLinearModel< L >::CategoricalGeneralizedLinearModel(const CategoricalGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >(glm)
+            {}
+
+        template<class L>
+            CategoricalGeneralizedLinearModel< L >::~CategoricalGeneralizedLinearModel()
+            {}
 
          template< class L >
             unsigned int CategoricalGeneralizedLinearModel< L >::get_nb_parameters() const

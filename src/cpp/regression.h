@@ -87,16 +87,20 @@ namespace statiskit
         template<class L>
         struct ContinuousGeneralizedLinearModel : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >
         { 
-        	using GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >::GeneralizedLinearModel;
-        	
+            ContinuousGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            ContinuousGeneralizedLinearModel(const ContinuousGeneralizedLinearModel< L >& glm);
+            virtual ~ContinuousGeneralizedLinearModel();
+
         	virtual unsigned int get_nb_parameters() const;
         };
         
         template<class L>
         struct CategoricalGeneralizedLinearModel : GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >
         { 
-        	using GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >::GeneralizedLinearModel;
-        	
+            CategoricalGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            CategoricalGeneralizedLinearModel(const CategoricalGeneralizedLinearModel< L >& glm);
+            virtual ~CategoricalGeneralizedLinearModel();
+                    	
         	virtual unsigned int get_nb_parameters() const;
         };             
         
