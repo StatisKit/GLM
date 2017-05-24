@@ -83,7 +83,7 @@ namespace statiskit
             {}
 
         template<class L>
-            ContinuousGeneralizedLinearModel< L >::ContinuousGeneralizedLinearModel(const DiscreteGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(glm)
+            ContinuousGeneralizedLinearModel< L >::ContinuousGeneralizedLinearModel(const ContinuousGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(glm)
             {}
 
         template<class L>
