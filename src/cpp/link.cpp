@@ -238,7 +238,7 @@ namespace statiskit
         Eigen::MatrixXd Ones = Eigen::MatrixXd::Ones(pi.rows(),pi.rows());
     	for(size_t j=0; j<pi.rows(); ++j)
     	{ D(j,j) = _distribution->pdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
-    	return Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Lower>(Ones) * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() ) * D;
+    	return Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Lower>(Ones) * D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() );
     } 
     
     std::unique_ptr< OrdinalLink > AdjacentLink::copy() const
@@ -270,7 +270,7 @@ namespace statiskit
     	Eigen::MatrixXd F = Eigen::MatrixXd::Zero(values.rows(),values.rows());
     	for(size_t j=0; j<values.rows(); ++j)
     	{ F(j,j) = _distribution->pdf( values(j) ); }        	
-    	return (R * F);
+    	return (F * R);
     } 
     
     std::unique_ptr< OrdinalLink > CumulativeLink::copy() const
@@ -324,7 +324,8 @@ namespace statiskit
     {
         M(j,j) = _distribution->pdf(values(j)) * product;
         for (size_t i=0; i<j; ++i)
-        { M(i,j) = -M(j,j) * _distribution->cdf(values(j)) / ( 1-_distribution->cdf(values(i)) ); }
+        //{ M(i,j) = -M(j,j) * _distribution->cdf(values(j)) / ( 1-_distribution->cdf(values(i)) ); }
+        { M(i,j) = - _distribution->pdf(values(i)) / ( 1-_distribution->cdf(values(i)) ) * _distribution->cdf(values(j)) * product ; }    
         product *= ( 1 - _distribution->cdf( values(j) ) );
     }
     return M; 

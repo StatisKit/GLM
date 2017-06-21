@@ -27,6 +27,7 @@ void wrapper_dd74b7cb9d935a2196feb6ba9f26220b()
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::class_< struct ::statiskit::NominalCanonicalLink, autowig::Held< struct ::statiskit::NominalCanonicalLink >::Type, boost::python::bases< struct ::statiskit::NominalLink > > class_dd74b7cb9d935a2196feb6ba9f26220b("NominalCanonicalLink", "", boost::python::no_init);
     class_dd74b7cb9d935a2196feb6ba9f26220b.def(boost::python::init<  >(""));
+    class_dd74b7cb9d935a2196feb6ba9f26220b.def(boost::python::init< struct ::statiskit::NominalCanonicalLink const & >(""));
 
     if(autowig::Held< struct ::statiskit::NominalCanonicalLink >::is_class)
     {

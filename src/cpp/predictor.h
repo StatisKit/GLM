@@ -11,6 +11,7 @@
 
 #include "base.h"
 #include <statiskit/core/sample_space.h>
+#include <statiskit/core/data.h>
 
 namespace statiskit
 {
@@ -161,13 +162,13 @@ namespace statiskit
 
             ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space);
     };    
-  
-    
+
     class STATISKIT_GLM_API ConstrainedVectorPredictor : public ProportionalVectorPredictor
     {
         public:
             ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Eigen::MatrixXd& constraint);
             ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const Eigen::MatrixXd& constraint, const Eigen::MatrixXd& intercept_constraint);
+            ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Indices& proportional);
             ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor);
             
             virtual Eigen::VectorXd operator() (const MultivariateEvent& event) const;
@@ -176,14 +177,18 @@ namespace statiskit
 			void set_constraint(const Eigen::MatrixXd& constraint);
 			
 			const Eigen::MatrixXd& get_intercept_constraint() const;
-			void set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint);			
+			void set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint);		
+
+            static Eigen::MatrixXd partial_proportional_constraint(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Indices& proportional);	
+            static Eigen::MatrixXd partial_proportional_constraint(const MultivariateData& data, const Index& response, const Indices& explanatories, const Indices& proportional); 
 
             virtual std::unique_ptr< VectorPredictor > copy() const;            
 
         protected:
             Eigen::MatrixXd _constraint;
             Eigen::MatrixXd _intercept_constraint;
-    };   
+    }; 
+
 };
 
 #endif

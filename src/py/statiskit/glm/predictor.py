@@ -7,11 +7,13 @@ from __glm.statiskit import (ScalarPredictor,
                                 CompleteScalarPredictor,
                             VectorPredictor,
                                 CompleteVectorPredictor,
-                                ProportionalVectorPredictor)
+                                ProportionalVectorPredictor,
+                                ConstrainedVectorPredictor)
 
 __all__ = ['CompleteScalarPredictor',
             'CompleteVectorPredictor',
-            'ProportionalVectorPredictor']
+            'ProportionalVectorPredictor',
+            'ConstrainedVectorPredictor']
 
 
 ScalarPredictor.explanatory_space = property(ScalarPredictor.get_explanatory_space)

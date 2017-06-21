@@ -113,14 +113,14 @@ namespace statiskit
         };
         
         
-        template< class D, class B > class CategoricalFisherEstimation : public ConditionalActiveEstimation< D, B, Index >
+        template< class D > class CategoricalFisherEstimation : public ConditionalActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation, Index >
         {
             public:
                 CategoricalFisherEstimation();
                 CategoricalFisherEstimation(D const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
                 CategoricalFisherEstimation(const CategoricalFisherEstimation& estimation);
 
-                class Estimator : public B::Estimator, public Optimization
+                class Estimator : public CategoricalUnivariateConditionalDistributionEstimation::Estimator, public Optimization
                 { 
                     public:
                         Estimator();
@@ -137,13 +137,16 @@ namespace statiskit
                     protected:
                         typename D::link_type * _link;
 
-                        virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
                         virtual std::vector< Eigen::VectorXd > y_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
                         virtual std::vector< double > w_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
-                        virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+
+                        virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const = 0;
+                        virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const = 0;
 
                         virtual D * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const = 0;
                 }; 
+                const double& get_loglikelihood() const;
+                const std::vector< double >& get_loglikelihood_sequence() const;
 
             private:
                 std::vector< Eigen::VectorXd > _beta;
@@ -151,126 +154,198 @@ namespace statiskit
                 std::vector< Eigen::VectorXd > _y;
                 std::vector< double > _w;
                 //Eigen::MatrixXd& information_inverse;
+                mutable std::vector< double > _loglikelihood_sequence;
+                mutable double _loglikelihood;
         };
-        
-        struct STATISKIT_GLM_API NominalFisherEstimation : CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >
-        {
-            NominalFisherEstimation(NominalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
-            NominalFisherEstimation(const NominalFisherEstimation& estimation);        
-                
-            class STATISKIT_GLM_API Estimator : public CategoricalFisherEstimation< NominalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
-            {
-            	public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);     		
 
-            	protected:
-                        virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
-            };
+        template< class D > class CompleteFisherEstimation : public CategoricalFisherEstimation< D >
+        {
+            public:
+                CompleteFisherEstimation();
+                CompleteFisherEstimation(D const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
+                CompleteFisherEstimation(const CompleteFisherEstimation& estimation);
+
+                class Estimator : public CategoricalFisherEstimation< D >::Estimator
+                {
+                    public:
+                        typedef CompleteVectorPredictor predictor_type;
+                        Estimator();
+                        Estimator(const Estimator& estimator);
+            
+                    protected:
+                        virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+                        virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+
+                        CompleteVectorPredictor build_predictor(const MultivariateSampleSpace& explanatory_space, const Index& dimension) const;
+                }; 
         };
-        
-        struct STATISKIT_GLM_API ProportionalNominalFisherEstimation : NominalFisherEstimation
+
+
+
+        template< class D > class ProportionalFisherEstimation : public CategoricalFisherEstimation< D >
         {
-            ProportionalNominalFisherEstimation(NominalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
-            ProportionalNominalFisherEstimation(const ProportionalNominalFisherEstimation& estimation);
+            public:
+                ProportionalFisherEstimation();
+                ProportionalFisherEstimation(D const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
+                ProportionalFisherEstimation(const ProportionalFisherEstimation& estimation);
 
-            class STATISKIT_GLM_API Estimator : public NominalFisherEstimation::Estimator
-            {
-            	public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);             	
+                class Estimator : public CategoricalFisherEstimation< D >::Estimator
+                {
+                    public:
+                        typedef ProportionalVectorPredictor predictor_type;
+                        Estimator();
+                        Estimator(const Estimator& estimator);
+            
+                    protected:
+                        virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+                        virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
 
-            	protected:
-            			virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
-            			
-                        virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
-            };
-        }; 
-        
-        struct STATISKIT_GLM_API ConstrainedNominalFisherEstimation : NominalFisherEstimation
-        {
-            ConstrainedNominalFisherEstimation(NominalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
-            ConstrainedNominalFisherEstimation(const ConstrainedNominalFisherEstimation& estimation);            
-
-            class STATISKIT_GLM_API Estimator : public NominalFisherEstimation::Estimator
-            {
-            	public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);   
-
-                    const Eigen::MatrixXd& get_intercept_constraint() const;
-                    void set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint);
-
-                    const Eigen::MatrixXd get_slope_constraint() const;
-                    void set_slope_constraint(const Eigen::MatrixXd& slope_constraint);
-
-            	protected:
-                    mutable Eigen::MatrixXd _intercept_constraint;
-            		mutable Eigen::MatrixXd _slope_constraint;
-            	
-            		virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
-                    virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
-            			
-                    virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
-            };
-        };                
-         
-        
-        struct STATISKIT_GLM_API OrdinalFisherEstimation : CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >
-        {
-            OrdinalFisherEstimation(OrdinalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
-            OrdinalFisherEstimation(const OrdinalFisherEstimation& estimation);     
-                    
-            class STATISKIT_GLM_API Estimator : public CategoricalFisherEstimation< OrdinalRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
-            {
-            	public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);      
-
-            	protected:
-                        virtual OrdinalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;
-            };
+                        ProportionalVectorPredictor build_predictor(const MultivariateSampleSpace& explanatory_space, const Index& dimension) const;
+                }; 
         };
-                
-        struct STATISKIT_GLM_API ProportionalOrdinalFisherEstimation : OrdinalFisherEstimation
+
+
+        template< class D > class ConstrainedFisherEstimation : public CategoricalFisherEstimation< D >
         {
-            ProportionalOrdinalFisherEstimation(OrdinalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
-            ProportionalOrdinalFisherEstimation(const ProportionalOrdinalFisherEstimation& estimation);            
+            public:
+                ConstrainedFisherEstimation();
+                ConstrainedFisherEstimation(D const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
+                ConstrainedFisherEstimation(const ConstrainedFisherEstimation& estimation);
 
-            class STATISKIT_GLM_API Estimator : public OrdinalFisherEstimation::Estimator
-            {
-            	public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);  
+                class Estimator : public CategoricalFisherEstimation< D >::Estimator
+                { 
+                    public:
+                        typedef ConstrainedVectorPredictor predictor_type;
+                        Estimator();
+                        Estimator(const Estimator& estimator);   
 
-            	protected:
-            			virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
-            			
-                        virtual OrdinalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;            	
-            };
-        }; 
-        
-        struct STATISKIT_GLM_API ConstrainedOrdinalFisherEstimation : OrdinalFisherEstimation
+                        const Eigen::MatrixXd& get_intercept_constraint() const;
+                        void set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint);
+
+                        const Eigen::MatrixXd get_slope_constraint() const;
+                        void set_slope_constraint(const Eigen::MatrixXd& slope_constraint);                  
+            
+                    protected:
+                        mutable Eigen::MatrixXd _intercept_constraint;
+                        mutable Eigen::MatrixXd _slope_constraint;
+
+                        virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+                        virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
+
+                        ConstrainedVectorPredictor build_predictor(const MultivariateSampleSpace& explanatory_space, const Index& dimension) const;
+                }; 
+
+                // class PartialProportionalEstimator : public CategoricalUnivariateConditionalDistributionEstimation::Estimator
+                // {
+                //     public:
+                //         typedef ConstrainedVectorPredictor predictor_type;
+                //         PartialProportionalEstimator();
+                //         PartialProportionalEstimator(const PartialProportionalEstimator& estimator);
+
+                //         virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy=true) const; 
+
+                //         const Indices get_proportional() const;
+                //         void set_proportional(const Indices& proportional);
+
+                //     protected:
+                //         Indices _proportional;                      
+                // };
+        };
+
+
+
+
+
+        template< class  T > class NominalFisherEstimation : public T
         {
-            ConstrainedOrdinalFisherEstimation(OrdinalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
-            ConstrainedOrdinalFisherEstimation(const ConstrainedOrdinalFisherEstimation& estimation); 
+            public:
+                NominalFisherEstimation();
+                NominalFisherEstimation(NominalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
+                NominalFisherEstimation(const NominalFisherEstimation& estimation);
 
-            class STATISKIT_GLM_API Estimator : public OrdinalFisherEstimation::Estimator
-            {
-            	public:
-            		Estimator(const Eigen::MatrixXd& constraint, const Index& dimension);
-            		Estimator(const Eigen::MatrixXd& constraint, const Eigen::MatrixXd& intercept_constraint);
-                    Estimator(const Estimator& estimator);
-            		
-            	protected:
-            			Eigen::MatrixXd _constraint;
-            			Eigen::MatrixXd _intercept_constraint;
-            	
-            			virtual std::vector< Eigen::MatrixXd > Z_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;
-            			
-                        virtual OrdinalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;           	
-            };
-        };                 
+                class Estimator : public T::Estimator
+                { 
+                    public:
+                        Estimator();
+                        Estimator(const Estimator& estimator);
+            
+                    protected:
+                        virtual NominalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;              
+                }; 
+        };
+
+        template< class T > class OrdinalFisherEstimation : public T
+        {
+            public:
+                OrdinalFisherEstimation();
+                OrdinalFisherEstimation(OrdinalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
+                OrdinalFisherEstimation(const OrdinalFisherEstimation& estimation);
+
+                class Estimator : public T::Estimator
+                { 
+                    public:
+                        Estimator();
+                        Estimator(const Estimator& estimator);
+            
+                    protected:
+                        virtual OrdinalRegression * build_estimated(const Eigen::VectorXd& beta, const MultivariateSampleSpace& explanatory_space, const UnivariateSampleSpace& response_space) const;              
+                }; 
+        };
+
+        template< class T > class CumulativeFisherEstimation : public OrdinalFisherEstimation< T >
+        {
+            public:
+                CumulativeFisherEstimation();
+                CumulativeFisherEstimation(OrdinalRegression const * estimated, MultivariateData const * data, const Index& response, const Indices& explanatories);
+                CumulativeFisherEstimation(const CumulativeFisherEstimation& estimation);
+
+                class Estimator : public OrdinalFisherEstimation< T >::Estimator
+                { 
+                    public:
+                        Estimator();
+                        Estimator(const Estimator& estimator);
+
+                        const Eigen::VectorXd& get_beta_init() const;
+                        void set_beta_init(const Eigen::VectorXd& beta_init);
+            
+                    protected:
+                        Eigen::VectorXd _beta_init;
+                        virtual Eigen::VectorXd beta_init(const MultivariateData& data, const Index& response, const Indices& explanatories) const;                     
+                }; 
+        };
+
+
+        typedef NominalFisherEstimation< CompleteFisherEstimation< NominalRegression > > NominalCompleteFisherEstimation;
+        typedef NominalFisherEstimation< CompleteFisherEstimation< NominalRegression > >::Estimator NominalCompleteFisherEstimator;
+
+        typedef NominalFisherEstimation< ProportionalFisherEstimation< NominalRegression > > NominalProportionalFisherEstimation;
+        typedef NominalFisherEstimation< ProportionalFisherEstimation< NominalRegression > >::Estimator NominalProportionalFisherEstimator;
+
+        typedef NominalFisherEstimation< ConstrainedFisherEstimation< NominalRegression > > NominalConstrainedFisherEstimation;
+        typedef NominalFisherEstimation< ConstrainedFisherEstimation< NominalRegression > >::Estimator NominalConstrainedFisherEstimator;
+//typedef NominalFisherEstimation< ConstrainedFisherEstimation< NominalRegression > >::PartialProportionalEstimator NominalPartialProportionalFisherEstimator; 
+
+        typedef OrdinalFisherEstimation< CompleteFisherEstimation< OrdinalRegression > > OrdinalCompleteFisherEstimation;
+        typedef OrdinalFisherEstimation< CompleteFisherEstimation< OrdinalRegression > >::Estimator OrdinalCompleteFisherEstimator;
+
+        typedef OrdinalFisherEstimation< ProportionalFisherEstimation< OrdinalRegression > > OrdinalProportionalFisherEstimation;
+        typedef OrdinalFisherEstimation< ProportionalFisherEstimation< OrdinalRegression > >::Estimator OrdinalProportionalFisherEstimator;
+
+        typedef OrdinalFisherEstimation< ConstrainedFisherEstimation< OrdinalRegression > > OrdinalConstrainedFisherEstimation;
+        typedef OrdinalFisherEstimation< ConstrainedFisherEstimation< OrdinalRegression > >::Estimator OrdinalConstrainedFisherEstimator;       
+//typedef OrdinalFisherEstimation< ConstrainedFisherEstimation< OrdinalRegression > >::PartialProportionalEstimator OrdinalPartialProportionalFisherEstimator;           
+
+     
+        typedef CumulativeFisherEstimation< CompleteFisherEstimation< OrdinalRegression > > CumulativeCompleteFisherEstimation;
+        typedef CumulativeFisherEstimation< CompleteFisherEstimation< OrdinalRegression > >::Estimator CumulativeCompleteFisherEstimator;
+
+        typedef CumulativeFisherEstimation< ProportionalFisherEstimation< OrdinalRegression > > CumulativeProportionalFisherEstimation;
+        typedef CumulativeFisherEstimation< ProportionalFisherEstimation< OrdinalRegression > >::Estimator CumulativeProportionalFisherEstimator;
+
+        typedef CumulativeFisherEstimation< ConstrainedFisherEstimation< OrdinalRegression > > CumulativeConstrainedFisherEstimation;
+        typedef CumulativeFisherEstimation< ConstrainedFisherEstimation< OrdinalRegression > >::Estimator CumulativeConstrainedFisherEstimator;
+//typedef CumulativeFisherEstimation< ConstrainedFisherEstimation< OrdinalRegression > >::PartialProportionalEstimator CumulativePartialProportionalFisherEstimator;
+
     }
 }
 

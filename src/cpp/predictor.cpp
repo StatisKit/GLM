@@ -216,6 +216,7 @@ namespace statiskit
     ProportionalVectorPredictor::ProportionalVectorPredictor(const MultivariateSampleSpace& explanatory_space) : VectorPredictor(explanatory_space)
     {}
 
+
     ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Eigen::MatrixXd& constraint) : ProportionalVectorPredictor(explanatory_space)
     {   
     	if(constraint.rows() != ( explanatory_space.encode() * dimension ) )
@@ -241,6 +242,9 @@ namespace statiskit
         _alpha = Eigen::VectorXd::Zero(intercept_constraint.cols()); 
         _delta = Eigen::VectorXd::Zero(constraint.cols());        
     }    
+
+    ConstrainedVectorPredictor::ConstrainedVectorPredictor(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Indices& proportional) : ConstrainedVectorPredictor(explanatory_space, dimension, partial_proportional_constraint(explanatory_space, dimension, proportional))
+    {}
 
     ConstrainedVectorPredictor::ConstrainedVectorPredictor(const ConstrainedVectorPredictor& predictor) : ProportionalVectorPredictor(predictor)
     { 
@@ -281,4 +285,60 @@ namespace statiskit
 	
     std::unique_ptr< VectorPredictor > ConstrainedVectorPredictor::copy() const
     { return std::make_unique< ConstrainedVectorPredictor >(*this); }
+
+    Eigen::MatrixXd ConstrainedVectorPredictor::partial_proportional_constraint(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Indices& proportional)
+    {
+        Index nb_cols=0, nb_block_rows=0, current_row = 0, current_col=0;
+        std::vector< Index > rows, cols;
+        for(Index i=0; i<explanatory_space.size(); ++i)
+        {
+            if(explanatory_space.get(i)->get_outcome() == outcome_type::CATEGORICAL)
+            { 
+                Index K = static_cast< const CategoricalSampleSpace* >( explanatory_space.get(i) )->get_cardinality();
+                rows.push_back(K-1); 
+            }
+            else
+            { rows.push_back(1); }
+            nb_block_rows += rows.back();
+
+            if(proportional.find(i) == proportional.end()) // complete
+            { cols.push_back(rows.back()*dimension); }
+            else
+            { cols.push_back(rows.back()); }  
+            nb_cols += cols.back();   
+        }
+        Eigen::MatrixXd constraint = Eigen::MatrixXd::Zero(nb_block_rows*dimension, nb_cols);
+        for(Index i=0; i<explanatory_space.size(); ++i)
+        {
+            Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(rows[i], rows[i]); 
+            if(proportional.find(i) == proportional.end()) 
+            {  
+                for(Index j=0; j<dimension; ++j)
+                {
+                    Eigen::RowVectorXd indicator = Eigen::RowVectorXd::Zero(dimension);
+                    indicator[j] = 1;    
+                    constraint.block(j*nb_block_rows + current_row, current_col, rows[i], cols[i]) = Eigen::kroneckerProduct(indicator, identity); 
+                }
+            }
+            else
+            {
+                for(Index j=0; j<dimension; ++j)
+                {constraint.block(j*nb_block_rows + current_row, current_col, rows[i], cols[i]) = identity; }
+            } 
+            current_col += cols[i];
+            current_row += rows[i];               
+        }
+        return constraint;
+    }
+
+    Eigen::MatrixXd ConstrainedVectorPredictor::partial_proportional_constraint(const MultivariateData& data, const Index& response, const Indices& explanatories, const Indices& proportional)
+    {
+        Index J = static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() )->get_cardinality();
+        std::unique_ptr< MultivariateData > _data = data.extract(explanatories);
+        const MultivariateSampleSpace* explanatory_space = _data->get_sample_space();
+        Indices prop;
+        for(Indices::iterator it=proportional.begin(); it!=proportional.end(); ++it)
+        { prop.insert(distance(explanatories.begin(), explanatories.find(*it))); }
+        return partial_proportional_constraint(*explanatory_space, J-1, prop);
+    }
 }
