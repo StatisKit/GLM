@@ -37,6 +37,7 @@ void wrapper_45b2ac2570a857b5a19c79be5c650b64()
     if(autowig::Held< class ::statiskit::glm::NegativeBinomialRegression >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::NegativeBinomialRegression >::Type, autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::NegativeBinomialRegression >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::NegativeBinomialRegression, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::NegativeBinomialRegression >::Type, class ::statiskit::glm::NegativeBinomialRegression > > >();
     }
 
 }

@@ -40,6 +40,7 @@ void wrapper_8e43891875f7555ba1fc2c14aff65b83()
     if(autowig::Held< class ::statiskit::CompleteVectorPredictor >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::CompleteVectorPredictor >::Type, autowig::Held< class ::statiskit::VectorPredictor >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::CompleteVectorPredictor >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::CompleteVectorPredictor, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::CompleteVectorPredictor >::Type, class ::statiskit::CompleteVectorPredictor > > >();
     }
 
 }

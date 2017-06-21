@@ -68,6 +68,8 @@ void wrapper_38c14bdcf2585318bf8d4b6f049ff4eb()
     {
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_38c14bdcf2585318bf8d4b6f049ff4eb >::Type, autowig::Held< class ::statiskit::ScalarPredictor >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< class ::statiskit::ScalarPredictor >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::ScalarPredictor >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::ScalarPredictor, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::ScalarPredictor >::Type, class ::statiskit::ScalarPredictor > > >();
+        //boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_38c14bdcf2585318bf8d4b6f049ff4eb >::Type, autowig::Held< class ::statiskit::ScalarPredictor >::Type >();
     }    
 
 }

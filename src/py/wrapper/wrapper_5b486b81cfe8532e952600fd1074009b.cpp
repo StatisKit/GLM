@@ -37,6 +37,7 @@ void wrapper_5b486b81cfe8532e952600fd1074009b()
     if(autowig::Held< class ::statiskit::glm::NominalRegression >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::NominalRegression >::Type, autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::NominalLink > >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::NominalRegression >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::NominalRegression, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::NominalRegression >::Type, class ::statiskit::glm::NominalRegression > > >();
     }
 
 }

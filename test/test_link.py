@@ -221,14 +221,21 @@ class AbstractTestOrdinalLink(object):
     _mu = linalg.Vector([math.exp(2)/_norm, math.exp(1)/_norm])
     _mu_prime = linalg.Matrix([[math.exp(2)*(1+math.exp(1))/_norm**2, -math.exp(3)/_norm**2], [math.exp(2)/_norm**2, math.exp(1)/_norm**2]])
 
+    # @classmethod
+    # def setUpClass(cls):
+    #     """Test ordinal link construction"""
+    #     cls._canonical_link = glm.OrdinalLink()
+
     def test_link_inverse(self):
         """Test Ordinal Link inverse"""
+        #v = self._logistic_link.inverse(self._eta)
         v = self._logistic_link.inverse(self._eta)
         self.assertAlmostEqual(v[0], self._mu[0])
         self.assertAlmostEqual(v[1], self._mu[1])
 
     def test_link_inverse_derivative(self):
         """Test Ordinal Link inverse derivative"""
+        #m = self._logistic_link.inverse_derivative(self._eta)
         m = self._logistic_link.inverse_derivative(self._eta)
         self.assertAlmostEqual(m[0,0], self._mu_prime[0,0])
         self.assertAlmostEqual(m[0,1], self._mu_prime[0,1])
@@ -288,13 +295,12 @@ class TestCumulativeLink(unittest.TestCase, AbstractTestOrdinalLink):
     _eta = linalg.Vector([0.,1.]) # must be ordered (eta0 < eta1)
     _norm = 1 + math.exp(1) 
     _mu = linalg.Vector([0.5, math.exp(1)/_norm-0.5])
-    _mu_prime = linalg.Matrix([[ 0.25, -math.exp(1)/_norm**2], [0., math.exp(1)/_norm**2]])
+    _mu_prime = linalg.Matrix([[ 0.25, -0.25], [0., math.exp(1)/_norm**2]])
 
     @classmethod
     def setUpClass(cls):
         """Test Cumulative link construction"""
-        cls._canonical_link = glm.OrdinalLink()
-        cls._logistic_link = glm.OrdinalLink(ratio='cumulative')  
+        cls._logistic_link = glm.OrdinalLink(ratio='cumulative')
 
     def test_F_distribution(self):
         """Test Cumulative link  distribution property"""
@@ -304,7 +310,6 @@ class TestCumulativeLink(unittest.TestCase, AbstractTestOrdinalLink):
     @classmethod
     def tearDownClass(cls):
         """Test Cumulative link deletion"""
-        del cls._canonical_link 
         del cls._logistic_link
 
 @attr(linux=True,
@@ -312,15 +317,18 @@ class TestCumulativeLink(unittest.TestCase, AbstractTestOrdinalLink):
       win=True,
       level=0)
 class TestSequentialLink(unittest.TestCase, AbstractTestOrdinalLink):
-    _eta = linalg.Vector([1.,1.]) 
-    _norm = 1 + math.exp(1) 
-    _mu = linalg.Vector([math.exp(1)/_norm, math.exp(1)/_norm**2])
-    _mu_prime = linalg.Matrix([[math.exp(1)/_norm**2, -math.exp(1)**2/_norm**3], [0., math.exp(1)/_norm**3]])
+    # _eta = linalg.Vector([1.,1.]) 
+    # _norm = 1 + math.exp(1) 
+    # _mu = linalg.Vector([math.exp(1)/_norm, math.exp(1)/_norm**2])
+    # _mu_prime = linalg.Matrix([[math.exp(1)/_norm**2, -math.exp(1)**2/_norm**3], [0., math.exp(1)/_norm**3]])
+    _eta = linalg.Vector([0.,1.]) 
+    _norm = 1 + math.exp(1)
+    _mu = linalg.Vector([0.5, 0.5*math.exp(1)/_norm])
+    _mu_prime = linalg.Matrix([[0.25, -0.25*math.exp(1)/_norm], [0., 0.5*math.exp(1)/_norm**2]])
 
     @classmethod
     def setUpClass(cls):
         """Test Sequential link construction"""
-        cls._canonical_link = glm.OrdinalLink()
         cls._logistic_link = glm.OrdinalLink(ratio='sequential')  
 
     def test_F_distribution(self):
@@ -331,5 +339,4 @@ class TestSequentialLink(unittest.TestCase, AbstractTestOrdinalLink):
     @classmethod
     def tearDownClass(cls):
         """Test Sequential link deletion"""
-        del cls._canonical_link 
         del cls._logistic_link

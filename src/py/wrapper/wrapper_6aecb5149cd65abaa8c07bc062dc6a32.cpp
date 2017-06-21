@@ -36,6 +36,7 @@ void wrapper_6aecb5149cd65abaa8c07bc062dc6a32()
     if(autowig::Held< struct ::statiskit::glm::PoissonFisherEstimation >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::PoissonFisherEstimation >::Type, autowig::Held< class ::statiskit::glm::ScalarFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::glm::PoissonFisherEstimation >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::glm::PoissonFisherEstimation, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::glm::PoissonFisherEstimation >::Type, struct ::statiskit::glm::PoissonFisherEstimation > > >();
     }
 
 }

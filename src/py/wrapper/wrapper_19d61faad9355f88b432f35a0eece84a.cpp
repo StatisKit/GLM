@@ -52,6 +52,7 @@ void wrapper_19d61faad9355f88b432f35a0eece84a()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_19d61faad9355f88b432f35a0eece84a >::Type, autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > >::Type, autowig::Held< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::NegativeBinomialLink > >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink >, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > >::Type, struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::NegativeBinomialLink > > > >();
     }
 
 }

@@ -32,6 +32,7 @@ void wrapper_984cb689762455efab19f9cb6760519a()
     if(autowig::Held< struct ::statiskit::SequentialLink >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::SequentialLink >::Type, autowig::Held< struct ::statiskit::FLink< struct ::statiskit::OrdinalLink > >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::SequentialLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::SequentialLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::SequentialLink >::Type, struct ::statiskit::SequentialLink > > >();
     }
 
 }

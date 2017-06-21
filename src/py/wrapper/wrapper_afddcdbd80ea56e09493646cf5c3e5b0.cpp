@@ -37,6 +37,7 @@ void wrapper_afddcdbd80ea56e09493646cf5c3e5b0()
     if(autowig::Held< class ::statiskit::CompleteScalarPredictor >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::CompleteScalarPredictor >::Type, autowig::Held< class ::statiskit::ScalarPredictor >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::CompleteScalarPredictor >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::CompleteScalarPredictor, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::CompleteScalarPredictor >::Type, class ::statiskit::CompleteScalarPredictor > > >();
     }
 
 }

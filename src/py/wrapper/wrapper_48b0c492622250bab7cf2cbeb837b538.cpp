@@ -61,6 +61,7 @@ void wrapper_48b0c492622250bab7cf2cbeb837b538()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_48b0c492622250bab7cf2cbeb837b538 >::Type, autowig::Held< struct ::statiskit::FLink< struct ::statiskit::BinomialLink > >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::FLink< struct ::statiskit::BinomialLink > >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::FLink< struct ::statiskit::BinomialLink > >::Type, autowig::Held< struct ::statiskit::BinomialLink >::Type >();
+        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::FLink< struct ::statiskit::BinomialLink > >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::FLink< struct ::statiskit::BinomialLink >, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::FLink< struct ::statiskit::BinomialLink > >::Type, struct ::statiskit::FLink< struct ::statiskit::BinomialLink > > > >();
     }
 
 }
