@@ -8,28 +8,43 @@ namespace statiskit
         template<class T, class L>
             GeneralizedLinearModel< T, L >::GeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link)
             {
-                _link = static_cast< L* >( link.copy().release() );
+                _link = static_cast< L* >(link.copy().release());
                 _predictor = predictor.copy().release();
             }
 
         template<class T, class L>
             GeneralizedLinearModel< T, L >::GeneralizedLinearModel(const GeneralizedLinearModel< T, L >& glm)
             {
-                _link = glm._link->copy().release();
-                _predictor = glm._predictor->copy().release();
-                _family = static_cast< typename L::family_type* >(glm._family->copy().release());
+                if(glm._link)
+                { _link = glm._link->copy().release(); }
+                if(glm._predictor)
+                { _predictor = glm._predictor->copy().release(); }
+                if(glm._family)
+                { _family = static_cast< typename L::family_type* >(glm._family->copy().release()); }
             }
 
         template<class T, class L>
             GeneralizedLinearModel< T, L >::~GeneralizedLinearModel()
             {
-                delete _link;
-                delete _predictor;
-                delete _family;
+                if(_link)
+                {
+                    delete _link;
+                    _link = nullptr;
+                }
+                if(_predictor)
+                {
+                    delete _predictor;
+                    _link = nullptr;
+                }
+                if(_family)
+                {
+                    delete _family;
+                    _family = nullptr;
+                }
             }
 
         template<class T, class L>
-            const UnivariateDistribution* GeneralizedLinearModel< T, L >::operator() (const MultivariateEvent& event)
+            const UnivariateDistribution* GeneralizedLinearModel< T, L >::operator() (const MultivariateEvent& event) const
             {
                 update(_link->inverse((*_predictor)(event)));
                 return _family;
@@ -48,11 +63,22 @@ namespace statiskit
 //            { return _family->get_nb_parameters() + _predictor->size(); }
 
         template<class T, class L>
-            const typename L::predictor_type* GeneralizedLinearModel< T, L >::get_predictor() const
+            typename L::predictor_type* GeneralizedLinearModel< T, L >::get_predictor() const
             { return _predictor; }
 
         template<class T, class L>
-            const L* GeneralizedLinearModel< T, L >::get_link() const
+            void GeneralizedLinearModel< T, L >::set_predictor(const typename L::predictor_type& predictor)
+            {
+                // if(_predictor->get_explanatory_space() == predictor->get_explanatory_space())
+                // {
+                    delete _predictor;
+                    _predictor = predictor.copy().release(); 
+                // }
+            }
+
+
+        template<class T, class L>
+            L* GeneralizedLinearModel< T, L >::get_link() const
             { return _link; }
 
         template<class T, class L>

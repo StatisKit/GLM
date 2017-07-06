@@ -31,7 +31,6 @@ void wrapper_7f7cd6cb2b9e5e26ae781a16f94ec563()
     if(autowig::Held< struct ::statiskit::NegativeBinomialCanonicalLink >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::NegativeBinomialCanonicalLink >::Type, autowig::Held< struct ::statiskit::NegativeBinomialLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::NegativeBinomialCanonicalLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::NegativeBinomialCanonicalLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::NegativeBinomialCanonicalLink >::Type, struct ::statiskit::NegativeBinomialCanonicalLink > > >();
     }
 
 }

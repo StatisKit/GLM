@@ -59,7 +59,6 @@ void wrapper_8510686a608159948096dea78e55e4f7()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_8510686a608159948096dea78e55e4f7 >::Type, autowig::Held< struct ::statiskit::OrdinalLink >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::OrdinalLink >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::OrdinalLink >::Type, autowig::Held< struct ::statiskit::VectorLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::OrdinalLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::OrdinalLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::OrdinalLink >::Type, struct ::statiskit::OrdinalLink > > >();
     }
 
 }

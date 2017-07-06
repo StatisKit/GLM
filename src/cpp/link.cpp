@@ -9,15 +9,17 @@ namespace statiskit
     PoissonCanonicalLink::~PoissonCanonicalLink()
     {} 
 
+    double PoissonCanonicalLink::evaluate(const double& value) const
+    { return log(value); }
+
     double PoissonCanonicalLink::inverse(const double& value) const
     { return exp(value); }
-    
+
     double PoissonCanonicalLink::inverse_derivative(const double& value) const
     { return exp(value); }
 
     std::unique_ptr< PoissonLink > PoissonCanonicalLink::copy() const
     { return std::make_unique< PoissonCanonicalLink >(); } 
-
 
     PoissonVLink::PoissonVLink() : FLink<PoissonLink>()
     {}
@@ -28,9 +30,12 @@ namespace statiskit
     PoissonVLink::~PoissonVLink()
     {} 
 
+    double PoissonVLink::evaluate(const double& value) const
+    { return _distribution->quantile(value / (1. + value)); }
+
     double PoissonVLink::inverse(const double& value) const // v = F/(1-F)
-    { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); }
-    
+    { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); } 
+
     double PoissonVLink::inverse_derivative(const double& value) const
     { return _distribution->pdf(value) / pow( 1-_distribution->cdf(value), 2); }        
 
@@ -44,6 +49,9 @@ namespace statiskit
     BinomialCanonicalLink::~BinomialCanonicalLink()
     {}  
 
+    double BinomialCanonicalLink::evaluate(const double& value) const
+    { return log(value / (1. - value)); }
+
     double BinomialCanonicalLink::inverse(const double& value) const
     { return 1. / (1 + exp(-value)); }
     
@@ -52,7 +60,6 @@ namespace statiskit
 
     std::unique_ptr< BinomialLink > BinomialCanonicalLink::copy() const
     { return std::make_unique< BinomialCanonicalLink >(*this); }
-
                    
     BinomialFLink::BinomialFLink() : FLink<BinomialLink>()
     {}
@@ -63,6 +70,9 @@ namespace statiskit
     BinomialFLink::~BinomialFLink()
     {}  
 
+    double BinomialFLink::evaluate(const double& value) const
+    { return _distribution->quantile(value); }
+
     double BinomialFLink::inverse(const double& value) const
     { return _distribution->cdf(value); }
     
@@ -71,7 +81,6 @@ namespace statiskit
 
     std::unique_ptr< BinomialLink > BinomialFLink::copy() const
     { return std::make_unique< BinomialFLink >(*this); }  
-           
 
     NegativeBinomialCanonicalLink::NegativeBinomialCanonicalLink()
     {}
@@ -79,11 +88,35 @@ namespace statiskit
     NegativeBinomialCanonicalLink::~NegativeBinomialCanonicalLink()
     {} 
 
+    double NegativeBinomialCanonicalLink::evaluate(const double& value) const
+    {
+        double res;
+        if(boost::math::isfinite(value) && value > 0.)
+        { res = log(value / (1 + value)); }
+        else
+        { res = std::numeric_limits< double >::quiet_NaN(); }
+        return res;
+    }
+
     double NegativeBinomialCanonicalLink::inverse(const double& value) const
-    { return exp(value)/(1-exp(value)); } // defined if value < 0.
-    
+    {
+        double res;
+        if(boost::math::isfinite(value) && value < 0.)
+        { res = exp(value) / (1 - exp(value)); }
+        else
+        { res = std::numeric_limits< double >::quiet_NaN(); }
+        return res;
+    }
+
     double NegativeBinomialCanonicalLink::inverse_derivative(const double& value) const
-    { return  exp(-value)/pow(exp(-value)-1, 2); } // defined if value < 0.       
+    {
+        double res;
+        if(boost::math::isfinite(value) && value < 0.)
+        { res = exp(value) / pow(1 - exp(value), 2); }
+        else
+        { res = std::numeric_limits< double >::quiet_NaN(); }
+        return res;
+    }
 
     std::unique_ptr< NegativeBinomialLink > NegativeBinomialCanonicalLink::copy() const
     { return std::make_unique< NegativeBinomialCanonicalLink >(*this); } 
@@ -98,11 +131,35 @@ namespace statiskit
     NegativeBinomialULink::~NegativeBinomialULink()
     {}    
 
+    double NegativeBinomialULink::evaluate(const double& value) const
+    {
+        double res;
+        if(boost::math::isfinite(value) && value > 0.)
+        { res = _distribution->quantile(value / (1. + 2 * value)); }
+        else
+        { res = std::numeric_limits< double >::quiet_NaN(); }
+        return res;
+    } 
+
     double NegativeBinomialULink::inverse(const double& value) const // return mu (and not pi)
-    { return _distribution->cdf(value) / (1 - 2*_distribution->cdf(value)); } // defined if value < 0 
+    {
+        double res;
+        if(boost::math::isfinite(value) && value < 0.)
+        { res = _distribution->cdf(value) / (1 - 2*_distribution->cdf(value)); }
+        else
+        { res = std::numeric_limits< double >::quiet_NaN(); }
+        return res;
+    } 
     
     double NegativeBinomialULink::inverse_derivative(const double& value) const
-    { return _distribution->pdf(value) / pow(1 - 2*_distribution->cdf(value), 2); } // defined if value < 0.   
+    {
+        double res;
+        if(boost::math::isfinite(value) && value < 0.)
+        { res = _distribution->pdf(value) / pow(1 - 2*_distribution->cdf(value), 2); }
+        else
+        { res = std::numeric_limits< double >::quiet_NaN(); }
+        return res;
+    }   
 
     std::unique_ptr< NegativeBinomialLink > NegativeBinomialULink::copy() const
     { return std::make_unique< NegativeBinomialULink >(*this); }
@@ -117,8 +174,11 @@ namespace statiskit
     NegativeBinomialVLink::~NegativeBinomialVLink()
     {}    
 
+    double NegativeBinomialVLink::evaluate(const double& value) const
+    { return _distribution->quantile(value / (1. + value)); }
+
     double NegativeBinomialVLink::inverse(const double& value) const 
-    { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); } 
+    { return _distribution->cdf(value) / (1 - _distribution->cdf(value)); } 
     
     double NegativeBinomialVLink::inverse_derivative(const double& value) const
     { return _distribution->pdf(value) / pow(1-_distribution->cdf(value), 2); }  

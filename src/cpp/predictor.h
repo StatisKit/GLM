@@ -180,7 +180,7 @@ namespace statiskit
 			void set_intercept_constraint(const Eigen::MatrixXd& intercept_constraint);		
 
             static Eigen::MatrixXd partial_proportional_constraint(const MultivariateSampleSpace& explanatory_space, const size_t& dimension, const Indices& proportional);	
-            static Eigen::MatrixXd partial_proportional_constraint(const MultivariateData& data, const Index& response, const Indices& explanatories, const Indices& proportional); 
+            static Eigen::MatrixXd partial_proportional_constraint(const UnivariateConditionalData& data, const Indices& proportional); 
 
             virtual std::unique_ptr< VectorPredictor > copy() const;            
 

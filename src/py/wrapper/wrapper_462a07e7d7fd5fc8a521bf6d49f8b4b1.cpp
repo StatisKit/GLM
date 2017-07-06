@@ -32,7 +32,6 @@ void wrapper_462a07e7d7fd5fc8a521bf6d49f8b4b1()
     if(autowig::Held< struct ::statiskit::ReferenceLink >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::ReferenceLink >::Type, autowig::Held< struct ::statiskit::FLink< struct ::statiskit::NominalLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::ReferenceLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::ReferenceLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::ReferenceLink >::Type, struct ::statiskit::ReferenceLink > > >();
     }
 
 }
