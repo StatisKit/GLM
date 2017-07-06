@@ -10,6 +10,7 @@ from nose.plugins.attrib import attr
       win=True,
       level=0)
 class TestPredictor(object):
+
     @classmethod
     def sample_space_init(cls):
         sample_spaces = []
@@ -23,6 +24,7 @@ class TestPredictor(object):
       win=True,
       level=0)
 class TestCompleteScalarPredictor(unittest.TestCase, TestPredictor):
+
     _alpha = 1.
     _delta = linalg.Vector([0.5, 2.])
     #_x = [1, 1.6]
@@ -53,6 +55,7 @@ class TestCompleteScalarPredictor(unittest.TestCase, TestPredictor):
       win=True,
       level=0)
 class TestCompleteVectorPredictor(unittest.TestCase, TestPredictor):
+
     _alpha = linalg.Vector([1., 2.])
     _delta = linalg.Matrix([[0.5, 2.], [1., 4.]])
     _len = 6
@@ -83,6 +86,7 @@ class TestCompleteVectorPredictor(unittest.TestCase, TestPredictor):
       win=True,
       level=0)
 class TestProportionalVectorPredictor(TestCompleteVectorPredictor):
+    
     _alpha = linalg.Vector([1., 2.])
     _delta = linalg.Vector([0.5, 2.])
     _len = 4

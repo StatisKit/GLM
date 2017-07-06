@@ -29,15 +29,18 @@ void wrapper_12cba5f08bca53ebb5d5e4782aeedbee()
     boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
     boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
     boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
+    unsigned int  (::statiskit::glm::BinomialRegression::*method_pointer_074ce71787b252eca25a84eac895fbc0)() const = &::statiskit::glm::BinomialRegression::get_kappa;
+    void  (::statiskit::glm::BinomialRegression::*method_pointer_ed9f1891e03f5f4e8bab58c69215323f)(unsigned int const &) = &::statiskit::glm::BinomialRegression::set_kappa;
     class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > >  (::statiskit::glm::BinomialRegression::*method_pointer_8c0e2385f1c05e7e907ba3dfb56c4d67)() const = &::statiskit::glm::BinomialRegression::copy;
     boost::python::class_< class ::statiskit::glm::BinomialRegression, autowig::Held< class ::statiskit::glm::BinomialRegression >::Type, boost::python::bases< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::BinomialLink > > > class_12cba5f08bca53ebb5d5e4782aeedbee("BinomialRegression", "", boost::python::no_init);
     class_12cba5f08bca53ebb5d5e4782aeedbee.def(boost::python::init< unsigned int const &, class ::statiskit::ScalarPredictor const &, struct ::statiskit::BinomialLink const & >(""));
+    class_12cba5f08bca53ebb5d5e4782aeedbee.def("get_kappa", method_pointer_074ce71787b252eca25a84eac895fbc0, "");
+    class_12cba5f08bca53ebb5d5e4782aeedbee.def("set_kappa", method_pointer_ed9f1891e03f5f4e8bab58c69215323f, "");
     class_12cba5f08bca53ebb5d5e4782aeedbee.def("copy", method_pointer_8c0e2385f1c05e7e907ba3dfb56c4d67, "");
 
     if(autowig::Held< class ::statiskit::glm::BinomialRegression >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::BinomialRegression >::Type, autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::BinomialLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::BinomialRegression >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::BinomialRegression, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::BinomialRegression >::Type, class ::statiskit::glm::BinomialRegression > > >();
     }
 
 }

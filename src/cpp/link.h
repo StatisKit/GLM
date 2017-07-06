@@ -26,6 +26,8 @@ namespace statiskit
             typedef ScalarPredictor predictor_type;
             typedef double expectation_type;
 
+            virtual double evaluate(const double& value) const = 0;
+
             virtual double inverse(const double& value) const = 0;
             virtual double inverse_derivative(const double& value) const = 0;
         };        
@@ -42,6 +44,8 @@ namespace statiskit
             PoissonCanonicalLink();
             virtual ~PoissonCanonicalLink();
 
+            virtual double evaluate(const double& value) const;
+
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
             
@@ -53,6 +57,8 @@ namespace statiskit
             PoissonVLink();
             PoissonVLink(const PoissonVLink& link);
             virtual ~PoissonVLink();
+
+            virtual double evaluate(const double& value) const;
 
 	        virtual double inverse(const double& value) const;
 	        virtual double inverse_derivative(const double& value) const;
@@ -72,6 +78,8 @@ namespace statiskit
             BinomialCanonicalLink();
             virtual ~BinomialCanonicalLink();
 
+            virtual double evaluate(const double& value) const;
+
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
             
@@ -83,7 +91,9 @@ namespace statiskit
 	    	BinomialFLink();
             BinomialFLink(const BinomialFLink& link);
 	    	virtual ~BinomialFLink();
-	    	
+
+            virtual double evaluate(const double& value) const;
+
 	        virtual double inverse(const double& value) const;
 	        virtual double inverse_derivative(const double& value) const;
 
@@ -102,6 +112,8 @@ namespace statiskit
             NegativeBinomialCanonicalLink();
             virtual ~NegativeBinomialCanonicalLink();
 
+            virtual double evaluate(const double& value) const;
+
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
             
@@ -114,6 +126,8 @@ namespace statiskit
             NegativeBinomialULink(const NegativeBinomialULink& link);
             virtual ~NegativeBinomialULink();
 
+            virtual double evaluate(const double& value) const;
+
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;
                         
@@ -125,6 +139,8 @@ namespace statiskit
             NegativeBinomialVLink();
             NegativeBinomialVLink(const NegativeBinomialVLink& link);
             virtual ~NegativeBinomialVLink();
+
+            virtual double evaluate(const double& value) const;
 
             virtual double inverse(const double& value) const;
             virtual double inverse_derivative(const double& value) const;

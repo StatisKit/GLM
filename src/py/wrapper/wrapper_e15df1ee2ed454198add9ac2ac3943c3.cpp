@@ -20,6 +20,9 @@ namespace autowig
             virtual double  inverse(double const & param_0) const
             { return this->get_override("inverse")(param_0); }
                         
+            virtual double  evaluate(double const & param_0) const
+            { return this->get_override("evaluate")(param_0); }
+                        
 
         protected:
             
@@ -59,7 +62,6 @@ void wrapper_e15df1ee2ed454198add9ac2ac3943c3()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_e15df1ee2ed454198add9ac2ac3943c3 >::Type, autowig::Held< struct ::statiskit::NegativeBinomialLink >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::NegativeBinomialLink >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::NegativeBinomialLink >::Type, autowig::Held< struct ::statiskit::ScalarLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::NegativeBinomialLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::NegativeBinomialLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::NegativeBinomialLink >::Type, struct ::statiskit::NegativeBinomialLink > > >();
     }
 
 }

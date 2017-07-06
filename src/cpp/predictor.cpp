@@ -23,7 +23,6 @@ namespace statiskit
     const MultivariateSampleSpace* ScalarPredictor::get_explanatory_space() const
     { return _explanatory_space; }
 
-
     CompleteScalarPredictor::CompleteScalarPredictor(const MultivariateSampleSpace& explanatory_space) : CompleteScalarPredictor(explanatory_space, explanatory_space.encode())
     {}
 
@@ -302,7 +301,7 @@ namespace statiskit
             nb_block_rows += rows.back();
 
             if(proportional.find(i) == proportional.end()) // complete
-            { cols.push_back(rows.back()*dimension); }
+            { cols.push_back(rows.back() * dimension); }
             else
             { cols.push_back(rows.back()); }  
             nb_cols += cols.back();   
@@ -331,14 +330,11 @@ namespace statiskit
         return constraint;
     }
 
-    Eigen::MatrixXd ConstrainedVectorPredictor::partial_proportional_constraint(const MultivariateData& data, const Index& response, const Indices& explanatories, const Indices& proportional)
+    Eigen::MatrixXd ConstrainedVectorPredictor::partial_proportional_constraint(const UnivariateConditionalData& data, const Indices& proportional)
     {
-        Index J = static_cast< const CategoricalSampleSpace* >( data.extract(response)->get_sample_space() )->get_cardinality();
-        std::unique_ptr< MultivariateData > _data = data.extract(explanatories);
+        Index J = static_cast< const CategoricalSampleSpace* >(data.get_response()->get_sample_space())->get_cardinality();
+        const MultivariateData* _data = data.get_explanatories();
         const MultivariateSampleSpace* explanatory_space = _data->get_sample_space();
-        Indices prop;
-        for(Indices::iterator it=proportional.begin(); it!=proportional.end(); ++it)
-        { prop.insert(distance(explanatories.begin(), explanatories.find(*it))); }
-        return partial_proportional_constraint(*explanatory_space, J-1, prop);
+        return partial_proportional_constraint(*explanatory_space, J-1, proportional);
     }
 }

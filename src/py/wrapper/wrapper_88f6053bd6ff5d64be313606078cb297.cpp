@@ -32,7 +32,6 @@ void wrapper_88f6053bd6ff5d64be313606078cb297()
     if(autowig::Held< struct ::statiskit::PoissonVLink >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::PoissonVLink >::Type, autowig::Held< struct ::statiskit::FLink< struct ::statiskit::PoissonLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::PoissonVLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::PoissonVLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::PoissonVLink >::Type, struct ::statiskit::PoissonVLink > > >();
     }
 
 }

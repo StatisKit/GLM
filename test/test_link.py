@@ -17,103 +17,27 @@ class AbstractTestLink(object):
     _mu = 1. 
     _mu_prime = 1.
 
-    def test_link_inverse(self):
-        """Test Link inverse"""
-        self.assertEqual(self._canonical_link.inverse(self._eta), self._mu)
-        self.assertEqual(self._canonical_link.inverse(self._eta), self._logistic_link.inverse(self._eta))  
 
-    def test_link_inverse_derivative(self):
-        """Test Link inverse derivative"""
-        self.assertEqual(self._canonical_link.inverse_derivative(self._eta), self._mu_prime)
-        self.assertAlmostEqual(self._canonical_link.inverse_derivative(self._eta), self._logistic_link.inverse_derivative(self._eta))    
+    # def test_evaluate(self):
+    #     self.assertEqual(self._link.evaluate(self._mu), self._eta)
 
+    # def test_inverse(self):
+    #     self.assertEqual(self._link.inverse(self._eta), self._mu)
+    #     self.assertEqual(self._link.inverse(self._link.evaluate(self._mu)), self._mu)
 
-@attr(linux=True,
-      osx=True,
-      win=True,
-      level=0)
-class TestPoissonLink(unittest.TestCase, AbstractTestLink):
+    # def test_link_inverse_derivative(self):
+    #     self.assertEqual(self._link.inverse(self._link.evaluate(self._mu)), self._mu)
 
-    @classmethod
-    def setUpClass(cls):
-        """Test PoissonLink construction"""
-        cls._canonical_link = glm.PoissonLink()
-        cls._logistic_link = glm.PoissonLink(link='V')
+    # def test_link_inverse(self):
+    #     """Test Link inverse"""
+    #     self.assertEqual(self._canonical_link.inverse(self._eta), self._mu)
+    #     self.assertEqual(self._canonical_link.inverse(self._eta), self._logistic_link.inverse(self._eta))  
 
-    def test_F_distribution(self):
-        """Test Poisson distribution property"""
-        link = glm.PoissonLink(link='V', distribution=core.NormalDistribution())
-        self.assertEqual(str(link.distribution), "N(0.0, 1.0)")
+    # def test_link_inverse_derivative(self):
+    #     """Test Link inverse derivative"""
+    #     self.assertEqual(self._canonical_link.inverse_derivative(self._eta), self._mu_prime)
+    #     self.assertAlmostEqual(self._canonical_link.inverse_derivative(self._eta), self._logistic_link.inverse_derivative(self._eta))    
 
-    @classmethod
-    def tearDownClass(cls):
-        """Test PoissonLink deletion"""
-        del cls._canonical_link 
-        del cls._logistic_link
-
-
-@attr(linux=True,
-      osx=True,
-      win=True,
-      level=0)
-class TestBinomialLink(unittest.TestCase, AbstractTestLink):
-    _mu = 0.5
-    _mu_prime = 0.25
-
-    @classmethod
-    def setUpClass(cls):
-        """Test BinomialLink construction"""
-        cls._canonical_link = glm.BinomialLink()
-        cls._logistic_link = glm.BinomialLink(link='F')      
-
-    def test_F_distribution(self):
-        """Test Binomial distribution property"""
-        link = glm.BinomialLink(link='F', distribution=core.NormalDistribution())
-        self.assertEqual(str(link.distribution), "N(0.0, 1.0)")              
-
-    @classmethod
-    def tearDownClass(cls):
-        """Test BinomialLink deletion"""
-        del cls._canonical_link 
-        del cls._logistic_link
-
-
-@attr(linux=True,
-      osx=True,
-      win=True,
-      level=0)
-class TestNegativeBinomialLink(unittest.TestCase, AbstractTestLink):
-    _eta = 1.
-    _mu = math.exp(1)/(1-math.exp(1))
-    _mu_prime = math.exp(1)/(1-math.exp(1))**2
-
-    @classmethod
-    def setUpClass(cls):
-        """Test NegativeBinomialLink construction"""
-        cls._canonical_link = glm.NegativeBinomialLink()
-        cls._logistic_link = glm.NegativeBinomialLink(link='U')
-        cls._V_logistic_link = glm.NegativeBinomialLink(link='V')
-
-    def test_F_distribution(self):
-        """Test Negative Binomial distribution property"""
-        link = glm.NegativeBinomialLink(link='U', distribution=core.NormalDistribution())
-        self.assertEqual(str(link.distribution), "N(0.0, 1.0)")
-        link = glm.NegativeBinomialLink(link='V', distribution=core.NormalDistribution())
-        self.assertEqual(str(link.distribution), "N(0.0, 1.0)")                
-
-    def test_V_link_inverse(self):
-        """Test Binomial negative V link inverse"""
-        self.assertEqual(self._V_logistic_link.inverse(0.), 1.)
-
-    def test_V_link_inverse_derivative(self):
-        """Test Binomial negative V Link inverse derivative"""
-        self.assertEqual(self._V_logistic_link.inverse_derivative(0.), 1.)
-
-    @classmethod
-    def tearDownClass(cls):
-        """Test NegativeBinomialLink deletion"""
-        del cls._canonical_link 
-        del cls._logistic_link
 
 @attr(linux=True,
       osx=True,

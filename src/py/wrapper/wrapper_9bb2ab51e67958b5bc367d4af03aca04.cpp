@@ -37,7 +37,6 @@ void wrapper_9bb2ab51e67958b5bc367d4af03aca04()
     if(autowig::Held< class ::statiskit::glm::OrdinalRegression >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::OrdinalRegression >::Type, autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::OrdinalLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::glm::OrdinalRegression >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::glm::OrdinalRegression, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::glm::OrdinalRegression >::Type, class ::statiskit::glm::OrdinalRegression > > >();
     }
 
 }

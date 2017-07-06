@@ -59,7 +59,6 @@ void wrapper_ab1a47a0d0c35de199c791da80fd401f()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_ab1a47a0d0c35de199c791da80fd401f >::Type, autowig::Held< struct ::statiskit::NominalLink >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::NominalLink >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::NominalLink >::Type, autowig::Held< struct ::statiskit::VectorLink >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::NominalLink >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::NominalLink, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::NominalLink >::Type, struct ::statiskit::NominalLink > > >();
     }
 
 }

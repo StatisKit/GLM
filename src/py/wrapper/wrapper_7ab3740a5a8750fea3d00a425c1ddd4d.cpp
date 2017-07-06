@@ -30,7 +30,7 @@ void wrapper_7ab3740a5a8750fea3d00a425c1ddd4d()
     class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & (::statiskit::ConstrainedVectorPredictor::*method_pointer_764175e8836a5149b0c3985395b6f713)() const = &::statiskit::ConstrainedVectorPredictor::get_intercept_constraint;
     void  (::statiskit::ConstrainedVectorPredictor::*method_pointer_6ad6664d698e5dc6a30bef820e1e284f)(class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const &) = &::statiskit::ConstrainedVectorPredictor::set_intercept_constraint;
     class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 >  (*method_pointer_8a46b5f507c4520e8d41f7ec79f22e9c)(struct ::statiskit::MultivariateSampleSpace const &, ::std::size_t const &, ::statiskit::Indices const &) = ::statiskit::ConstrainedVectorPredictor::partial_proportional_constraint;
-    class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 >  (*method_pointer_e2b18af2d6f2598db0198db1762bd3c2)(struct ::statiskit::MultivariateData const &, ::statiskit::Index const &, ::statiskit::Indices const &, ::statiskit::Indices const &) = ::statiskit::ConstrainedVectorPredictor::partial_proportional_constraint;
+    class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 >  (*method_pointer_676a0f367b025af8a7133b921d13d807)(class ::statiskit::UnivariateConditionalData const &, ::statiskit::Indices const &) = ::statiskit::ConstrainedVectorPredictor::partial_proportional_constraint;
     boost::python::class_< class ::statiskit::ConstrainedVectorPredictor, autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, boost::python::bases< class ::statiskit::ProportionalVectorPredictor > > class_7ab3740a5a8750fea3d00a425c1ddd4d("ConstrainedVectorPredictor", "", boost::python::no_init);
     class_7ab3740a5a8750fea3d00a425c1ddd4d.def(boost::python::init< struct ::statiskit::MultivariateSampleSpace const &, ::std::size_t const &, class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & >(""));
     class_7ab3740a5a8750fea3d00a425c1ddd4d.def(boost::python::init< struct ::statiskit::MultivariateSampleSpace const &, class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const &, class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & >(""));
@@ -41,13 +41,12 @@ void wrapper_7ab3740a5a8750fea3d00a425c1ddd4d()
     class_7ab3740a5a8750fea3d00a425c1ddd4d.def("get_intercept_constraint", method_pointer_764175e8836a5149b0c3985395b6f713, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_7ab3740a5a8750fea3d00a425c1ddd4d.def("set_intercept_constraint", method_pointer_6ad6664d698e5dc6a30bef820e1e284f, "");
     class_7ab3740a5a8750fea3d00a425c1ddd4d.def("partial_proportional_constraint", method_pointer_8a46b5f507c4520e8d41f7ec79f22e9c, "");
-    class_7ab3740a5a8750fea3d00a425c1ddd4d.def("partial_proportional_constraint", method_pointer_e2b18af2d6f2598db0198db1762bd3c2, "");
+    class_7ab3740a5a8750fea3d00a425c1ddd4d.def("partial_proportional_constraint", method_pointer_676a0f367b025af8a7133b921d13d807, "");
     class_7ab3740a5a8750fea3d00a425c1ddd4d.staticmethod("partial_proportional_constraint");
 
     if(autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, autowig::Held< class ::statiskit::ProportionalVectorPredictor >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, boost::python::objects::make_ptr_instance< class ::statiskit::ConstrainedVectorPredictor, boost::python::objects::pointer_holder< autowig::Held< class ::statiskit::ConstrainedVectorPredictor >::Type, class ::statiskit::ConstrainedVectorPredictor > > >();
     }
 
 }

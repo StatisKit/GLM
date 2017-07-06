@@ -11,7 +11,7 @@ namespace autowig
 
         protected:
             
-            virtual void  update(double const & param_0) 
+            virtual void  update(double const & param_0) const
             { this->get_override("update")(param_0); }
                         
 
@@ -52,7 +52,6 @@ void wrapper_dc48f2feea7056a38623863577a67de2()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_dc48f2feea7056a38623863577a67de2 >::Type, autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > >::Type, autowig::Held< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::PoissonLink > >::Type >();
-        //boost::python::objects::class_value_wrapper< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > >::Type, boost::python::objects::make_ptr_instance< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink >, boost::python::objects::pointer_holder< autowig::Held< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > >::Type, struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > > > >();
     }
 
 }

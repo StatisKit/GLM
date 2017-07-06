@@ -22,15 +22,16 @@ namespace statiskit
                 GeneralizedLinearModel(const GeneralizedLinearModel<T, L>& glm);
                 virtual ~GeneralizedLinearModel();
                 
-                virtual const UnivariateDistribution* operator() (const MultivariateEvent& event);
+                virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const;
                 
                 // virtual std::unique_ptr< UnivariateSampleSpace > get_response_space() const;
                 
                 virtual const MultivariateSampleSpace* get_explanatory_space() const;
 
-                const typename L::predictor_type* get_predictor() const;
+                typename L::predictor_type* get_predictor() const;
+                void set_predictor(const typename L::predictor_type& predictor);
 
-                const L* get_link() const;
+                L* get_link() const;
                 void set_link(const L& link);
                 
             protected:
@@ -38,7 +39,7 @@ namespace statiskit
                 typename L::predictor_type* _predictor;
                 typename L::family_type* _family;
 
-                virtual void update(const typename L::expectation_type& value) = 0;
+                virtual void update(const typename L::expectation_type& value) const = 0;
         };            
        
         template<class L>
@@ -59,29 +60,35 @@ namespace statiskit
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;
                 
             private:
-                virtual void update(const double& value);                
+                virtual void update(const double& value) const;                
         };          
 
         class STATISKIT_GLM_API BinomialRegression : public DiscreteGeneralizedLinearModel< BinomialLink >
         {
             public:
                 BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link);
-                
-                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;     
                            
+                unsigned int get_kappa() const;
+                void set_kappa(const unsigned int& kappa);
+
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;     
+
             private:
-                virtual void update(const double& value);                
+                virtual void update(const double& value) const;                
         };
       
         class STATISKIT_GLM_API NegativeBinomialRegression : public DiscreteGeneralizedLinearModel< NegativeBinomialLink >
         {
             public:
                 NegativeBinomialRegression(const double& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link);
-                
+                           
+                double get_kappa() const;
+                void set_kappa(const double& kappa);
+
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;
                                 
             private:
-                virtual void update(const double& value);                
+                virtual void update(const double& value) const;                
         };
         
         template<class L>
@@ -114,7 +121,7 @@ namespace statiskit
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
                            
             private:
-                virtual void update(const Eigen::VectorXd& values);                
+                virtual void update(const Eigen::VectorXd& values) const;                
         };
         
         class STATISKIT_GLM_API OrdinalRegression : public CategoricalGeneralizedLinearModel< OrdinalLink >
@@ -127,7 +134,7 @@ namespace statiskit
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;   
                              
             private:
-                virtual void update(const Eigen::VectorXd& values);                
+                virtual void update(const Eigen::VectorXd& values) const;                
         };                                               
     }
 }
