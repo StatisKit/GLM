@@ -29,10 +29,8 @@ void wrapper_3e7e5eaba9225d339f81fff56f0765bc()
     boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
     boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
     boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > >  (::statiskit::glm::PoissonRegression::*method_pointer_f92365dfbeac5f2da1aee45df3078f5f)() const = &::statiskit::glm::PoissonRegression::copy;
     boost::python::class_< class ::statiskit::glm::PoissonRegression, autowig::Held< class ::statiskit::glm::PoissonRegression >::Type, boost::python::bases< struct ::statiskit::glm::DiscreteGeneralizedLinearModel< struct ::statiskit::PoissonLink > > > class_3e7e5eaba9225d339f81fff56f0765bc("PoissonRegression", "", boost::python::no_init);
     class_3e7e5eaba9225d339f81fff56f0765bc.def(boost::python::init< class ::statiskit::ScalarPredictor const &, struct ::statiskit::PoissonLink const & >(""));
-    class_3e7e5eaba9225d339f81fff56f0765bc.def("copy", method_pointer_f92365dfbeac5f2da1aee45df3078f5f, "");
 
     if(autowig::Held< class ::statiskit::glm::PoissonRegression >::is_class)
     {

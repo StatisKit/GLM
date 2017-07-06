@@ -33,13 +33,13 @@ void wrapper_957d6c322e915a51a2117bfe24ef629f()
     boost::python::object module_42c4b95e3c2959d78ff2080715b8c2eb(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_42c4b95e3c2959d78ff2080715b8c2eb.c_str()))));
     boost::python::scope().attr("_negative_binomial_regression_x2_estimation") = module_42c4b95e3c2959d78ff2080715b8c2eb;
     boost::python::scope scope_42c4b95e3c2959d78ff2080715b8c2eb = module_42c4b95e3c2959d78ff2080715b8c2eb;
-    boost::python::class_< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator, autowig::Held< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator >::Type, boost::python::bases< struct ::statiskit::OptimizationEstimation< double, class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > > class_957d6c322e915a51a2117bfe24ef629f("Estimator", "", boost::python::no_init);
+    boost::python::class_< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator, autowig::Held< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator >::Type, boost::python::bases< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator, struct ::statiskit::OptimizationEstimation< double, class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > > > class_957d6c322e915a51a2117bfe24ef629f("Estimator", "", boost::python::no_init);
     class_957d6c322e915a51a2117bfe24ef629f.def(boost::python::init<  >(""));
     class_957d6c322e915a51a2117bfe24ef629f.def(boost::python::init< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator const & >(""));
 
     if(autowig::Held< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator >::is_class)
     {
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator >::Type, autowig::Held< struct ::statiskit::OptimizationEstimation< double, class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator >::Type, autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::NegativeBinomialRegressionX2Estimation::Estimator, struct ::statiskit::OptimizationEstimation< double, class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type >();
     }
 
 }

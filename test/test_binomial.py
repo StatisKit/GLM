@@ -59,7 +59,7 @@ class TestBinomialRegression(unittest.TestCase):#, AbstractTestDiscreteRegressio
 
     def test_Fisher_estimation(self):
         """Test binomial regression Fisher estimation"""
-        data = self._data.conditioning(explanatories=[1],
+        data = self._data.extract(explanatories=[1],
                                      response=0)
         fe = glm.binomial_estimation(algo='Fisher',
                                      data=data,
@@ -70,7 +70,7 @@ class TestBinomialRegression(unittest.TestCase):#, AbstractTestDiscreteRegressio
 
     def test_Fisher_estimation(self):
         """Test binomial regression steepest ascent estimation"""
-        data = self._data.conditioning(explanatories=[1],
+        data = self._data.extract(explanatories=[1],
                                      response=0)
         fe = glm.binomial_estimation(algo='SA',
                                      data=data)

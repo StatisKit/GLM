@@ -567,11 +567,11 @@ namespace statiskit
             {}
 
         template<class T >
-            NominalRegressionFisherEstimation < T >::Estimator::Estimator() : T::Estimator()
+            NominalRegressionFisherEstimation < T >::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename T::Estimator >()
             { this->_link = new NominalCanonicalLink(); }
 
         template<class T >
-            NominalRegressionFisherEstimation < T >::Estimator::Estimator(const Estimator& estimator) : T::Estimator(estimator)
+            NominalRegressionFisherEstimation < T >::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename T::Estimator >(estimator)
             {}
 
         template<class T >           
@@ -585,23 +585,23 @@ namespace statiskit
 
 
         template<class T >
-            OrdinalRegressionFisherEstimation < T >::OrdinalRegressionFisherEstimation () : T()
+            OrdinalRegressionFisherEstimation < T >::OrdinalRegressionFisherEstimation() : T()
             {}
 
         template<class T >
-            OrdinalRegressionFisherEstimation < T >::OrdinalRegressionFisherEstimation (OrdinalRegression const * estimated, UnivariateConditionalData const * data) : T(estimated, data)
+            OrdinalRegressionFisherEstimation < T >::OrdinalRegressionFisherEstimation(OrdinalRegression const * estimated, UnivariateConditionalData const * data) : T(estimated, data)
             {}
 
         template<class T >
-            OrdinalRegressionFisherEstimation < T >::OrdinalRegressionFisherEstimation (const OrdinalRegressionFisherEstimation & estimation) : T(estimation)
+            OrdinalRegressionFisherEstimation < T >::OrdinalRegressionFisherEstimation(const OrdinalRegressionFisherEstimation & estimation) : T(estimation)
             {}
 
         template<class T >
-            OrdinalRegressionFisherEstimation < T >::Estimator::Estimator() : T::Estimator()
+            OrdinalRegressionFisherEstimation < T >::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename T::Estimator >()
             { this->_link = new OrdinalCanonicalLink(); }
 
         template<class T >
-            OrdinalRegressionFisherEstimation < T >::Estimator::Estimator(const Estimator& estimator) : T::Estimator(estimator)
+            OrdinalRegressionFisherEstimation < T >::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename T::Estimator >(estimator)
             {}
 
         template<class T >           
@@ -626,11 +626,11 @@ namespace statiskit
             {}
 
         template<class T >
-            CumulativeRegressionFisherEstimation < T >::Estimator::Estimator() : OrdinalRegressionFisherEstimation < T >::Estimator()
+            CumulativeRegressionFisherEstimation < T >::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename OrdinalRegressionFisherEstimation < T >::Estimator >()
             {}
 
         template<class T >
-            CumulativeRegressionFisherEstimation < T >::Estimator::Estimator(const Estimator& estimator) : OrdinalRegressionFisherEstimation < T >::Estimator(estimator)
+            CumulativeRegressionFisherEstimation < T >::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename OrdinalRegressionFisherEstimation < T >::Estimator >(estimator)
             {} 
 
         template<class T >
