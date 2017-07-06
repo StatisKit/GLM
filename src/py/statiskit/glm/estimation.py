@@ -60,13 +60,13 @@ def _data(data, mult, **kwargs):
         if mult:
             if "responses" not in kwargs:
                 raise ValueError("'responses' parameter must be given when providing '" + data.__class__.__name__ + "' instances for 'data' parameter")
-            data = data.conditioning(responses=kwargs.pop("responses"),
-                                     explanatories=kwargs.pop("explanatories"))
+            data = data.extract(responses=kwargs.pop("responses"),
+                                explanatories=kwargs.pop("explanatories"))
         else:
             if "response" not in kwargs:
                 raise ValueError("'response' parameter must be given when providing '" + data.__class__.__name__ + "' instances for 'data' parameter")
-            data = data.conditioning(response=kwargs.pop("response"),
-                                     explanatories=kwargs.pop("explanatories"))
+            data = data.extract(response=kwargs.pop("response"),
+                                explanatories=kwargs.pop("explanatories"))
         return data, kwargs
     else:
         return data, kwargs

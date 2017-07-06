@@ -12,10 +12,10 @@ namespace statiskit
         PoissonRegressionFisherEstimation::PoissonRegressionFisherEstimation(const PoissonRegressionFisherEstimation & estimation) : ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >(estimation)
         {}
 
-        PoissonRegressionFisherEstimation::Estimator::Estimator() : ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator()
+        PoissonRegressionFisherEstimation::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >()
         { _link = new PoissonCanonicalLink(); }
 
-        PoissonRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator(estimator)
+        PoissonRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
         {}        
 
         double PoissonRegressionFisherEstimation::Estimator::sigma_square(const double& mu) const
@@ -34,13 +34,13 @@ namespace statiskit
         BinomialRegressionFisherEstimation::BinomialRegressionFisherEstimation(const BinomialRegressionFisherEstimation & estimation) : ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >(estimation)
         {}
 
-        BinomialRegressionFisherEstimation::Estimator::Estimator() : ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator()
+        BinomialRegressionFisherEstimation::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >()
         { 
             _link = new BinomialCanonicalLink(); 
             _kappa = 0;
         }
         
-        BinomialRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator(estimator)
+        BinomialRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
         { _kappa = estimator._kappa; }
                 
         unsigned int BinomialRegressionFisherEstimation::Estimator::get_kappa() const
@@ -68,10 +68,10 @@ namespace statiskit
         BinomialRegressionSteepestAscentEstimation::BinomialRegressionSteepestAscentEstimation(const BinomialRegressionSteepestAscentEstimation & estimation) : OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >(estimation)
         {}
 
-        BinomialRegressionSteepestAscentEstimation::Estimator::Estimator() : OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator()
+        BinomialRegressionSteepestAscentEstimation::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >()
         { _estimator = new BinomialRegressionFisherEstimation::Estimator(); }
         
-        BinomialRegressionSteepestAscentEstimation::Estimator::Estimator(const Estimator& estimator) : OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator(estimator)
+        BinomialRegressionSteepestAscentEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
         { _estimator = estimator._estimator; }
 
         BinomialRegressionSteepestAscentEstimation::Estimator::~Estimator()
@@ -128,13 +128,13 @@ namespace statiskit
         NegativeBinomialRegressionFisherEstimation::NegativeBinomialRegressionFisherEstimation(const NegativeBinomialRegressionFisherEstimation & estimation) : ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >(estimation)
         {}     
 
-        NegativeBinomialRegressionFisherEstimation::Estimator::Estimator() : ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator()
+        NegativeBinomialRegressionFisherEstimation::Estimator::Estimator() :  PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >()
         { 
             _link = new NegativeBinomialCanonicalLink();
             _kappa = 0.;
         }
         
-        NegativeBinomialRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator(estimator)
+        NegativeBinomialRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) :  PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
         { _kappa = estimator._kappa; }
                         
         double NegativeBinomialRegressionFisherEstimation::Estimator::get_kappa() const
@@ -162,10 +162,10 @@ namespace statiskit
         NegativeBinomialRegressionX2Estimation::NegativeBinomialRegressionX2Estimation(const NegativeBinomialRegressionX2Estimation & estimation) : OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >(estimation)
         {}
 
-        NegativeBinomialRegressionX2Estimation::Estimator::Estimator() : OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator()
+        NegativeBinomialRegressionX2Estimation::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >()
         { _estimator = new NegativeBinomialRegressionFisherEstimation::Estimator(); }
         
-        NegativeBinomialRegressionX2Estimation::Estimator::Estimator(const Estimator& estimator) : OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator(estimator)
+        NegativeBinomialRegressionX2Estimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
         { _estimator = estimator._estimator; }
 
         NegativeBinomialRegressionX2Estimation::Estimator::~Estimator()
@@ -224,8 +224,6 @@ namespace statiskit
                 ++its;
             } while(run(its, __impl::reldiff(prev, curr)));
             return estimation;
-        }
-
-                             
+        }                    
     }
 }

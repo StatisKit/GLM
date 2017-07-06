@@ -35,7 +35,7 @@ void wrapper_4618dcf8eb9a5278919ac372173f4e60()
     boost::python::scope scope_cddd11990be752b68abb161f93e30a49 = module_cddd11990be752b68abb161f93e30a49;
     unsigned int  (::statiskit::glm::BinomialRegressionFisherEstimation::Estimator::*method_pointer_a6635b1d44d657a18288036e306e7b45)() const = &::statiskit::glm::BinomialRegressionFisherEstimation::Estimator::get_kappa;
     void  (::statiskit::glm::BinomialRegressionFisherEstimation::Estimator::*method_pointer_870d85387fea50029e3b7dd3886d87f8)(unsigned int const &) = &::statiskit::glm::BinomialRegressionFisherEstimation::Estimator::set_kappa;
-    boost::python::class_< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator, autowig::Held< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator >::Type, boost::python::bases< class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > > class_4618dcf8eb9a5278919ac372173f4e60("Estimator", "", boost::python::no_init);
+    boost::python::class_< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator, autowig::Held< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator >::Type, boost::python::bases< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator, class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > > > class_4618dcf8eb9a5278919ac372173f4e60("Estimator", "", boost::python::no_init);
     class_4618dcf8eb9a5278919ac372173f4e60.def(boost::python::init<  >(""));
     class_4618dcf8eb9a5278919ac372173f4e60.def(boost::python::init< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator const & >(""));
     class_4618dcf8eb9a5278919ac372173f4e60.def("get_kappa", method_pointer_a6635b1d44d657a18288036e306e7b45, "");
@@ -43,7 +43,7 @@ void wrapper_4618dcf8eb9a5278919ac372173f4e60()
 
     if(autowig::Held< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator >::is_class)
     {
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator >::Type, autowig::Held< class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator >::Type, autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::BinomialRegressionFisherEstimation::Estimator, class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type >();
     }
 
 }

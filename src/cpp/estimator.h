@@ -57,7 +57,7 @@ namespace statiskit
             PoissonRegressionFisherEstimation(PoissonRegression const * estimated, UnivariateConditionalData const * data);
             PoissonRegressionFisherEstimation(const PoissonRegressionFisherEstimation & estimation);
 
-            class STATISKIT_GLM_API Estimator : public ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< PoissonRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >
             {
             	public:
             		Estimator();
@@ -75,7 +75,7 @@ namespace statiskit
             BinomialRegressionFisherEstimation(BinomialRegression const * estimated, UnivariateConditionalData const * data);
             BinomialRegressionFisherEstimation(const BinomialRegressionFisherEstimation & estimation);
 
-            class STATISKIT_GLM_API Estimator : public ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >
             {
             	public:
             		Estimator();
@@ -100,7 +100,7 @@ namespace statiskit
             BinomialRegressionSteepestAscentEstimation(BinomialRegression const * estimated, UnivariateConditionalData const * data);
             BinomialRegressionSteepestAscentEstimation(const BinomialRegressionSteepestAscentEstimation & estimation);
 
-            class STATISKIT_GLM_API Estimator : public OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, OptimizationEstimation<unsigned int, BinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >
             {
                 public:
                     Estimator();
@@ -119,7 +119,7 @@ namespace statiskit
             NegativeBinomialRegressionFisherEstimation(NegativeBinomialRegression const * estimated, UnivariateConditionalData const * data);
             NegativeBinomialRegressionFisherEstimation(const NegativeBinomialRegressionFisherEstimation & estimation);  
                       
-            class STATISKIT_GLM_API Estimator : public ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >
             {
             	public:
             		Estimator();
@@ -144,7 +144,7 @@ namespace statiskit
             NegativeBinomialRegressionX2Estimation(NegativeBinomialRegression const * estimated, UnivariateConditionalData const * data);
             NegativeBinomialRegressionX2Estimation(const NegativeBinomialRegressionX2Estimation & estimation);
 
-            class STATISKIT_GLM_API Estimator : public OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator
+            class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, OptimizationEstimation<double, NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >
             {
                 public:
                     Estimator();
@@ -298,9 +298,6 @@ namespace statiskit
         };
 
 
-
-
-
         template< class  T > class NominalRegressionFisherEstimation : public T
         {
             public:
@@ -308,7 +305,7 @@ namespace statiskit
                 NominalRegressionFisherEstimation(NominalRegression const * estimated, UnivariateConditionalData const * data);
                 NominalRegressionFisherEstimation(const NominalRegressionFisherEstimation & estimation);
 
-                class Estimator : public T::Estimator
+                class Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename T::Estimator >
                 { 
                     public:
                         Estimator();
@@ -326,7 +323,7 @@ namespace statiskit
                 OrdinalRegressionFisherEstimation(OrdinalRegression const * estimated, UnivariateConditionalData const * data);
                 OrdinalRegressionFisherEstimation(const OrdinalRegressionFisherEstimation & estimation);
 
-                class Estimator : public T::Estimator
+                class Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename T::Estimator >
                 { 
                     public:
                         Estimator();
@@ -344,7 +341,7 @@ namespace statiskit
                 CumulativeRegressionFisherEstimation(OrdinalRegression const * estimated, UnivariateConditionalData const * data);
                 CumulativeRegressionFisherEstimation(const CumulativeRegressionFisherEstimation & estimation);
 
-                class Estimator : public OrdinalRegressionFisherEstimation < T >::Estimator
+                class Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, typename OrdinalRegressionFisherEstimation < T >::Estimator >
                 { 
                     public:
                         Estimator();
@@ -360,35 +357,35 @@ namespace statiskit
         };
 
 
-        typedef NominalRegressionFisherEstimation < CompleteRegressionFisherEstimation < NominalRegression > > NominalCompleteRegressionFisherEstimation ;
-        typedef NominalRegressionFisherEstimation < CompleteRegressionFisherEstimation < NominalRegression > >::Estimator NominalCompleteFisherEstimator;
+        typedef NominalRegressionFisherEstimation< CompleteRegressionFisherEstimation < NominalRegression > > NominalCompleteRegressionFisherEstimation ;
+        typedef NominalRegressionFisherEstimation< CompleteRegressionFisherEstimation < NominalRegression > >::Estimator NominalCompleteFisherEstimator;
 
-        typedef NominalRegressionFisherEstimation < ProportionalRegressionFisherEstimation < NominalRegression > > NominalProportionalRegressionFisherEstimation ;
-        typedef NominalRegressionFisherEstimation < ProportionalRegressionFisherEstimation < NominalRegression > >::Estimator NominalProportionalFisherEstimator;
+        typedef NominalRegressionFisherEstimation< ProportionalRegressionFisherEstimation < NominalRegression > > NominalProportionalRegressionFisherEstimation ;
+        typedef NominalRegressionFisherEstimation< ProportionalRegressionFisherEstimation < NominalRegression > >::Estimator NominalProportionalFisherEstimator;
 
-        typedef NominalRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < NominalRegression > > NominalConstrainedRegressionFisherEstimation ;
-        typedef NominalRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < NominalRegression > >::Estimator NominalConstrainedFisherEstimator;
+        typedef NominalRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < NominalRegression > > NominalConstrainedRegressionFisherEstimation ;
+        typedef NominalRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < NominalRegression > >::Estimator NominalConstrainedFisherEstimator;
 //typedef NominalRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < NominalRegression > >::PartialProportionalEstimator NominalPartialProportionalFisherEstimator; 
 
-        typedef OrdinalRegressionFisherEstimation < CompleteRegressionFisherEstimation < OrdinalRegression > > OrdinalCompleteRegressionFisherEstimation ;
-        typedef OrdinalRegressionFisherEstimation < CompleteRegressionFisherEstimation < OrdinalRegression > >::Estimator OrdinalCompleteFisherEstimator;
+        typedef OrdinalRegressionFisherEstimation< CompleteRegressionFisherEstimation < OrdinalRegression > > OrdinalCompleteRegressionFisherEstimation ;
+        typedef OrdinalRegressionFisherEstimation< CompleteRegressionFisherEstimation < OrdinalRegression > >::Estimator OrdinalCompleteFisherEstimator;
 
-        typedef OrdinalRegressionFisherEstimation < ProportionalRegressionFisherEstimation < OrdinalRegression > > OrdinalProportionalRegressionFisherEstimation ;
-        typedef OrdinalRegressionFisherEstimation < ProportionalRegressionFisherEstimation < OrdinalRegression > >::Estimator OrdinalProportionalFisherEstimator;
+        typedef OrdinalRegressionFisherEstimation< ProportionalRegressionFisherEstimation < OrdinalRegression > > OrdinalProportionalRegressionFisherEstimation ;
+        typedef OrdinalRegressionFisherEstimation< ProportionalRegressionFisherEstimation < OrdinalRegression > >::Estimator OrdinalProportionalFisherEstimator;
 
-        typedef OrdinalRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > > OrdinalConstrainedRegressionFisherEstimation ;
-        typedef OrdinalRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > >::Estimator OrdinalConstrainedFisherEstimator;       
+        typedef OrdinalRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < OrdinalRegression > > OrdinalConstrainedRegressionFisherEstimation ;
+        typedef OrdinalRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < OrdinalRegression > >::Estimator OrdinalConstrainedFisherEstimator;       
 //typedef OrdinalRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > >::PartialProportionalEstimator OrdinalPartialProportionalFisherEstimator;           
 
      
-        typedef CumulativeRegressionFisherEstimation < CompleteRegressionFisherEstimation < OrdinalRegression > > CumulativeCompleteRegressionFisherEstimation ;
-        typedef CumulativeRegressionFisherEstimation < CompleteRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeCompleteFisherEstimator;
+        typedef CumulativeRegressionFisherEstimation< CompleteRegressionFisherEstimation < OrdinalRegression > > CumulativeCompleteRegressionFisherEstimation ;
+        typedef CumulativeRegressionFisherEstimation< CompleteRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeCompleteFisherEstimator;
 
-        typedef CumulativeRegressionFisherEstimation < ProportionalRegressionFisherEstimation < OrdinalRegression > > CumulativeProportionalRegressionFisherEstimation ;
-        typedef CumulativeRegressionFisherEstimation < ProportionalRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeProportionalFisherEstimator;
+        typedef CumulativeRegressionFisherEstimation< ProportionalRegressionFisherEstimation < OrdinalRegression > > CumulativeProportionalRegressionFisherEstimation ;
+        typedef CumulativeRegressionFisherEstimation< ProportionalRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeProportionalFisherEstimator;
 
-        typedef CumulativeRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > > CumulativeConstrainedRegressionFisherEstimation ;
-        typedef CumulativeRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeConstrainedFisherEstimator;
+        typedef CumulativeRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < OrdinalRegression > > CumulativeConstrainedRegressionFisherEstimation ;
+        typedef CumulativeRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeConstrainedFisherEstimator;
 //typedef CumulativeRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > >::PartialProportionalEstimator CumulativePartialProportionalFisherEstimator;
 
     }

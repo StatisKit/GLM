@@ -33,13 +33,13 @@ void wrapper_0254773f16755121a7fe9d2e331d0a91()
     boost::python::object module_a4bfff7e28ee596b990e2eb2c1c236b4(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_a4bfff7e28ee596b990e2eb2c1c236b4.c_str()))));
     boost::python::scope().attr("_binomial_regression_steepest_ascent_estimation") = module_a4bfff7e28ee596b990e2eb2c1c236b4;
     boost::python::scope scope_a4bfff7e28ee596b990e2eb2c1c236b4 = module_a4bfff7e28ee596b990e2eb2c1c236b4;
-    boost::python::class_< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator, autowig::Held< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator >::Type, boost::python::bases< struct ::statiskit::OptimizationEstimation< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > > class_0254773f16755121a7fe9d2e331d0a91("Estimator", "", boost::python::no_init);
+    boost::python::class_< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator, autowig::Held< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator >::Type, boost::python::bases< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator, struct ::statiskit::OptimizationEstimation< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > > > class_0254773f16755121a7fe9d2e331d0a91("Estimator", "", boost::python::no_init);
     class_0254773f16755121a7fe9d2e331d0a91.def(boost::python::init<  >(""));
     class_0254773f16755121a7fe9d2e331d0a91.def(boost::python::init< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator const & >(""));
 
     if(autowig::Held< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator >::is_class)
     {
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator >::Type, autowig::Held< struct ::statiskit::OptimizationEstimation< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator >::Type, autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::BinomialRegressionSteepestAscentEstimation::Estimator, struct ::statiskit::OptimizationEstimation< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type >();
     }
 
 }

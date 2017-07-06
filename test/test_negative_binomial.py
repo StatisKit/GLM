@@ -73,7 +73,7 @@ class TestNegativeBinomialRegression(unittest.TestCase, AbstractTestDiscreteRegr
 
     def test_Fisher_estimation(self):
         """Test negative binomial regression Fisher estimation"""
-        data = self._data.conditioning(explanatories=range(len(self._data.components) - 1),
+        data = self._data.extract(explanatories=range(len(self._data.components) - 1),
                                        response=-1)
         fe = glm.negative_binomial_estimation(algo='Fisher',
                                               data=data,
@@ -82,7 +82,7 @@ class TestNegativeBinomialRegression(unittest.TestCase, AbstractTestDiscreteRegr
 
     def test_X2_estimation(self):
         """Test negative binomial regression X2 estimation"""
-        data = self._data.conditioning(explanatories=range(len(self._data.components) - 1),
+        data = self._data.extract(explanatories=range(len(self._data.components) - 1),
                                        response=-1)
         fe = glm.negative_binomial_estimation(algo='X2',
                                               data=data)
