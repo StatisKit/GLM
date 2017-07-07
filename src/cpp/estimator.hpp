@@ -31,7 +31,10 @@ namespace statiskit
 
         template<class D, class B>
             ScalarRegressionFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : OptimizationEstimation< Eigen::VectorXd, D, B >::Estimator(estimator)
-            { _link = estimator._link->copy().release(); }
+            { 
+                _link = estimator._link->copy().release();
+                _solver = estimator._solver;
+            }
 
         template<class D, class B>
             const statiskit::linalg::solver_type& ScalarRegressionFisherEstimation< D, B >::Estimator::get_solver() const
@@ -90,7 +93,11 @@ namespace statiskit
                     ++its;
                 } while(this->run(its, statiskit::__impl::reldiff(prev, curr)));
                 if(boost::math::isfinite(curr.norm()))
-                { estimated->get_predictor()->set_beta(curr); }
+                { 
+                    estimated->get_predictor()->set_beta(curr);
+                    if(!lazy)
+                    { static_cast< ScalarRegressionFisherEstimation< D, B >* >(estimation.get())->_iterations.push_back(curr); }
+                }
                 else
                 { estimated->get_predictor()->set_beta(prev); }
                 return std::move(estimation);
