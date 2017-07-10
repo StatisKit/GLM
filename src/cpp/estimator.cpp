@@ -130,7 +130,7 @@ namespace statiskit
 
         NegativeBinomialRegressionFisherEstimation::Estimator::Estimator() :  PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< NegativeBinomialRegression, DiscreteUnivariateConditionalDistributionEstimation >::Estimator >()
         { 
-            _link = new NegativeBinomialCanonicalLink();
+            _link = new NegativeBinomialVLink();
             _kappa = 0.;
         }
         
