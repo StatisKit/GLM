@@ -9,7 +9,8 @@ from predictor import ConstrainedVectorPredictor
 import _glm
 from __glm.statiskit import (_ActiveEstimation,
                              _OptimizationEstimation)
-from __glm.statiskit.glm import (   PoissonRegressionFisherEstimation,
+from __glm.statiskit.glm import (_ScalarRegressionFisherEstimation,
+                                    PoissonRegressionFisherEstimation,
                                     BinomialRegressionFisherEstimation,
                                     BinomialRegressionSteepestAscentEstimation,
                                     NegativeBinomialRegressionFisherEstimation,
@@ -36,6 +37,17 @@ for cls in _ActiveEstimation:
 
 for cls in _OptimizationEstimation:
     optimization_estimation_decorator(cls)
+
+def scalar_regression_fihser_estimator_decorator(cls):
+
+    cls.link = property(cls.get_link, cls.set_link)
+    del cls.get_link, cls.set_link
+
+    cls.solver = property(cls.get_solver, cls.set_solver)
+    del cls.get_solver, cls.set_solver
+
+for cls in _ScalarRegressionFisherEstimation:
+    scalar_regression_fihser_estimator_decorator(cls.Estimator)
 
 for cls in _CategoricalRegressionFisherEstimation:
     cls.Estimator.link = property(cls.Estimator.get_link, cls.Estimator.set_link)
