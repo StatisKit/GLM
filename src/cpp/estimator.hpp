@@ -160,54 +160,54 @@ namespace statiskit
             }
          
         template< class D >      
-            CategoricalRegressionFisherEstimation < D >::CategoricalRegressionFisherEstimation () : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >()
+            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation () : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >()
             {}
 
         template< class D >
-            CategoricalRegressionFisherEstimation < D >::CategoricalRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
+            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
             {}
 
         template< class D >
-            CategoricalRegressionFisherEstimation < D >::CategoricalRegressionFisherEstimation (const CategoricalRegressionFisherEstimation & estimation) : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
+            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation (const CategoricalRegressionFisherEstimation & estimation) : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
             {}
 
         template< class D >
-            const double& CategoricalRegressionFisherEstimation < D >::get_loglikelihood() const
+            const double& CategoricalRegressionFisherEstimation< D >::get_loglikelihood() const
             { return _loglikelihood; }
 
         template< class D >
-            const std::vector< double >& CategoricalRegressionFisherEstimation < D >::get_loglikelihood_sequence() const
+            const std::vector< double >& CategoricalRegressionFisherEstimation< D >::get_loglikelihood_sequence() const
             { return _loglikelihood_sequence; }            
 
         template< class D >
-            CategoricalRegressionFisherEstimation < D >::Estimator::Estimator() : Optimization()
+            CategoricalRegressionFisherEstimation< D >::Estimator::Estimator() : Optimization()
             { _maxits = 1e4; }
         
         template< class D >
-            CategoricalRegressionFisherEstimation < D >::Estimator::~Estimator()
+            CategoricalRegressionFisherEstimation< D >::Estimator::~Estimator()
             { delete _link; }
 
         template< class D >
-            CategoricalRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
+            CategoricalRegressionFisherEstimation< D >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
             { _link = estimator._link->copy().release(); }
 
         template< class D >
-            const typename D::link_type* CategoricalRegressionFisherEstimation < D >::Estimator::get_link() const
+            const typename D::link_type* CategoricalRegressionFisherEstimation< D >::Estimator::get_link() const
             { return _link; }
 
         template< class D >
-            void CategoricalRegressionFisherEstimation < D >::Estimator::set_link(const typename D::link_type& link)
+            void CategoricalRegressionFisherEstimation< D >::Estimator::set_link(const typename D::link_type& link)
             { _link = link.copy().release(); }
         
         template<class D >
-            std::unique_ptr< UnivariateConditionalDistributionEstimation > CategoricalRegressionFisherEstimation < D >::Estimator::operator() (const UnivariateConditionalData& data, const bool& lazy) const
+            std::unique_ptr< UnivariateConditionalDistributionEstimation > CategoricalRegressionFisherEstimation< D >::Estimator::operator() (const UnivariateConditionalData& data, const bool& lazy) const
             {
                 std::unique_ptr< UnivariateConditionalDistributionEstimation > estimation;
                 if(lazy)
-                { estimation = std::make_unique< LazyEstimation< CategoricalUnivariateConditionalDistribution, CategoricalRegressionFisherEstimation < D > > >(static_cast< const CategoricalUnivariateConditionalDistribution* >( (*this)(data, false)->get_estimated() ) ); }
+                { estimation = std::make_unique< LazyEstimation< D, CategoricalUnivariateConditionalDistributionEstimation > >(static_cast< const D* >((*this)(data, false)->get_estimated())); }
                 else
                 {
-                    std::unique_ptr< CategoricalRegressionFisherEstimation < D > > _estimation = std::make_unique< CategoricalRegressionFisherEstimation < D > >(nullptr, &data);
+                    std::unique_ptr< CategoricalRegressionFisherEstimation< D > > _estimation = std::make_unique< CategoricalRegressionFisherEstimation< D > >(nullptr, &data);
                     _estimation->_beta.clear();
                     std::vector< Eigen::MatrixXd > Z = Z_init(data);
                     std::vector< Eigen::VectorXd > y = y_init(data);
@@ -268,7 +268,7 @@ namespace statiskit
             }
 
         template< class D >
-            std::vector< Eigen::VectorXd > CategoricalRegressionFisherEstimation < D >::Estimator::y_init(const UnivariateConditionalData& data) const
+            std::vector< Eigen::VectorXd > CategoricalRegressionFisherEstimation< D >::Estimator::y_init(const UnivariateConditionalData& data) const
             {
                 const UnivariateData* _data = data.get_response();
                 std::vector< Eigen::VectorXd > y;
@@ -292,7 +292,7 @@ namespace statiskit
             }
 
         template< class D >
-            std::vector< double > CategoricalRegressionFisherEstimation < D >::Estimator::w_init(const UnivariateConditionalData& data) const
+            std::vector< double > CategoricalRegressionFisherEstimation< D >::Estimator::w_init(const UnivariateConditionalData& data) const
             {
                 std::vector< double > w;
                 std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
@@ -305,23 +305,23 @@ namespace statiskit
             }
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation () : CategoricalRegressionFisherEstimation < D >()
+            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation () : CategoricalRegressionFisherEstimation< D >()
             {}
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation < D >(estimated, data)
+            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation< D >(estimated, data)
             {}
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation (const CompleteRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation < D >(estimation)
+            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation (const CompleteRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
             {}
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation < D >::Estimator()
+            CompleteRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation< D >::Estimator()
             {}
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : CategoricalRegressionFisherEstimation < D >::Estimator(estimator)
+            CompleteRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : CategoricalRegressionFisherEstimation< D >::Estimator(estimator)
             {}
 
         template< class D >
@@ -369,23 +369,23 @@ namespace statiskit
 
 
         template< class D >
-            ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation () : CategoricalRegressionFisherEstimation < D >()
+            ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation () : CategoricalRegressionFisherEstimation< D >()
             {}
 
         template< class D >
-            ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation < D >(estimated, data)
+            ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation< D >(estimated, data)
             {}
 
         template< class D >
-            ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation (const ProportionalRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation < D >(estimation)
+            ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation (const ProportionalRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
             {}
 
         template< class D >
-            ProportionalRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation < D >::Estimator()
+            ProportionalRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation< D >::Estimator()
             {}
 
         template< class D >
-            ProportionalRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : CategoricalRegressionFisherEstimation < D >::Estimator(estimator)
+            ProportionalRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : CategoricalRegressionFisherEstimation< D >::Estimator(estimator)
             {}
 
         template< class D >
@@ -434,23 +434,23 @@ namespace statiskit
 
 
         template< class D >
-            ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation () : CategoricalRegressionFisherEstimation < D >()
+            ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation () : CategoricalRegressionFisherEstimation< D >()
             {}
 
         template< class D >
-            ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation < D >(estimated, data)
+            ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation< D >(estimated, data)
             {}
 
         template< class D >
-            ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation (const ConstrainedRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation < D >(estimation)
+            ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation (const ConstrainedRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
             {}
 
         template< class D >
-            ConstrainedRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation < D >::Estimator()
+            ConstrainedRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation< D >::Estimator()
             {}
 
         template< class D >
-            ConstrainedRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : CategoricalRegressionFisherEstimation < D >::Estimator(estimator)
+            ConstrainedRegressionFisherEstimation < D >::Estimator::Estimator(const Estimator& estimator) : CategoricalRegressionFisherEstimation< D >::Estimator(estimator)
             {
                 _slope_constraint = estimator._slope_constraint;
                 _intercept_constraint = estimator._intercept_constraint;                

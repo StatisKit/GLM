@@ -89,35 +89,35 @@ namespace statiskit
             }
             
         template<class L>
-            DiscreteGeneralizedLinearModel< L >::DiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(predictor, link)
+            UnivariateDiscreteGeneralizedLinearModel< L >::UnivariateDiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(predictor, link)
             {}
 
         template<class L>
-            DiscreteGeneralizedLinearModel< L >::DiscreteGeneralizedLinearModel(const DiscreteGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(glm)
+            UnivariateDiscreteGeneralizedLinearModel< L >::UnivariateDiscreteGeneralizedLinearModel(const UnivariateDiscreteGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(glm)
             {}
 
         template<class L>
-            DiscreteGeneralizedLinearModel< L >::~DiscreteGeneralizedLinearModel()
+            UnivariateDiscreteGeneralizedLinearModel< L >::~UnivariateDiscreteGeneralizedLinearModel()
             {}
 
         template< class L >
-            unsigned int DiscreteGeneralizedLinearModel< L >::get_nb_parameters() const
+            unsigned int UnivariateDiscreteGeneralizedLinearModel< L >::get_nb_parameters() const
             { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
             
         template<class L>
-            ContinuousGeneralizedLinearModel< L >::ContinuousGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(predictor, link)
+            UnivariateContinuousGeneralizedLinearModel< L >::UnivariateContinuousGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(predictor, link)
             {}
 
         template<class L>
-            ContinuousGeneralizedLinearModel< L >::ContinuousGeneralizedLinearModel(const ContinuousGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(glm)
+            UnivariateContinuousGeneralizedLinearModel< L >::UnivariateContinuousGeneralizedLinearModel(const UnivariateContinuousGeneralizedLinearModel< L >& glm) : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >(glm)
             {}
 
         template<class L>
-            ContinuousGeneralizedLinearModel< L >::~ContinuousGeneralizedLinearModel()
+            UnivariateContinuousGeneralizedLinearModel< L >::~UnivariateContinuousGeneralizedLinearModel()
             {}
 
          template< class L >
-            unsigned int ContinuousGeneralizedLinearModel< L >::get_nb_parameters() const
+            unsigned int UnivariateContinuousGeneralizedLinearModel< L >::get_nb_parameters() const
             { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
 
             

@@ -40,19 +40,19 @@ namespace statiskit
                 typename L::family_type* _family;
 
                 virtual void update(const typename L::expectation_type& value) const = 0;
-        };            
+        };
        
         template<class L>
-        struct DiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
+        struct UnivariateDiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
         { 
-            DiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
-            DiscreteGeneralizedLinearModel(const DiscreteGeneralizedLinearModel< L >& glm);
-            virtual ~DiscreteGeneralizedLinearModel();
+            UnivariateDiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            UnivariateDiscreteGeneralizedLinearModel(const UnivariateDiscreteGeneralizedLinearModel< L >& glm);
+            virtual ~UnivariateDiscreteGeneralizedLinearModel();
 
         	virtual unsigned int get_nb_parameters() const;
         };
         
-        class STATISKIT_GLM_API PoissonRegression : public DiscreteGeneralizedLinearModel< PoissonLink >
+        class STATISKIT_GLM_API PoissonRegression : public UnivariateDiscreteGeneralizedLinearModel< PoissonLink >
         {
             public:
                 PoissonRegression(const ScalarPredictor& predictor, const PoissonLink& link);
@@ -63,7 +63,7 @@ namespace statiskit
                 virtual void update(const double& value) const;                
         };          
 
-        class STATISKIT_GLM_API BinomialRegression : public DiscreteGeneralizedLinearModel< BinomialLink >
+        class STATISKIT_GLM_API BinomialRegression : public UnivariateDiscreteGeneralizedLinearModel< BinomialLink >
         {
             public:
                 BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link);
@@ -77,7 +77,7 @@ namespace statiskit
                 virtual void update(const double& value) const;                
         };
       
-        class STATISKIT_GLM_API NegativeBinomialRegression : public DiscreteGeneralizedLinearModel< NegativeBinomialLink >
+        class STATISKIT_GLM_API NegativeBinomialRegression : public UnivariateDiscreteGeneralizedLinearModel< NegativeBinomialLink >
         {
             public:
                 NegativeBinomialRegression(const double& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link);
@@ -92,11 +92,11 @@ namespace statiskit
         };
         
         template<class L>
-        struct ContinuousGeneralizedLinearModel : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >
+        struct UnivariateContinuousGeneralizedLinearModel : GeneralizedLinearModel< ContinuousUnivariateConditionalDistribution, L >
         { 
-            ContinuousGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
-            ContinuousGeneralizedLinearModel(const ContinuousGeneralizedLinearModel< L >& glm);
-            virtual ~ContinuousGeneralizedLinearModel();
+            UnivariateContinuousGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            UnivariateContinuousGeneralizedLinearModel(const UnivariateContinuousGeneralizedLinearModel< L >& glm);
+            virtual ~UnivariateContinuousGeneralizedLinearModel();
 
         	virtual unsigned int get_nb_parameters() const;
         };
