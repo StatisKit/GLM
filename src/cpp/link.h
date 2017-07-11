@@ -6,6 +6,8 @@
 
 namespace statiskit
 {
+    namespace glm
+    {
         template<class T>
         struct FLink : public T
         {
@@ -258,6 +260,7 @@ namespace statiskit
 
             virtual std::unique_ptr< MultinomialSplittingLink > copy() const;
         };
+    }
 }
 
 #include "link.hpp"

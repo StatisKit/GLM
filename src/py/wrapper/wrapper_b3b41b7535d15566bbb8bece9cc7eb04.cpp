@@ -61,11 +61,11 @@ void wrapper_b3b41b7535d15566bbb8bece9cc7eb04()
     boost::python::object module_8adeded49f5751a5bda6fb4ed88849e6(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_8adeded49f5751a5bda6fb4ed88849e6.c_str()))));
     boost::python::scope().attr("__categorical_regression_fisher_estimation_8adeded49f5751a5bda6fb4ed88849e6") = module_8adeded49f5751a5bda6fb4ed88849e6;
     boost::python::scope scope_8adeded49f5751a5bda6fb4ed88849e6 = module_8adeded49f5751a5bda6fb4ed88849e6;
-    struct ::statiskit::NominalLink const * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::Estimator::*method_pointer_507ffe485dad5b62b175804603efda92)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::Estimator::get_link;
-    void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::Estimator::*method_pointer_e7347364d2505a5988bdf3bfe9094793)(struct ::statiskit::NominalLink const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::Estimator::set_link;
+    struct ::statiskit::glm::NominalLink const * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::Estimator::*method_pointer_507ffe485dad5b62b175804603efda92)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::Estimator::get_link;
+    void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::Estimator::*method_pointer_7e207d62d01458d9ade6f6c288328fc2)(struct ::statiskit::glm::NominalLink const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::Estimator::set_link;
     boost::python::class_< autowig::Wrap_b3b41b7535d15566bbb8bece9cc7eb04, autowig::Held< autowig::Wrap_b3b41b7535d15566bbb8bece9cc7eb04 >::Type, boost::python::bases< struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::Optimization >, boost::noncopyable > class_b3b41b7535d15566bbb8bece9cc7eb04("Estimator", "", boost::python::no_init);
     class_b3b41b7535d15566bbb8bece9cc7eb04.def("get_link", method_pointer_507ffe485dad5b62b175804603efda92, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
-    class_b3b41b7535d15566bbb8bece9cc7eb04.def("set_link", method_pointer_e7347364d2505a5988bdf3bfe9094793, "");
+    class_b3b41b7535d15566bbb8bece9cc7eb04.def("set_link", method_pointer_7e207d62d01458d9ade6f6c288328fc2, "");
 
     if(autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::Estimator >::is_class)
     {

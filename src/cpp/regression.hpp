@@ -136,6 +136,22 @@ namespace statiskit
          template< class L >
             unsigned int CategoricalGeneralizedLinearModel< L >::get_nb_parameters() const
             { return this->_predictor->size(); }                                   
+            
+        template<class L>
+            SplittingRegression< L >::SplittingRegression(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(predictor, link)
+            {}
+
+        template<class L>
+            SplittingRegression< L >::SplittingRegression(const SplittingRegression< L >& glm) : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >(glm)
+            {}
+
+        template<class L>
+            SplittingRegression< L >::~SplittingRegression()
+            {}
+
+        template< class L >
+            unsigned int SplittingRegression< L >::get_nb_parameters() const
+            { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
     }
 }
 #endif

@@ -136,6 +136,16 @@ namespace statiskit
             private:
                 virtual void update(const Eigen::VectorXd& values) const;                
         };                                               
+
+        template<class L>
+            struct SplittingRegression : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
+            { 
+                SplittingRegression(const typename L::predictor_type& predictor, const L& link);
+                SplittingRegression(const SplittingRegression< L >& glm);
+                virtual ~SplittingRegression();
+
+                virtual unsigned int get_nb_parameters() const;
+            };
     }
 }
 

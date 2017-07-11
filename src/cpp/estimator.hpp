@@ -248,7 +248,7 @@ namespace statiskit
                         beta = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::colPivHouseholderQr);
                         ++its;
 
-                    }while((l_new-l_old)/std::abs(l_new)>this->_mindiff and its < 50); //while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
+                    }while((l_new-l_old)/std::abs(l_new)>this->_mindiff && its < 50); //while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
     				_estimation->_Z = Z;
     				_estimation->_y = y;
     				_estimation->_w = w;
