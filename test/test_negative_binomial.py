@@ -78,7 +78,8 @@ class TestNegativeBinomialRegression(unittest.TestCase, AbstractTestDiscreteRegr
         fe = glm.negative_binomial_estimation(algo='Fisher',
                                               data=data,
                                               kappa=1.274892646)
-        self.assertAlmostEqual(2 * fe.estimated.loglikelihood(data), -1093.61, places=2)
+        self.assertAlmostEqual(2 * fe.estimated.loglikelihood(data), -1093.15, places=2)
+        # self.assertAlmostEqual(2 * fe.estimated.loglikelihood(data), -1093.61, places=2)
 
     def test_X2_estimation(self):
         """Test negative binomial regression X2 estimation"""
@@ -86,7 +87,7 @@ class TestNegativeBinomialRegression(unittest.TestCase, AbstractTestDiscreteRegr
                                        response=-1)
         fe = glm.negative_binomial_estimation(algo='X2',
                                               data=data)
-        self.assertAlmostEqual(2 * fe.estimated.loglikelihood(data), -1093.68, places=2)
+        self.assertAlmostEqual(2 * fe.estimated.loglikelihood(data), -1093.41, places=2)
 
     # def test_conditional_V(self):
     #     """Test negative binomial regression (V link) conditional operator"""

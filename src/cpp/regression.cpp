@@ -4,7 +4,7 @@ namespace statiskit
 {
     namespace glm
     {              
-        PoissonRegression::PoissonRegression(const ScalarPredictor& predictor, const PoissonLink& link) :  DiscreteGeneralizedLinearModel< PoissonLink >(predictor, link)
+        PoissonRegression::PoissonRegression(const ScalarPredictor& predictor, const PoissonLink& link) :  UnivariateDiscreteGeneralizedLinearModel< PoissonLink >(predictor, link)
         { _family = new PoissonDistribution(std::numeric_limits< double >::quiet_NaN()); }
         
 		std::unique_ptr< UnivariateConditionalDistribution > PoissonRegression::copy() const
@@ -13,7 +13,7 @@ namespace statiskit
         void PoissonRegression::update(const double& value) const
         { _family->set_theta(value); } 
                     
-        BinomialRegression::BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link) :  DiscreteGeneralizedLinearModel< BinomialLink >(predictor, link)
+        BinomialRegression::BinomialRegression(const unsigned int& kappa, const ScalarPredictor& predictor, const BinomialLink& link) :  UnivariateDiscreteGeneralizedLinearModel< BinomialLink >(predictor, link)
         { _family = new BinomialDistribution(kappa, std::numeric_limits< double >::quiet_NaN()); }
         
         unsigned int BinomialRegression::get_kappa() const
@@ -28,7 +28,7 @@ namespace statiskit
         void BinomialRegression::update(const double& value) const
         { _family->set_pi(value); }    
         
-        NegativeBinomialRegression::NegativeBinomialRegression(const double& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link) :  DiscreteGeneralizedLinearModel< NegativeBinomialLink >(predictor, link)
+        NegativeBinomialRegression::NegativeBinomialRegression(const double& kappa, const ScalarPredictor& predictor, const NegativeBinomialLink& link) :  UnivariateDiscreteGeneralizedLinearModel< NegativeBinomialLink >(predictor, link)
         { _family = new NegativeBinomialDistribution(kappa, std::numeric_limits< double >::quiet_NaN()); }
         
         double NegativeBinomialRegression::get_kappa() const
