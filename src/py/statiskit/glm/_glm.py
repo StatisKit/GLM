@@ -87,6 +87,7 @@ __glm.statiskit.glm.OrdinalProportionalRegressionFisherEstimation = __glm.statis
 __glm.statiskit.glm.OrdinalProportionalFisherEstimator = __glm.statiskit.glm._OrdinalRegressionFisherEstimation_00a9d045f80c53d9980075eba475494d.Estimator
 __glm.statiskit.glm.CumulativeConstrainedFisherEstimator = __glm.statiskit.glm._CumulativeRegressionFisherEstimation_7e22cced0c3f560b82928871cb418b8e.Estimator
 __glm.statiskit.PoissonLink.FamilyType = statiskit.core.__core.statiskit.PoissonDistribution
+__glm.statiskit.MultinomialSplittingLink.FamilyType = statiskit.core.__core.statiskit.MultinomialSplittingDistribution
 __glm.statiskit.BinomialLink.FamilyType = statiskit.core.__core.statiskit.BinomialDistribution
 __glm.statiskit.OrdinalLink.FamilyType = statiskit.core.__core.statiskit.OrdinalDistribution
 __glm.statiskit.NominalLink.FamilyType = statiskit.core.__core.statiskit.NominalDistribution

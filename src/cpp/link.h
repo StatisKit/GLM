@@ -240,6 +240,24 @@ namespace statiskit
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };                                                   
+
+        struct STATISKIT_GLM_API MultinomialSplittingLink : VectorLink
+        {
+            typedef MultinomialSplittingDistribution family_type;
+
+            virtual std::unique_ptr< MultinomialSplittingLink > copy() const = 0;
+        };
+
+        struct STATISKIT_GLM_API MultinomialSplittingCanonicalLink : MultinomialSplittingLink
+        {
+            MultinomialSplittingCanonicalLink();
+            virtual ~MultinomialSplittingCanonicalLink();
+
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+
+            virtual std::unique_ptr< MultinomialSplittingLink > copy() const;
+        };
 }
 
 #include "link.hpp"
