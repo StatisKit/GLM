@@ -60,5 +60,29 @@ namespace statiskit
 		
         void OrdinalRegression::update(const Eigen::VectorXd& values) const
         { _family->set_ordered_pi(values); }                                
+
+        MultinomialSplittingRegressionI::MultinomialSplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link) :  SplittingRegressionI< MultinomialSplittingLink >(sum, predictor, link)
+        { _family = nullptr; }
+        
+        MultinomialSplittingRegressionI::MultinomialSplittingRegressionI(const MultinomialSplittingRegressionI& splitting) :  SplittingRegressionI< MultinomialSplittingLink >(splitting)
+        {}
+
+        std::unique_ptr< MultivariateConditionalDistribution > MultinomialSplittingRegressionI::copy() const
+        { return std::make_unique< MultinomialSplittingRegressionI >(*this); }
+        
+        void MultinomialSplittingRegressionI::update(const Eigen::VectorXd& values) const
+        { _family->set_pi(values); }     
+
+        MultinomialSplittingRegressionII::MultinomialSplittingRegressionII(const DiscreteUnivariateDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link) :  SplittingRegressionII< MultinomialSplittingLink >(sum, predictor, link)
+        { _family = nullptr; }
+        
+        MultinomialSplittingRegressionII::MultinomialSplittingRegressionII(const MultinomialSplittingRegressionII& splitting) :  SplittingRegressionII< MultinomialSplittingLink >(splitting)
+        {}
+
+        std::unique_ptr< MultivariateConditionalDistribution > MultinomialSplittingRegressionII::copy() const
+        { return std::make_unique< MultinomialSplittingRegressionII >(*this); }
+        
+        void MultinomialSplittingRegressionII::update(const Eigen::VectorXd& values) const
+        { _family->set_pi(values); }     
     }
 }

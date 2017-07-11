@@ -22,7 +22,7 @@ namespace statiskit
                 GeneralizedLinearModel(const GeneralizedLinearModel<T, L>& glm);
                 virtual ~GeneralizedLinearModel();
                 
-                virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const;
+                virtual const typename T::response_type* operator() (const MultivariateEvent& event) const;
                 
                 // virtual std::unique_ptr< UnivariateSampleSpace > get_response_space() const;
                 
@@ -138,14 +138,64 @@ namespace statiskit
         };                                               
 
         template<class L>
-            struct SplittingRegression : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
+            class SplittingRegressionI : public GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
             { 
-                SplittingRegression(const typename L::predictor_type& predictor, const L& link);
-                SplittingRegression(const SplittingRegression< L >& glm);
-                virtual ~SplittingRegression();
+                public:
+                    SplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const typename L::predictor_type& predictor, const L& link);
+                    SplittingRegressionI(const SplittingRegressionI< L >& glm);
+                    virtual ~SplittingRegressionI();
 
-                virtual unsigned int get_nb_parameters() const;
+                    virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
+
+                    virtual unsigned int get_nb_parameters() const;
+
+                    const DiscreteUnivariateConditionalDistribution* get_sum() const;
+                    void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
+
+                protected:
+                    DiscreteUnivariateConditionalDistribution* _sum;
             };
+
+        template<class L>
+            class SplittingRegressionII : public GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
+            { 
+                public:
+                    SplittingRegressionII(const DiscreteUnivariateDistribution& sum, const typename L::predictor_type& predictor, const L& link);
+                    SplittingRegressionII(const SplittingRegressionII< L >& glm);
+                    virtual ~SplittingRegressionII();
+
+                    virtual unsigned int get_nb_parameters() const;
+
+                    const DiscreteUnivariateDistribution* get_sum() const;
+                    void set_sum(const DiscreteUnivariateDistribution& sum);
+
+                protected:
+                    DiscreteUnivariateDistribution* _sum;
+            };
+
+        class STATISKIT_GLM_API MultinomialSplittingRegressionI : public SplittingRegressionI< MultinomialSplittingLink >
+        {
+            public:
+                MultinomialSplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
+                MultinomialSplittingRegressionI(const MultinomialSplittingRegressionI& splitting);
+
+                virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
+                
+            private:
+                virtual void update(const Eigen::VectorXd& values) const;  
+        };
+
+        class STATISKIT_GLM_API MultinomialSplittingRegressionII : public SplittingRegressionII< MultinomialSplittingLink >
+        {
+            public:
+                MultinomialSplittingRegressionII(const DiscreteUnivariateDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
+                MultinomialSplittingRegressionII(const MultinomialSplittingRegressionII& splitting);
+
+                virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
+                
+            private:
+                virtual void update(const Eigen::VectorXd& values) const;  
+        };
     }
 }
 

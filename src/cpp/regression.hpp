@@ -44,7 +44,7 @@ namespace statiskit
             }
 
         template<class T, class L>
-            const UnivariateDistribution* GeneralizedLinearModel< T, L >::operator() (const MultivariateEvent& event) const
+            const typename T::response_type* GeneralizedLinearModel< T, L >::operator() (const MultivariateEvent& event) const
             {
                 update(_link->inverse((*_predictor)(event)));
                 return _family;
@@ -138,20 +138,59 @@ namespace statiskit
             { return this->_predictor->size(); }                                   
             
         template<class L>
-            SplittingRegression< L >::SplittingRegression(const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >(predictor, link)
-            {}
+            SplittingRegressionI< L >::SplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >(predictor, link)
+            { _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(sum.copy().release()); }
 
         template<class L>
-            SplittingRegression< L >::SplittingRegression(const SplittingRegression< L >& glm) : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >(glm)
-            {}
+            SplittingRegressionI< L >::SplittingRegressionI(const SplittingRegressionI< L >& glm) : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >(glm)
+            { _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(glm._sum->copy().release()); }
 
         template<class L>
-            SplittingRegression< L >::~SplittingRegression()
-            {}
+            SplittingRegressionI< L >::~SplittingRegressionI()
+            { delete _sum; }
+
+        template<class L>
+            const MultivariateDistribution* SplittingRegressionI< L >::operator() (const MultivariateEvent& event) const
+            {
+                this->_family->set_sum(*(static_cast< const DiscreteUnivariateDistribution* >(_sum->operator() (event))));
+                return GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >::operator() (event);
+            }
+
+        template<class L>
+            const DiscreteUnivariateConditionalDistribution* SplittingRegressionI< L >::get_sum() const
+            { return _sum; }
+
+        template<class L>
+            void SplittingRegressionI< L >::set_sum(const DiscreteUnivariateConditionalDistribution& sum)
+            { _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(sum.copy().release()); }
 
         template< class L >
-            unsigned int SplittingRegression< L >::get_nb_parameters() const
-            { return this->_family->get_nb_parameters() + this->_predictor->size() - 1; }
+            unsigned int SplittingRegressionI< L >::get_nb_parameters() const
+            { return _sum->get_nb_parameters() + this->_predictor->size(); }
+
+        template<class L>
+            SplittingRegressionII< L >::SplittingRegressionII(const DiscreteUnivariateDistribution& sum, const typename L::predictor_type& predictor, const L& link) : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >(predictor, link)
+            { _sum = static_cast< DiscreteUnivariateDistribution* >(sum.copy().release()); }
+
+        template<class L>
+            SplittingRegressionII< L >::SplittingRegressionII(const SplittingRegressionII< L >& glm) : GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >(glm)
+            { _sum = static_cast< DiscreteUnivariateDistribution* >(glm._sum->copy().release()); }
+
+        template<class L>
+            SplittingRegressionII< L >::~SplittingRegressionII()
+            { delete _sum; }
+
+        template<class L>
+            const DiscreteUnivariateDistribution* SplittingRegressionII< L >::get_sum() const
+            { return _sum; }
+
+        template<class L>
+            void SplittingRegressionII< L >::set_sum(const DiscreteUnivariateDistribution& sum)
+            { _sum = static_cast< DiscreteUnivariateDistribution* >(sum.copy().release()); }
+
+        template< class L >
+            unsigned int SplittingRegressionII< L >::get_nb_parameters() const
+            { return _sum->get_nb_parameters() + this->_predictor->size(); }
     }
 }
 #endif
