@@ -17,6 +17,9 @@ namespace autowig
             virtual unsigned int  get_nb_parameters() const
             { return this->get_override("get_nb_parameters")(); }
                         
+            virtual ::statiskit::Index  get_nb_components() const
+            { return this->get_override("get_nb_components")(); }
+                        
 
         protected:
             

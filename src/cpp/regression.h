@@ -43,15 +43,15 @@ namespace statiskit
         };
        
         template<class L>
-        struct UnivariateDiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
-        { 
-            UnivariateDiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
-            UnivariateDiscreteGeneralizedLinearModel(const UnivariateDiscreteGeneralizedLinearModel< L >& glm);
-            virtual ~UnivariateDiscreteGeneralizedLinearModel();
+            struct UnivariateDiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
+            { 
+                UnivariateDiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+                UnivariateDiscreteGeneralizedLinearModel(const UnivariateDiscreteGeneralizedLinearModel< L >& glm);
+                virtual ~UnivariateDiscreteGeneralizedLinearModel();
 
-        	virtual unsigned int get_nb_parameters() const;
-        };
-        
+            	virtual unsigned int get_nb_parameters() const;
+            };
+            
         class STATISKIT_GLM_API PoissonRegression : public UnivariateDiscreteGeneralizedLinearModel< PoissonLink >
         {
             public:
@@ -147,6 +147,8 @@ namespace statiskit
 
                     virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
 
+                    virtual Index get_nb_components() const;
+
                     virtual unsigned int get_nb_parameters() const;
 
                     const DiscreteUnivariateConditionalDistribution* get_sum() const;
@@ -164,6 +166,8 @@ namespace statiskit
                     SplittingRegressionII(const SplittingRegressionII< L >& glm);
                     virtual ~SplittingRegressionII();
 
+                    virtual Index get_nb_components() const;
+
                     virtual unsigned int get_nb_parameters() const;
 
                     const DiscreteUnivariateDistribution* get_sum() const;
@@ -171,6 +175,28 @@ namespace statiskit
 
                 protected:
                     DiscreteUnivariateDistribution* _sum;
+            };
+
+        template<class F>
+            class SplittingRegressionIII : public DiscreteMultivariateConditionalDistribution
+            { 
+                public:
+                    SplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const F& family);
+                    SplittingRegressionIII(const SplittingRegressionIII< F >& glm);
+                    virtual ~SplittingRegressionIII();
+
+                    virtual Index get_nb_components() const;
+
+                    virtual const MultivariateSampleSpace* get_explanatory_space() const;
+
+                    virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
+
+                    const DiscreteUnivariateConditionalDistribution* get_sum() const;
+                    void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
+
+                protected:
+                    DiscreteUnivariateConditionalDistribution* _sum;
+                    F* _family;
             };
 
         class STATISKIT_GLM_API MultinomialSplittingRegressionI : public SplittingRegressionI< MultinomialSplittingLink >
@@ -190,6 +216,23 @@ namespace statiskit
             public:
                 MultinomialSplittingRegressionII(const DiscreteUnivariateDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
                 MultinomialSplittingRegressionII(const MultinomialSplittingRegressionII& splitting);
+
+                virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
+                
+            private:
+                virtual void update(const Eigen::VectorXd& values) const;  
+        };
+
+        class STATISKIT_GLM_API MultinomialSplittingRegressionIII : public SplittingRegressionIII< MultinomialSplittingDistribution >
+        {
+            public:
+                MultinomialSplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const MultinomialSplittingDistribution& family);
+                MultinomialSplittingRegressionIII(const MultinomialSplittingRegressionIII& splitting);
+
+                virtual unsigned int get_nb_parameters() const;
+
+                const Eigen::VectorXd& get_pi() const;
+                void set_pi(const Eigen::VectorXd& pi);
 
                 virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
                 

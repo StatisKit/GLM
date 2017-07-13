@@ -83,6 +83,24 @@ namespace statiskit
         { return std::make_unique< MultinomialSplittingRegressionII >(*this); }
         
         void MultinomialSplittingRegressionII::update(const Eigen::VectorXd& values) const
-        { _family->set_pi(values); }     
+        { _family->set_pi(values); }
+
+        MultinomialSplittingRegressionIII::MultinomialSplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const MultinomialSplittingDistribution& family) :  SplittingRegressionIII< MultinomialSplittingDistribution >(sum, family)
+        {}
+        
+        MultinomialSplittingRegressionIII::MultinomialSplittingRegressionIII(const MultinomialSplittingRegressionIII& splitting) :  SplittingRegressionIII< MultinomialSplittingDistribution >(splitting)
+        {}
+
+        unsigned int MultinomialSplittingRegressionIII::get_nb_parameters() const
+        { return _sum->get_nb_parameters() + get_nb_components() - 1; }
+
+        const Eigen::VectorXd& MultinomialSplittingRegressionIII::get_pi() const
+        { return _family->get_pi(); }
+
+        void MultinomialSplittingRegressionIII::set_pi(const Eigen::VectorXd& pi)
+        { return _family->set_pi(pi); }
+
+        std::unique_ptr< MultivariateConditionalDistribution > MultinomialSplittingRegressionIII::copy() const
+        { return std::make_unique< MultinomialSplittingRegressionIII >(*this); }
     }
 }

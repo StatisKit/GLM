@@ -164,6 +164,10 @@ namespace statiskit
             void SplittingRegressionI< L >::set_sum(const DiscreteUnivariateConditionalDistribution& sum)
             { _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(sum.copy().release()); }
 
+        template<class L>
+            Index SplittingRegressionI< L >::get_nb_components() const
+            { return this->_family->get_nb_components(); }
+
         template< class L >
             unsigned int SplittingRegressionI< L >::get_nb_parameters() const
             { return _sum->get_nb_parameters() + this->_predictor->size(); }
@@ -188,9 +192,58 @@ namespace statiskit
             void SplittingRegressionII< L >::set_sum(const DiscreteUnivariateDistribution& sum)
             { _sum = static_cast< DiscreteUnivariateDistribution* >(sum.copy().release()); }
 
+        template<class L>
+            Index SplittingRegressionII< L >::get_nb_components() const
+            { return this->_family->get_nb_components(); }
+
         template< class L >
             unsigned int SplittingRegressionII< L >::get_nb_parameters() const
             { return _sum->get_nb_parameters() + this->_predictor->size(); }
+
+        template<class F>
+            SplittingRegressionIII< F >::SplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const F& family)
+            {
+                _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(sum.copy().release());
+                _family = static_cast< F* >(family.copy().release());
+
+            }
+
+        template<class F>
+            SplittingRegressionIII< F >::SplittingRegressionIII(const SplittingRegressionIII< F >& glm)
+            {
+                _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(glm._sum->copy().release());
+                _family = static_cast< F* >(glm._family->copy().release());
+            }
+
+        template<class F>
+            SplittingRegressionIII< F >::~SplittingRegressionIII()
+            {
+                delete _sum;
+                delete _family;
+            }
+
+        template<class F>
+            const MultivariateSampleSpace* SplittingRegressionIII< F >::get_explanatory_space() const
+            { return _sum->get_explanatory_space(); }
+
+        template<class F>
+            const MultivariateDistribution* SplittingRegressionIII< F >::operator() (const MultivariateEvent& event) const
+            {
+                _family->set_sum(*(static_cast< const DiscreteUnivariateDistribution* >(_sum->operator() (event))));
+                return _family;
+            }
+
+        template<class F>
+            const DiscreteUnivariateConditionalDistribution* SplittingRegressionIII< F >::get_sum() const
+            { return _sum; }
+
+        template<class F>
+            void SplittingRegressionIII< F >::set_sum(const DiscreteUnivariateConditionalDistribution& sum)
+            { _sum = static_cast< DiscreteUnivariateConditionalDistribution* >(sum.copy().release()); }
+
+        template<class F>
+            Index SplittingRegressionIII< F >::get_nb_components() const
+            { return _family->get_nb_components(); }
     }
 }
 #endif
