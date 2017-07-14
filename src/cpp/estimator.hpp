@@ -248,7 +248,7 @@ namespace statiskit
                         beta = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::colPivHouseholderQr);
                         ++its;
 
-                    }while((l_new-l_old)/std::abs(l_new)>this->_mindiff and its < 50); //while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
+                    }while((l_new-l_old)/std::abs(l_new)>this->_mindiff && its < 50); //while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
     				_estimation->_Z = Z;
     				_estimation->_y = y;
     				_estimation->_w = w;
@@ -641,15 +641,15 @@ namespace statiskit
             {} 
 
         template<class T >
-            const Eigen::VectorXd& CumulativeRegressionFisherEstimation < T >::Estimator::Estimator::get_beta_init() const
+            const Eigen::VectorXd& CumulativeRegressionFisherEstimation < T >::Estimator::get_beta_init() const
             { return _beta_init; }
                                              
         template<class T >
-            void CumulativeRegressionFisherEstimation < T >::Estimator::Estimator::set_beta_init(const Eigen::VectorXd& beta_init)
+            void CumulativeRegressionFisherEstimation < T >::Estimator::set_beta_init(const Eigen::VectorXd& beta_init)
             { _beta_init = beta_init; }
 
         template<class T >
-            Eigen::VectorXd CumulativeRegressionFisherEstimation < T >::Estimator::Estimator::beta_init(const UnivariateConditionalData& data) const
+            Eigen::VectorXd CumulativeRegressionFisherEstimation < T >::Estimator::beta_init(const UnivariateConditionalData& data) const
             {
                 Index J = static_cast< const CategoricalSampleSpace* >( data.get_response()->get_sample_space() )->get_cardinality();
                 Eigen::VectorXd beta = T::Estimator::beta_init(data);
@@ -658,7 +658,7 @@ namespace statiskit
                 else
                 {
                     for (Index j=0; j<(J-1); ++j)
-                    { beta[j] = LogisticDistribution().quantile( double(1+j)/double(J) ); }
+                    { beta[j] = LogisticDistribution().quantile(double(1+j) / double(J)); }
                 }                          
                 return beta;
             }

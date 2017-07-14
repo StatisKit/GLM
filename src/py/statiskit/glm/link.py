@@ -1,8 +1,8 @@
 from functools import wraps
 
 import _glm
-from __glm.statiskit import(_FLink,
-                            ScalarLink,
+from __glm.statiskit.glm import(_FLink,
+                                ScalarLink,
                                 PoissonLink,
                                     PoissonCanonicalLink,
                                     PoissonVLink,
