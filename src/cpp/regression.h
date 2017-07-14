@@ -137,108 +137,191 @@ namespace statiskit
                 virtual void update(const Eigen::VectorXd& values) const;                
         };                                               
 
-        template<class L>
-            class SplittingRegressionI : public GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
-            { 
-                public:
-                    SplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const typename L::predictor_type& predictor, const L& link);
-                    SplittingRegressionI(const SplittingRegressionI< L >& glm);
-                    virtual ~SplittingRegressionI();
-
-                    virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
-
-                    virtual Index get_nb_components() const;
-
-                    virtual unsigned int get_nb_parameters() const;
-
-                    const DiscreteUnivariateConditionalDistribution* get_sum() const;
-                    void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
-
-                protected:
-                    DiscreteUnivariateConditionalDistribution* _sum;
-            };
-
-        template<class L>
-            class SplittingRegressionII : public GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
-            { 
-                public:
-                    SplittingRegressionII(const DiscreteUnivariateDistribution& sum, const typename L::predictor_type& predictor, const L& link);
-                    SplittingRegressionII(const SplittingRegressionII< L >& glm);
-                    virtual ~SplittingRegressionII();
-
-                    virtual Index get_nb_components() const;
-
-                    virtual unsigned int get_nb_parameters() const;
-
-                    const DiscreteUnivariateDistribution* get_sum() const;
-                    void set_sum(const DiscreteUnivariateDistribution& sum);
-
-                protected:
-                    DiscreteUnivariateDistribution* _sum;
-            };
-
-        template<class F>
-            class SplittingRegressionIII : public DiscreteMultivariateConditionalDistribution
-            { 
-                public:
-                    SplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const F& family);
-                    SplittingRegressionIII(const SplittingRegressionIII< F >& glm);
-                    virtual ~SplittingRegressionIII();
-
-                    virtual Index get_nb_components() const;
-
-                    virtual const MultivariateSampleSpace* get_explanatory_space() const;
-
-                    virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
-
-                    const DiscreteUnivariateConditionalDistribution* get_sum() const;
-                    void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
-
-                protected:
-                    DiscreteUnivariateConditionalDistribution* _sum;
-                    F* _family;
-            };
-
-        class STATISKIT_GLM_API MultinomialSplittingRegressionI : public SplittingRegressionI< MultinomialSplittingLink >
+        struct STATISKIT_GLM_API SplittingOperator
         {
-            public:
-                MultinomialSplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
-                MultinomialSplittingRegressionI(const MultinomialSplittingRegressionI& splitting);
+            typedef statiskit::SplittingOperator response_type;
 
-                virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
-                
-            private:
-                virtual void update(const Eigen::VectorXd& values) const;  
+            virtual Index get_nb_components() const = 0;
+
+            virtual unsigned int get_nb_parameters() const = 0;
+
+            virtual const typename statiskit::SplittingOperator* operator() (const MultivariateEvent& event) const = 0;
+                            
+            virtual const MultivariateSampleSpace* get_explanatory_space() const = 0; 
+
+            virtual std::unique_ptr< SplittingOperator > copy() const = 0;           
         };
 
-        class STATISKIT_GLM_API MultinomialSplittingRegressionII : public SplittingRegressionII< MultinomialSplittingLink >
+        template<class T, class L>
+            struct MultivariateGeneralizedLinearModel : GeneralizedLinearModel< T, L >
+            {
+                MultivariateGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+                MultivariateGeneralizedLinearModel(const MultivariateGeneralizedLinearModel<T, L>& glm);
+
+                virtual Index get_nb_components() const = 0;
+            };
+
+        class STATISKIT_GLM_API MultinomialSplittingOperator : public MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >
         {
             public:
-                MultinomialSplittingRegressionII(const DiscreteUnivariateDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
-                MultinomialSplittingRegressionII(const MultinomialSplittingRegressionII& splitting);
+                MultinomialSplittingOperator(const VectorPredictor& predictor, const MultinomialSplittingLink& link);
+                MultinomialSplittingOperator(const MultinomialSplittingOperator& splitting);
+                virtual ~MultinomialSplittingOperator();
 
-                virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
-                
-            private:
-                virtual void update(const Eigen::VectorXd& values) const;  
+            protected:
+                virtual void update(const Eigen::VectorXd& value) const;
         };
 
-        class STATISKIT_GLM_API MultinomialSplittingRegressionIII : public SplittingRegressionIII< MultinomialSplittingDistribution >
+        class STATISKIT_GLM_API DirichletMultinomialSplittingOperator : public MultivariateGeneralizedLinearModel< SplittingOperator, DirichletMultinomialSplittingLink >
         {
             public:
-                MultinomialSplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const MultinomialSplittingDistribution& family);
-                MultinomialSplittingRegressionIII(const MultinomialSplittingRegressionIII& splitting);
+                DirichletMultinomialSplittingOperator(const VectorPredictor& predictor, const DirichletMultinomialSplittingLink& link);
+                DirichletMultinomialSplittingOperator(const DirichletMultinomialSplittingOperator& splitting);
+                virtual ~DirichletMultinomialSplittingOperator();
+
+            protected:
+                virtual void update(const Eigen::VectorXd& value) const;
+        };
+
+        class STATISKIT_GLM_API SplittingRegressionI : public DiscreteMultivariateConditionalDistribution
+        {
+            public:
+                SplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const SplittingOperator& splitting);
+                SplittingRegressionI(const SplittingRegressionI& splitting);
+                virtual ~SplittingRegressionI();
+
+                virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
+
+                virtual Index get_nb_components() const;
+
+                virtual const MultivariateSampleSpace* get_explanatory_space() const;
 
                 virtual unsigned int get_nb_parameters() const;
 
-                const Eigen::VectorXd& get_pi() const;
-                void set_pi(const Eigen::VectorXd& pi);
+                const DiscreteUnivariateConditionalDistribution* get_sum() const;
+                void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
 
-                virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
-                
-            private:
-                virtual void update(const Eigen::VectorXd& values) const;  
+                const SplittingOperator* get_splitting() const;
+                void set_splitting(const SplittingOperator& splitting);
+
+            protected:
+                struct STATISKIT_GLM_API SplittingDistribution : public statiskit::SplittingDistribution
+                {
+                    SplittingDistribution();
+                    virtual ~SplittingDistribution();
+
+                    void set_sum(DiscreteUnivariateDistribution* sum);
+
+                    void set_splitting(statiskit::SplittingOperator* splitting);
+                };           
+
+                DiscreteUnivariateConditionalDistribution* _sum;
+                SplittingOperator* _splitting; 
+                SplittingDistribution* _family;
         };
+
+        // template<class L>
+        //     class SplittingRegressionI : public GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
+        //     { 
+        //         public:
+        //             SplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const typename L::predictor_type& predictor, const L& link);
+        //             SplittingRegressionI(const SplittingRegressionI< L >& glm);
+        //             virtual ~SplittingRegressionI();
+
+        //             virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
+
+        //             virtual Index get_nb_components() const;
+
+        //             virtual unsigned int get_nb_parameters() const;
+
+        //             const DiscreteUnivariateConditionalDistribution* get_sum() const;
+        //             void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
+
+        //         protected:
+        //             DiscreteUnivariateConditionalDistribution* _sum;
+        //     };
+
+        // template<class L>
+        //     class SplittingRegressionII : public GeneralizedLinearModel< DiscreteMultivariateConditionalDistribution, L >
+        //     { 
+        //         public:
+        //             SplittingRegressionII(const DiscreteUnivariateDistribution& sum, const typename L::predictor_type& predictor, const L& link);
+        //             SplittingRegressionII(const SplittingRegressionII< L >& glm);
+        //             virtual ~SplittingRegressionII();
+
+        //             virtual Index get_nb_components() const;
+
+        //             virtual unsigned int get_nb_parameters() const;
+
+        //             const DiscreteUnivariateDistribution* get_sum() const;
+        //             void set_sum(const DiscreteUnivariateDistribution& sum);
+
+        //         protected:
+        //             DiscreteUnivariateDistribution* _sum;
+        //     };
+
+        // template<class F>
+        //     class SplittingRegressionIII : public DiscreteMultivariateConditionalDistribution
+        //     { 
+        //         public:
+        //             SplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const F& family);
+        //             SplittingRegressionIII(const SplittingRegressionIII< F >& glm);
+        //             virtual ~SplittingRegressionIII();
+
+        //             virtual Index get_nb_components() const;
+
+        //             virtual const MultivariateSampleSpace* get_explanatory_space() const;
+
+        //             virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const;
+
+        //             const DiscreteUnivariateConditionalDistribution* get_sum() const;
+        //             void set_sum(const DiscreteUnivariateConditionalDistribution& sum);
+
+        //         protected:
+        //             DiscreteUnivariateConditionalDistribution* _sum;
+        //             F* _family;
+        //     };
+
+        // class STATISKIT_GLM_API MultinomialSplittingRegressionI : public SplittingRegressionI< MultinomialSplittingLink >
+        // {
+        //     public:
+        //         MultinomialSplittingRegressionI(const DiscreteUnivariateConditionalDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
+        //         MultinomialSplittingRegressionI(const MultinomialSplittingRegressionI& splitting);
+
+        //         virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
+                
+        //     private:
+        //         virtual void update(const Eigen::VectorXd& values) const;  
+        // };
+
+        // class STATISKIT_GLM_API MultinomialSplittingRegressionII : public SplittingRegressionII< MultinomialSplittingLink >
+        // {
+        //     public:
+        //         MultinomialSplittingRegressionII(const DiscreteUnivariateDistribution& sum, const VectorPredictor& predictor, const MultinomialSplittingLink& link);
+        //         MultinomialSplittingRegressionII(const MultinomialSplittingRegressionII& splitting);
+
+        //         virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
+                
+        //     private:
+        //         virtual void update(const Eigen::VectorXd& values) const;  
+        // };
+
+        // class STATISKIT_GLM_API MultinomialSplittingRegressionIII : public SplittingRegressionIII< MultinomialSplittingDistribution >
+        // {
+        //     public:
+        //         MultinomialSplittingRegressionIII(const DiscreteUnivariateConditionalDistribution& sum, const MultinomialSplittingDistribution& family);
+        //         MultinomialSplittingRegressionIII(const MultinomialSplittingRegressionIII& splitting);
+
+        //         virtual unsigned int get_nb_parameters() const;
+
+        //         const Eigen::VectorXd& get_pi() const;
+        //         void set_pi(const Eigen::VectorXd& pi);
+
+        //         virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const;
+                
+        //     private:
+        //         virtual void update(const Eigen::VectorXd& values) const;  
+        // };
     }
 }
 

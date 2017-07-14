@@ -416,6 +416,21 @@ namespace statiskit
         
         std::unique_ptr< MultinomialSplittingLink > MultinomialSplittingCanonicalLink::copy() const
         { return std::make_unique< MultinomialSplittingCanonicalLink >(*this); }
+
+        DirichletMultinomialSplittingCanonicalLink::DirichletMultinomialSplittingCanonicalLink()
+        {}
+
+        DirichletMultinomialSplittingCanonicalLink::~DirichletMultinomialSplittingCanonicalLink()
+        {}
+
+        Eigen::VectorXd DirichletMultinomialSplittingCanonicalLink::inverse(const Eigen::VectorXd& values) const
+        { return values.array().exp(); }
+        
+        Eigen::MatrixXd DirichletMultinomialSplittingCanonicalLink::inverse_derivative(const Eigen::VectorXd& values) const
+        { return inverse(values); }          
+        
+        std::unique_ptr< DirichletMultinomialSplittingLink > DirichletMultinomialSplittingCanonicalLink::copy() const
+        { return std::make_unique< DirichletMultinomialSplittingCanonicalLink >(*this); }
     }
 }
 

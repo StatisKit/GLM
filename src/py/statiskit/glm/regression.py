@@ -11,13 +11,13 @@ from __glm.statiskit.glm import (_GeneralizedLinearModel,
                                     BinomialRegression,
                                     NegativeBinomialRegression,
                                     NominalRegression,
-                                    OrdinalRegression,
-                                    _SplittingRegressionI,
-                                    _SplittingRegressionII,
-                                    _SplittingRegressionIII,
-                                    MultinomialSplittingRegressionI,
-                                    MultinomialSplittingRegressionII,
-                                    MultinomialSplittingRegressionIII)
+                                    OrdinalRegression)
+                                    # _SplittingRegressionI,
+                                    # _SplittingRegressionII,
+                                    # _SplittingRegressionIII,
+                                    # MultinomialSplittingRegressionI,
+                                    # MultinomialSplittingRegressionII,
+                                    # MultinomialSplittingRegressionIII)
 
 __all__ = ['PoissonRegression',
            'BinomialRegression',

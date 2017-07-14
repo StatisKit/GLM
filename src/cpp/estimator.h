@@ -388,13 +388,13 @@ namespace statiskit
         typedef CumulativeRegressionFisherEstimation< ConstrainedRegressionFisherEstimation < OrdinalRegression > >::Estimator CumulativeConstrainedFisherEstimator;
 //typedef CumulativeRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > >::PartialProportionalEstimator CumulativePartialProportionalFisherEstimator;
 
-        template< class D > class SplittingRegressionIRPREstimation : public OptimizationEstimation< Eigen::MatrixXd, D, DiscreteMultivariateConditionalDistributionEstimation >
-        {
-            public:
-                SplittingRegressionIRPREstimation();
-                SplittingRegressionIRPREstimation(D const * estimated, MultivariateConditionalData const * data);
-                SplittingRegressionIRPREstimation(const SplittingRegressionIRPREstimation& estimation);
-        };
+        // template< class D > class SplittingRegressionIRPREstimation : public OptimizationEstimation< Eigen::MatrixXd, D, DiscreteMultivariateConditionalDistributionEstimation >
+        // {
+        //     public:
+        //         SplittingRegressionIRPREstimation();
+        //         SplittingRegressionIRPREstimation(D const * estimated, MultivariateConditionalData const * data);
+        //         SplittingRegressionIRPREstimation(const SplittingRegressionIRPREstimation& estimation);
+        // };
     }
 }
 
