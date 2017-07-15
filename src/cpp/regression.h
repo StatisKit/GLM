@@ -145,7 +145,7 @@ namespace statiskit
 
             virtual unsigned int get_nb_parameters() const = 0;
 
-            virtual const typename statiskit::SplittingOperator* operator() (const MultivariateEvent& event) const = 0;
+            virtual const statiskit::SplittingOperator* operator() (const MultivariateEvent& event) const = 0;
                             
             virtual const MultivariateSampleSpace* get_explanatory_space() const = 0; 
 
