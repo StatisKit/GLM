@@ -160,15 +160,15 @@ namespace statiskit
             }
          
         template< class D >      
-            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation () : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >()
+            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation () :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >()
             {}
 
         template< class D >
-            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
+            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
             {}
 
         template< class D >
-            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation (const CategoricalRegressionFisherEstimation & estimation) : ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
+            CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation (const CategoricalRegressionFisherEstimation & estimation) :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
             {}
 
         template< class D >
@@ -180,15 +180,15 @@ namespace statiskit
             { return _loglikelihood_sequence; }            
 
         template< class D >
-            CategoricalRegressionFisherEstimation< D >::Estimator::Estimator() : Optimization()
-            { _maxits = 1e4; }
+            CategoricalRegressionFisherEstimation< D >::Estimator::Estimator() :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >::Estimator()
+            { this->_maxits = 1e4; }
         
         template< class D >
             CategoricalRegressionFisherEstimation< D >::Estimator::~Estimator()
             { delete _link; }
 
         template< class D >
-            CategoricalRegressionFisherEstimation< D >::Estimator::Estimator(const Estimator& estimator) : Optimization(estimator)
+            CategoricalRegressionFisherEstimation< D >::Estimator::Estimator(const Estimator& estimator) :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >::Estimator(estimator)
             { _link = estimator._link->copy().release(); }
 
         template< class D >

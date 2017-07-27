@@ -54,14 +54,13 @@ void wrapper_9d758493e317506b8c01cdfca42b168b()
     boost::python::object module_b1f1f244b2f459d18ed0eab52aa68957(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_b1f1f244b2f459d18ed0eab52aa68957.c_str()))));
     boost::python::scope().attr("__optimization_estimation_impl_b1f1f244b2f459d18ed0eab52aa68957") = module_b1f1f244b2f459d18ed0eab52aa68957;
     boost::python::scope scope_b1f1f244b2f459d18ed0eab52aa68957 = module_b1f1f244b2f459d18ed0eab52aa68957;
-    boost::python::class_< autowig::Wrap_9d758493e317506b8c01cdfca42b168b, autowig::Held< autowig::Wrap_9d758493e317506b8c01cdfca42b168b >::Type, boost::python::bases< struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::Optimization >, boost::noncopyable > class_9d758493e317506b8c01cdfca42b168b("Estimator", "", boost::python::no_init);
+    boost::python::class_< autowig::Wrap_9d758493e317506b8c01cdfca42b168b, autowig::Held< autowig::Wrap_9d758493e317506b8c01cdfca42b168b >::Type, boost::python::bases< class ::statiskit::Optimization< struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation::Estimator > >, boost::noncopyable > class_9d758493e317506b8c01cdfca42b168b("Estimator", "", boost::python::no_init);
 
     if(autowig::Held< class ::statiskit::OptimizationEstimationImpl< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::is_class)
     {
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_9d758493e317506b8c01cdfca42b168b >::Type, autowig::Held< class ::statiskit::OptimizationEstimationImpl< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< class ::statiskit::OptimizationEstimationImpl< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::OptimizationEstimationImpl< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type, autowig::Held< struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation::Estimator >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::OptimizationEstimationImpl< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type, autowig::Held< class ::statiskit::Optimization >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::OptimizationEstimationImpl< unsigned int, class ::statiskit::glm::BinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type, autowig::Held< class ::statiskit::Optimization< struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation::Estimator > >::Type >();
     }
 
 }
