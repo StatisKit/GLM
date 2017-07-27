@@ -63,7 +63,7 @@ void wrapper_a0a8a3259686533bb0eead87e5c0553d()
     boost::python::scope scope_e7c465f54bff53b2b62fea726a278b20 = module_e7c465f54bff53b2b62fea726a278b20;
     struct ::statiskit::glm::OrdinalLink const * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_2608eb86880654d4a3ba3d0c836c19ee)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::get_link;
     void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_81ea2953b2735786bc7122456c3eb2c5)(struct ::statiskit::glm::OrdinalLink const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::set_link;
-    boost::python::class_< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d, autowig::Held< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d >::Type, boost::python::bases< struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::Optimization >, boost::noncopyable > class_a0a8a3259686533bb0eead87e5c0553d("Estimator", "", boost::python::no_init);
+    boost::python::class_< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d, autowig::Held< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d >::Type, boost::python::bases< struct ::statiskit::OptimizationEstimation< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >, class ::statiskit::glm::OrdinalRegression, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation >::Estimator >, boost::noncopyable > class_a0a8a3259686533bb0eead87e5c0553d("Estimator", "", boost::python::no_init);
     class_a0a8a3259686533bb0eead87e5c0553d.def("get_link", method_pointer_2608eb86880654d4a3ba3d0c836c19ee, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_a0a8a3259686533bb0eead87e5c0553d.def("set_link", method_pointer_81ea2953b2735786bc7122456c3eb2c5, "");
 
@@ -71,8 +71,7 @@ void wrapper_a0a8a3259686533bb0eead87e5c0553d()
     {
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d >::Type, autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator >::Type, autowig::Held< struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation::Estimator >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator >::Type, autowig::Held< class ::statiskit::Optimization >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator >::Type, autowig::Held< struct ::statiskit::OptimizationEstimation< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >, class ::statiskit::glm::OrdinalRegression, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
     }
 
 }

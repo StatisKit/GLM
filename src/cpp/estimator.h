@@ -158,14 +158,14 @@ namespace statiskit
             };
         };
 
-        template< class D > class CategoricalRegressionFisherEstimation : public ActiveEstimation< D, CategoricalUnivariateConditionalDistributionEstimation >
+        template< class D > class CategoricalRegressionFisherEstimation : public OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >
         {
             public:
                 CategoricalRegressionFisherEstimation();
                 CategoricalRegressionFisherEstimation(D const * estimated, UnivariateConditionalData const * data);
                 CategoricalRegressionFisherEstimation(const CategoricalRegressionFisherEstimation & estimation);
 
-                class Estimator : public CategoricalUnivariateConditionalDistributionEstimation::Estimator, public Optimization
+                class Estimator : public OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >::Estimator
                 { 
                     public:
                         Estimator();
