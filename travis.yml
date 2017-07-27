@@ -10,8 +10,8 @@ services:
   - docker
   
 env:
- - RECIPE=libstatiskit_glm
- - RECIPE=python-statiskit_glm
+ - CONDA_RECIPE=libstatiskit_glm
+ - CONDA_RECIPE=python-statiskit_glm
     
 install:
   - git clone https://github.com/StatisKit/travis-ci.git
