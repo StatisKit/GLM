@@ -10,17 +10,17 @@ build:
 
 about:
   home: http://statiskit-glm.readthedocs.io
-  license: CeCILL
+  license: Apache License 2.0
 
 requirements:
   build:
-    - libdev
-    - python-dev
+    - libtoolchain
+    - python-toolchain
     - libboost
     - libstatiskit_glm
     - python
   run:
-    - librun
+    - libruntime
     - libboost
     - libstatiskit_glm
     - python-statiskit_core
@@ -28,9 +28,11 @@ requirements:
 
 test:                                               
   requires:
-    - python-dev
+    - python-toolchain
     - matplotlib
     - numpy
+  imports:
+    - statiskit.glm
   source_files:                                
     - test/test_*.py
   commands:                                       
