@@ -2,7 +2,7 @@
 
 
 
-namespace autowig
+/*namespace autowig
 {
     class Wrap_d858f5e2ee3751a19de2e61d598c12e0 : public ::statiskit::glm::SplittingRegressionI, public boost::python::wrapper< class ::statiskit::glm::SplittingRegressionI >
     {
@@ -34,13 +34,13 @@ namespace boost
 }
     #endif
 #endif
-
+*/
 
 
 void wrapper_d858f5e2ee3751a19de2e61d598c12e0()
 {
 
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
+    /* std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
@@ -63,6 +63,6 @@ void wrapper_d858f5e2ee3751a19de2e61d598c12e0()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_d858f5e2ee3751a19de2e61d598c12e0 >::Type, autowig::Held< class ::statiskit::glm::SplittingRegressionI >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< class ::statiskit::glm::SplittingRegressionI >::Type >();
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::SplittingRegressionI >::Type, autowig::Held< struct ::statiskit::DiscreteMultivariateConditionalDistribution >::Type >();
-    }
+    }*/
 
 }

@@ -2,7 +2,7 @@
 
 
 
-namespace autowig
+/*namespace autowig
 {
 
     void method_decorator_4ff54c95caa05d2c9ebf4b01d3cee0ee(class ::std::unique_ptr< struct ::statiskit::glm::SplittingOperator, struct ::std::default_delete< struct ::statiskit::glm::SplittingOperator > > const & instance, const struct ::statiskit::glm::SplittingOperator & param_out) { instance.operator*() = param_out; }
@@ -16,13 +16,13 @@ namespace boost
 }
     #endif
 #endif
-
+*/
 
 
 void wrapper_2314f4728d0a5934a4e64981f4081ceb()
 {
 
-    std::string name_a5e4e9231d6351ccb0e06756b389f0af = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".std");
+    /*std::string name_a5e4e9231d6351ccb0e06756b389f0af = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".std");
     boost::python::object module_a5e4e9231d6351ccb0e06756b389f0af(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_a5e4e9231d6351ccb0e06756b389f0af.c_str()))));
     boost::python::scope().attr("std") = module_a5e4e9231d6351ccb0e06756b389f0af;
     boost::python::scope scope_a5e4e9231d6351ccb0e06756b389f0af = module_a5e4e9231d6351ccb0e06756b389f0af;
@@ -36,5 +36,5 @@ void wrapper_2314f4728d0a5934a4e64981f4081ceb()
         }
     };
 
-    boost::python::to_python_converter< class ::std::unique_ptr< struct ::statiskit::glm::SplittingOperator, struct ::std::default_delete< struct ::statiskit::glm::SplittingOperator > >, unique_ptr_2314f4728d0a5934a4e64981f4081ceb_to_python >();
+    boost::python::to_python_converter< class ::std::unique_ptr< struct ::statiskit::glm::SplittingOperator, struct ::std::default_delete< struct ::statiskit::glm::SplittingOperator > >, unique_ptr_2314f4728d0a5934a4e64981f4081ceb_to_python >();*/
 }
