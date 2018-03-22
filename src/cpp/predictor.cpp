@@ -1,5 +1,5 @@
 #include "predictor.h"
-#include <eigen3/unsupported/Eigen/KroneckerProduct>
+#include <Eigen/Unsupported/KroneckerProduct>
 
 namespace statiskit
 {
