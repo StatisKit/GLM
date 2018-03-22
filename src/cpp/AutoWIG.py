@@ -1,4 +1,4 @@
-from autowig.site.controller.statiskit_stl import controller as stl_controller
+from scons_tools.site_autowig.controller.statiskit_stl import controller as stl_controller
 
 def controller(asg):
     # import ipdb
