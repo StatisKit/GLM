@@ -137,7 +137,7 @@ namespace statiskit
                 virtual void update(const Eigen::VectorXd& values) const;                
         };                                               
 
-        struct STATISKIT_GLM_API SplittingOperator
+        /* struct STATISKIT_GLM_API SplittingOperator
         {
             typedef statiskit::SplittingOperator response_type;
 
@@ -150,7 +150,7 @@ namespace statiskit
             virtual const MultivariateSampleSpace* get_explanatory_space() const = 0; 
 
             virtual std::unique_ptr< SplittingOperator > copy() const = 0;           
-        };
+        }; */
 
         template<class T, class L>
             struct MultivariateGeneralizedLinearModel : GeneralizedLinearModel< T, L >
