@@ -180,9 +180,9 @@ namespace statiskit
         std::unique_ptr< UnivariateConditionalDistributionEstimation > NegativeBinomialRegressionX2Estimation::Estimator::operator() (const UnivariateConditionalData& data, const bool& lazy) const
         {
             const UnivariateData* response = data.get_response();
-            NaturalMeanEstimation::Estimator mean_estimator = NaturalMeanEstimation::Estimator();
-            std::unique_ptr< MeanEstimation > mean_estimation = mean_estimator(*response);
-            double total = data.compute_total(), mean = mean_estimation->get_mean(), prev, curr = 0;
+            UnivariateMeanEstimation::Estimator location_estimator = UnivariateMeanEstimation::Estimator();
+            std::unique_ptr< UnivariateLocationEstimation > location_estimation = location_estimator(*response);
+            double total = data.compute_total(), mean = location_estimation->get_location(), prev, curr = 0;
             std::unique_ptr< UnivariateData::Generator > rgenerator = response->generator();
             while(rgenerator->is_valid())
             {
