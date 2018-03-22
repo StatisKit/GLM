@@ -1,7 +1,7 @@
 #include "_glm.h"
 
 
-
+/*
 namespace autowig
 {
     class Wrap_f7608de1b2185cfabb2f2cb9c9bb7e10 : public ::statiskit::glm::MultivariateGeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink >, public boost::python::wrapper< struct ::statiskit::glm::MultivariateGeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink > >
@@ -43,13 +43,13 @@ namespace boost
 }
     #endif
 #endif
-
+*/
 
 
 void wrapper_f7608de1b2185cfabb2f2cb9c9bb7e10()
 {
 
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
+    /* std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
@@ -64,6 +64,6 @@ void wrapper_f7608de1b2185cfabb2f2cb9c9bb7e10()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_f7608de1b2185cfabb2f2cb9c9bb7e10 >::Type, autowig::Held< struct ::statiskit::glm::MultivariateGeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink > >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::MultivariateGeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink > >::Type >();
         boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::MultivariateGeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink > >::Type, autowig::Held< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink > >::Type >();
-    }
+    } */
 
 }

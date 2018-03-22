@@ -1,7 +1,7 @@
 #include "_glm.h"
 
 
-
+/*
 namespace autowig
 {
 
@@ -17,12 +17,12 @@ namespace boost
     #endif
 #endif
 
-
+*/
 
 void wrapper_79baa138c28f5ad292b3ece9219ffebf()
 {
 
-    std::string name_a5e4e9231d6351ccb0e06756b389f0af = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".std");
+    /* std::string name_a5e4e9231d6351ccb0e06756b389f0af = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".std");
     boost::python::object module_a5e4e9231d6351ccb0e06756b389f0af(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_a5e4e9231d6351ccb0e06756b389f0af.c_str()))));
     boost::python::scope().attr("std") = module_a5e4e9231d6351ccb0e06756b389f0af;
     boost::python::scope scope_a5e4e9231d6351ccb0e06756b389f0af = module_a5e4e9231d6351ccb0e06756b389f0af;
@@ -36,5 +36,5 @@ void wrapper_79baa138c28f5ad292b3ece9219ffebf()
         }
     };
 
-    boost::python::to_python_converter< class ::std::unique_ptr< struct ::statiskit::glm::MultinomialSplittingLink, struct ::std::default_delete< struct ::statiskit::glm::MultinomialSplittingLink > >, unique_ptr_79baa138c28f5ad292b3ece9219ffebf_to_python >();
+    boost::python::to_python_converter< class ::std::unique_ptr< struct ::statiskit::glm::MultinomialSplittingLink, struct ::std::default_delete< struct ::statiskit::glm::MultinomialSplittingLink > >, unique_ptr_79baa138c28f5ad292b3ece9219ffebf_to_python >(); */
 }
