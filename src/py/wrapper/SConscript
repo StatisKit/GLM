@@ -7,7 +7,7 @@ try:
     pyenv = env.Clone(tools = ['boost_python'])
 
     pyenv.AppendUnique(LIBS  = ['statiskit_glm'],
-                       CPPFLAGS = ["-Wignored-attributes"])
+                       CPPFLAGS = ["-Wno-ignored-attributes"])
 
     exclude = """
     """.split()
