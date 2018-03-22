@@ -4,7 +4,7 @@
 #include <statiskit/core/estimator.h>
 #include <statiskit/glm/regression.h>
 #include <statiskit/linalg/Eigen.h>
-#include <eigen3/unsupported/Eigen/KroneckerProduct>
+#include <Eigen/Unsupported/KroneckerProduct>
 
 namespace statiskit
 {
