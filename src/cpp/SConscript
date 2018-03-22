@@ -10,7 +10,7 @@ exclude = """
 """.split()
 
 sources = [source for source in cppenv.Glob('*.h*') if not source.name in exclude]
-targets = cppenv.CppDev("statiskit_glm", sources)
+targets = cppenv.CppDev(["statiskit", "glm"], sources)
 Alias("cpp-dev", targets)
 Alias("cpp", targets)
 Alias("autowig", targets)
