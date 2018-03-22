@@ -6,7 +6,8 @@ try:
     Import("env")
     pyenv = env.Clone(tools = ['boost_python'])
 
-    pyenv.AppendUnique(LIBS  = ['statiskit_glm'])
+    pyenv.AppendUnique(LIBS  = ['statiskit_glm'],
+                       CPPFLAGS = ["-Wignored-attributes"])
 
     exclude = """
     """.split()
