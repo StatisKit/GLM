@@ -1,7 +1,7 @@
 #include "_glm.h"
 
 
-
+/*
 namespace autowig
 {
     class Wrap_e540d7ab4b2b537a9d831cad24583a81 : public ::statiskit::glm::DirichletMultinomialSplittingOperator, public boost::python::wrapper< class ::statiskit::glm::DirichletMultinomialSplittingOperator >
@@ -40,13 +40,13 @@ namespace boost
 }
     #endif
 #endif
-
+*/
 
 
 void wrapper_e540d7ab4b2b537a9d831cad24583a81()
 {
 
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
+    /* std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
@@ -61,6 +61,6 @@ void wrapper_e540d7ab4b2b537a9d831cad24583a81()
         boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_e540d7ab4b2b537a9d831cad24583a81 >::Type, autowig::Held< class ::statiskit::glm::DirichletMultinomialSplittingOperator >::Type >();
         boost::python::register_ptr_to_python< autowig::Held< class ::statiskit::glm::DirichletMultinomialSplittingOperator >::Type >();
         boost::python::implicitly_convertible< autowig::Held< class ::statiskit::glm::DirichletMultinomialSplittingOperator >::Type, autowig::Held< struct ::statiskit::glm::MultivariateGeneralizedLinearModel< struct ::statiskit::glm::SplittingOperator, struct ::statiskit::glm::DirichletMultinomialSplittingLink > >::Type >();
-    }
+    } */
 
 }

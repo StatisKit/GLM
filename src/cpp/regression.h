@@ -161,7 +161,7 @@ namespace statiskit
                 virtual Index get_nb_components() const = 0;
             };
 
-        class STATISKIT_GLM_API MultinomialSplittingOperator : public MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >
+        /* class STATISKIT_GLM_API MultinomialSplittingOperator : public MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >
         {
             public:
                 MultinomialSplittingOperator(const VectorPredictor& predictor, const MultinomialSplittingLink& link);
@@ -321,7 +321,7 @@ namespace statiskit
                 
         //     private:
         //         virtual void update(const Eigen::VectorXd& values) const;  
-        // };
+        // }; */
     }
 }
 

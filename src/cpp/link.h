@@ -243,7 +243,7 @@ namespace statiskit
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };                                                   
 
-        struct STATISKIT_GLM_API MultinomialSplittingLink : VectorLink
+        /*struct STATISKIT_GLM_API MultinomialSplittingLink : VectorLink
         {
             typedef MultinomialSplittingOperator family_type;
 
@@ -277,7 +277,7 @@ namespace statiskit
             virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
 
             virtual std::unique_ptr< DirichletMultinomialSplittingLink > copy() const;
-        };
+        };*/
     }
 }
 

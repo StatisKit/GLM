@@ -61,7 +61,7 @@ namespace statiskit
         void OrdinalRegression::update(const Eigen::VectorXd& values) const
         { _family->set_ordered_pi(values); }                                
 
-        MultinomialSplittingOperator::MultinomialSplittingOperator(const VectorPredictor& predictor, const MultinomialSplittingLink& link) : MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >(predictor, link)
+        /* MultinomialSplittingOperator::MultinomialSplittingOperator(const VectorPredictor& predictor, const MultinomialSplittingLink& link) : MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >(predictor, link)
         {}
 
         MultinomialSplittingOperator::MultinomialSplittingOperator(const MultinomialSplittingOperator& splitting) : MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >(splitting)
@@ -215,6 +215,6 @@ namespace statiskit
         // { return _family->set_pi(pi); }
 
         // std::unique_ptr< MultivariateConditionalDistribution > MultinomialSplittingRegressionIII::copy() const
-        // { return std::make_unique< MultinomialSplittingRegressionIII >(*this); }
+        // { return std::make_unique< MultinomialSplittingRegressionIII >(*this); } */
     }
 }
