@@ -395,7 +395,7 @@ namespace statiskit
         std::unique_ptr< OrdinalLink > SequentialLink::copy() const
         { return std::make_unique< SequentialLink >(*this); }                 
 
-        MultinomialSplittingCanonicalLink::MultinomialSplittingCanonicalLink()
+        /* MultinomialSplittingCanonicalLink::MultinomialSplittingCanonicalLink()
         {}
 
         MultinomialSplittingCanonicalLink::~MultinomialSplittingCanonicalLink()
@@ -430,7 +430,7 @@ namespace statiskit
         { return inverse(values); }          
         
         std::unique_ptr< DirichletMultinomialSplittingLink > DirichletMultinomialSplittingCanonicalLink::copy() const
-        { return std::make_unique< DirichletMultinomialSplittingCanonicalLink >(*this); }
+        { return std::make_unique< DirichletMultinomialSplittingCanonicalLink >(*this); } */
     }
 }
 
