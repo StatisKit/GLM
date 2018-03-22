@@ -11,18 +11,22 @@ build:
 about:
   home: http://statiskit-glm.readthedocs.io
   license: Apache License 2.0
+  summary: A Python Interface from C++ Library for Modeling Conditional Data Using Generalized Linear Models
 
 requirements:
   build:
     - libtoolchain
-    - python-toolchain
-    - libboost
+    - libboost_core-dev
+    - libstatiskit_glm-dev
     - libstatiskit_glm
+    - libboost_python-dev
+    - libboost_python
     - python
   run:
-    - libruntime
-    - libboost
+    - libboost_python
     - libstatiskit_glm
+    - python-statiskit_linalg
+    - python-statiskit_stl
     - python-statiskit_core
     - python
 

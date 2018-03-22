@@ -11,13 +11,18 @@ build:
 about:
     home: http://statiskit-glm.readthedocs.io/
     license: Apache License 2.0
-
+    summary: A C++ Library for Modeling Conditional Data Using Generalized Linear Models
+    
 requirements:
     build:
         - libtoolchain
-        - libboost
+        - libstatiskit_glm-dev
+        - libstatiskit_stl
+        - libstatiskit_linalg
         - libstatiskit_core
+        - libboost_core-dev
     run:
-        - libruntime
         - libboost
+        - libstatiskit_stl
+        - libstatiskit_linalg
         - libstatiskit_core

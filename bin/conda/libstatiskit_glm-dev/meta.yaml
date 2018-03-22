@@ -1,0 +1,28 @@
+package:
+  name: libstatiskit_glm-dev
+  version: "1.0.0"
+
+source:
+  path: ../../..
+
+build:
+  number: 0
+
+about:
+  home: http://statiskit-stl.readthedocs.org
+  license: Apache License 2.0
+  summary: C++ Development Files for Modeling Conditional Data Using Generalized Linear Models
+
+requirements:
+  build:
+    - libtoolchain
+    - libtoolchain-dev
+    - libstatiskit_stl-dev
+    - libstatiskit_linalg-dev
+    - libstatiskit_core-dev
+    # - libboost_core-dev
+  run:
+    - libstatiskit_stl-dev
+    - libstatiskit_linalg-dev
+    - libstatiskit_core-dev
+    - libboost_core-dev
