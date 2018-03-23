@@ -5,19 +5,19 @@ from statiskit.core.distribution import (DiscreteUnivariateDistribution,
                                          UnivariateConditionalDistribution,
                                              DiscreteUnivariateConditionalDistribution)
 
-import _glm
-from __glm.statiskit.glm import (_GeneralizedLinearModel,
-                                    PoissonRegression,
-                                    BinomialRegression,
-                                    NegativeBinomialRegression,
-                                    NominalRegression,
-                                    OrdinalRegression)
-                                    # _SplittingRegressionI,
-                                    # _SplittingRegressionII,
-                                    # _SplittingRegressionIII,
-                                    # MultinomialSplittingRegressionI,
-                                    # MultinomialSplittingRegressionII,
-                                    # MultinomialSplittingRegressionIII)
+from . import _glm
+from .__glm.statiskit.glm import (_GeneralizedLinearModel,
+                                     PoissonRegression,
+                                     BinomialRegression,
+                                     NegativeBinomialRegression,
+                                     NominalRegression,
+                                     OrdinalRegression)
+                                     # _SplittingRegressionI,
+                                     # _SplittingRegressionII,
+                                     # _SplittingRegressionIII,
+                                     # MultinomialSplittingRegressionI,
+                                     # MultinomialSplittingRegressionII,
+                                     # MultinomialSplittingRegressionIII)
 
 __all__ = ['PoissonRegression',
            'BinomialRegression',

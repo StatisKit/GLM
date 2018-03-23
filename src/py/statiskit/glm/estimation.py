@@ -3,28 +3,28 @@ from statiskit.core import estimation
 from statiskit.core.data import UnivariateConditionalData
 from statiskit.core.estimation import (active_estimation_decorator,
                                        optimization_estimation_decorator)
-from link import NominalLink, OrdinalLink
-from predictor import ConstrainedVectorPredictor
+from .link import NominalLink, OrdinalLink
+from .predictor import ConstrainedVectorPredictor
 
-import _glm
-from __glm.statiskit import (_ActiveEstimation,
-                             _OptimizationEstimation)
-from __glm.statiskit.glm import (_ScalarRegressionFisherEstimation,
-                                    PoissonRegressionFisherEstimation,
-                                    BinomialRegressionFisherEstimation,
-                                    BinomialRegressionSteepestAscentEstimation,
-                                    NegativeBinomialRegressionFisherEstimation,
-                                    NegativeBinomialRegressionX2Estimation,
-                                 _CategoricalRegressionFisherEstimation, _ConstrainedRegressionFisherEstimation,
-                                        NominalCompleteRegressionFisherEstimation,
-                                        NominalProportionalRegressionFisherEstimation,
-                                        OrdinalCompleteRegressionFisherEstimation,
-                                        OrdinalProportionalRegressionFisherEstimation,
-                                        CumulativeCompleteRegressionFisherEstimation,
-                                        CumulativeProportionalRegressionFisherEstimation,                                                                                                                        
-                                        NominalConstrainedRegressionFisherEstimation,
-                                        OrdinalConstrainedRegressionFisherEstimation,
-                                        CumulativeConstrainedRegressionFisherEstimation)
+from . import _glm
+from .__glm.statiskit import (_ActiveEstimation,
+                              _OptimizationEstimation)
+from .__glm.statiskit.glm import (_ScalarRegressionFisherEstimation,
+                                     PoissonRegressionFisherEstimation,
+                                     BinomialRegressionFisherEstimation,
+                                     BinomialRegressionSteepestAscentEstimation,
+                                     NegativeBinomialRegressionFisherEstimation,
+                                     NegativeBinomialRegressionX2Estimation,
+                                  _CategoricalRegressionFisherEstimation, _ConstrainedRegressionFisherEstimation,
+                                         NominalCompleteRegressionFisherEstimation,
+                                         NominalProportionalRegressionFisherEstimation,
+                                         OrdinalCompleteRegressionFisherEstimation,
+                                         OrdinalProportionalRegressionFisherEstimation,
+                                         CumulativeCompleteRegressionFisherEstimation,
+                                         CumulativeProportionalRegressionFisherEstimation,                                                                                                                        
+                                         NominalConstrainedRegressionFisherEstimation,
+                                         OrdinalConstrainedRegressionFisherEstimation,
+                                         CumulativeConstrainedRegressionFisherEstimation)
 
 __all__ = ['poisson_estimation',
            'binomial_estimation',

@@ -6,7 +6,7 @@ import statiskit.linalg._linalg
 import statiskit.core._core
 
 # Import Boost.Python module
-import __glm
+from . import __glm
 
 # Resolve scopes
 __glm.statiskit._OptimizationEstimationImpl_abac012450c85167aeb33598ddc46ed9.Estimator = __glm.statiskit.__optimization_estimation_impl_abac012450c85167aeb33598ddc46ed9.Estimator

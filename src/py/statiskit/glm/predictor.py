@@ -2,13 +2,13 @@ from functools import wraps
 from statiskit.core.event import (MultivariateEvent,
                                     VectorEvent)
 
-import _glm
-from __glm.statiskit.glm import (ScalarPredictor, 
-                                     CompleteScalarPredictor,
-                                 VectorPredictor,
-                                     CompleteVectorPredictor,
-                                     ProportionalVectorPredictor,
-                                     ConstrainedVectorPredictor)
+from . import _glm
+from .__glm.statiskit.glm import (ScalarPredictor, 
+                                      CompleteScalarPredictor,
+                                  VectorPredictor,
+                                      CompleteVectorPredictor,
+                                      ProportionalVectorPredictor,
+                                      ConstrainedVectorPredictor)
 
 __all__ = ['CompleteScalarPredictor',
             'CompleteVectorPredictor',

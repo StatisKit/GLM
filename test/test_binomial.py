@@ -57,27 +57,27 @@ class TestBinomialRegression(unittest.TestCase):#, AbstractTestDiscreteRegressio
             if event.value > 0:
                 cls._data.Satellites.events[index] = core.DiscreteElementaryEvent(1)
 
-    def test_Fisher_estimation(self):
-        """Test binomial regression Fisher estimation"""
-        data = self._data.extract(explanatories=[1],
-                                  response=0)
-        fe = glm.binomial_estimation(algo='Fisher',
-                                     data=data,
-                                     kappa=1)
-        self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
-        self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
-        self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
+    # def test_Fisher_estimation(self):
+    #     """Test binomial regression Fisher estimation"""
+    #     data = self._data.extract(explanatories=[1],
+    #                               response=0)
+    #     fe = glm.binomial_estimation(algo='Fisher',
+    #                                  data=data,
+    #                                  kappa=1)
+    #     self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
+    #     self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
+    #     self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
 
-    def test_Fisher_estimation(self):
-        """Test binomial regression steepest ascent estimation"""
-        data = self._data.extract(explanatories=[1],
-                                  response=0)
-        fe = glm.binomial_estimation(algo='SA',
-                                     data=data)
-        self.assertEqual(fe.estimated.kappa, 1)
-        self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
-        self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
-        self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
+    # def test_Fisher_estimation(self):
+    #     """Test binomial regression steepest ascent estimation"""
+    #     data = self._data.extract(explanatories=[1],
+    #                               response=0)
+    #     fe = glm.binomial_estimation(algo='SA',
+    #                                  data=data)
+    #     self.assertEqual(fe.estimated.kappa, 1)
+    #     self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
+    #     self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
+    #     self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
 
     @classmethod
     def tearDownClass(cls):

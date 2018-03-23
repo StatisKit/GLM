@@ -18,25 +18,25 @@ class AbstractTestLink(object):
     _mu_prime = 1.
 
 
-    # def test_evaluate(self):
-    #     self.assertEqual(self._link.evaluate(self._mu), self._eta)
+    def test_evaluate(self):
+        self.assertEqual(self._link.evaluate(self._mu), self._eta)
 
-    # def test_inverse(self):
-    #     self.assertEqual(self._link.inverse(self._eta), self._mu)
-    #     self.assertEqual(self._link.inverse(self._link.evaluate(self._mu)), self._mu)
+    def test_inverse(self):
+        self.assertEqual(self._link.inverse(self._eta), self._mu)
+        self.assertEqual(self._link.inverse(self._link.evaluate(self._mu)), self._mu)
 
-    # def test_link_inverse_derivative(self):
-    #     self.assertEqual(self._link.inverse(self._link.evaluate(self._mu)), self._mu)
+    def test_link_inverse_derivative(self):
+        self.assertEqual(self._link.inverse(self._link.evaluate(self._mu)), self._mu)
 
-    # def test_link_inverse(self):
-    #     """Test Link inverse"""
-    #     self.assertEqual(self._canonical_link.inverse(self._eta), self._mu)
-    #     self.assertEqual(self._canonical_link.inverse(self._eta), self._logistic_link.inverse(self._eta))  
+    def test_link_inverse(self):
+        """Test Link inverse"""
+        self.assertEqual(self._canonical_link.inverse(self._eta), self._mu)
+        self.assertEqual(self._canonical_link.inverse(self._eta), self._logistic_link.inverse(self._eta))  
 
-    # def test_link_inverse_derivative(self):
-    #     """Test Link inverse derivative"""
-    #     self.assertEqual(self._canonical_link.inverse_derivative(self._eta), self._mu_prime)
-    #     self.assertAlmostEqual(self._canonical_link.inverse_derivative(self._eta), self._logistic_link.inverse_derivative(self._eta))    
+    def test_link_inverse_derivative(self):
+        """Test Link inverse derivative"""
+        self.assertEqual(self._canonical_link.inverse_derivative(self._eta), self._mu_prime)
+        self.assertAlmostEqual(self._canonical_link.inverse_derivative(self._eta), self._logistic_link.inverse_derivative(self._eta))    
 
 
 @attr(linux=True,

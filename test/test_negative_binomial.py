@@ -89,10 +89,10 @@ class TestNegativeBinomialRegression(unittest.TestCase, AbstractTestDiscreteRegr
                                               data=data)
         self.assertAlmostEqual(2 * fe.estimated.loglikelihood(data), -1093.41, places=2)
 
-    # def test_conditional_V(self):
-    #     """Test negative binomial regression (V link) conditional operator"""
-    #     response_distribution = self._V_model(*self._x)
-    #     self.assertAlmostEqual(response_distribution.mean, self._mu2, places = self._places)    
+    def test_conditional_V(self):
+        """Test negative binomial regression (V link) conditional operator"""
+        response_distribution = self._V_model(*self._x)
+        self.assertAlmostEqual(response_distribution.mean, self._mu2, places = self._places)    
 
     @classmethod
     def tearDownClass(cls):

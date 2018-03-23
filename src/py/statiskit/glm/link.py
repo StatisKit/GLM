@@ -1,27 +1,27 @@
 from functools import wraps
 
-import _glm
-from __glm.statiskit.glm import(_FLink,
-                                ScalarLink,
-                                PoissonLink,
-                                    PoissonCanonicalLink,
-                                    PoissonVLink,
-                                BinomialLink,
-                                    BinomialCanonicalLink,
-                                    BinomialFLink,
-                                NegativeBinomialLink,
-                                    NegativeBinomialCanonicalLink,
-                                    NegativeBinomialULink,
-                                    NegativeBinomialVLink,
-                                VectorLink,
-                                    NominalLink,
-                                        NominalCanonicalLink,
-                                        ReferenceLink,
-                                    OrdinalLink,
-                                        OrdinalCanonicalLink,
-                                        AdjacentLink,
-                                        CumulativeLink,
-                                        SequentialLink)
+from . import _glm
+from .__glm.statiskit.glm import(_FLink,
+                                 ScalarLink,
+                                 PoissonLink,
+                                     PoissonCanonicalLink,
+                                     PoissonVLink,
+                                 BinomialLink,
+                                     BinomialCanonicalLink,
+                                     BinomialFLink,
+                                 NegativeBinomialLink,
+                                     NegativeBinomialCanonicalLink,
+                                     NegativeBinomialULink,
+                                     NegativeBinomialVLink,
+                                 VectorLink,
+                                     NominalLink,
+                                         NominalCanonicalLink,
+                                         ReferenceLink,
+                                     OrdinalLink,
+                                         OrdinalCanonicalLink,
+                                         AdjacentLink,
+                                         CumulativeLink,
+                                         SequentialLink)
 
 __all__ = ['PoissonLink',
            'BinomialLink',
@@ -46,7 +46,7 @@ def _link(link, mapping, **kwargs):
         raise ValueError('\'link\' parameter, possible values are ' + ', '.join('"' + link + '"' for link in mapping.iterkeys()))
     except:
         raise
-    for attr in kwargs.keys():
+    for attr in list(kwargs.keys()):
         if hasattr(link, attr):
             setattr(link, attr, kwargs.pop(attr))
         else:
@@ -81,7 +81,7 @@ def _ratio(ratio, mapping, **kwargs):
         raise ValueError('\'ratio\' parameter, possible values are ' + ', '.join('"' + ratio + '"' for ratio in mapping.iterkeys()))
     except:
         raise
-    for attr in kwargs.keys():
+    for attr in list(kwargs.keys()):
         if hasattr(ratio, attr):
             setattr(ratio, attr, kwargs.pop(attr))
         else:
