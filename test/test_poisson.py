@@ -15,24 +15,17 @@ from test_regression import AbstractTestDiscreteRegression
       osx=True,
       win=True,
       level=0)
-class TestPoissonLink(unittest.TestCase, AbstractTestLink):
+class TestPoissonVLink(unittest.TestCase, AbstractTestLink):
 
     @classmethod
     def setUpClass(cls):
         """Test PoissonLink construction"""
-        cls._canonical_link = glm.PoissonLink()
-        cls._logistic_link = glm.PoissonLink(link='V')
-
-    def test_F_distribution(self):
-        """Test Poisson distribution property"""
-        link = glm.PoissonLink(link='V', distribution=core.NormalDistribution())
-        self.assertEqual(str(link.distribution), "N(0.0, 1.0)")
+        cls._link = glm.PoissonLink(link='V')
 
     @classmethod
     def tearDownClass(cls):
         """Test PoissonLink deletion"""
-        del cls._canonical_link 
-        del cls._logistic_link
+        del cls._link 
 
 @attr(linux=True,
       osx=True,

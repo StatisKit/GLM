@@ -92,7 +92,7 @@ def _estimation(algo, data, mapping, **kwargs):
         raise
     if data:
         lazy = kwargs.pop('lazy', False)
-    for attr in kwargs.keys():
+    for attr in list(kwargs.keys()):
         if hasattr(algo, attr):
             setattr(algo, attr, kwargs.pop(attr))
         else:

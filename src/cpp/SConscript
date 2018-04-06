@@ -20,9 +20,8 @@ wigenv = cppenv.Clone(tools = ['wig'])
 targets = wigenv.BoostPythonWIG('statiskit_glm', [target for target in targets if target.name.endswith('.h')],
                                 module='../py/wrapper/_glm.cpp',
                                 decorator='../py/statiskit/glm/_glm.py',
-                                parser_bootstrap=1,
                                 controller='AutoWIG.py',
-                                depends=['statiskit_linalg', 'statiskit_stl', 'statiskit_core'])
+                                depends=['statiskit_core'])
 Alias("autowig", targets)
 wigenv.Depends(targets, "cpp-dev")
 

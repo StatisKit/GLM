@@ -3,11 +3,11 @@
 
 #include <boost/python.hpp>
 #include <type_traits>
-#include <statiskit/glm/link.h>
-#include <statiskit/glm/regression.h>
-#include <statiskit/glm/predictor.h>
 #include <statiskit/glm/base.h>
 #include <statiskit/glm/estimator.h>
+#include <statiskit/glm/link.h>
+#include <statiskit/glm/predictor.h>
+#include <statiskit/glm/regression.h>
 #include <memory>
 
 namespace autowig

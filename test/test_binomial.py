@@ -15,26 +15,37 @@ from test_regression import AbstractTestDiscreteRegression
       osx=True,
       win=True,
       level=0)
-class TestBinomialLink(unittest.TestCase, AbstractTestLink):
+class TestBinomialCanonicalLink(unittest.TestCase, AbstractTestLink):
     _mu = 0.5
     _mu_prime = 0.25
 
     @classmethod
     def setUpClass(cls):
         """Test BinomialLink construction"""
-        cls._canonical_link = glm.BinomialLink()
-        cls._logistic_link = glm.BinomialLink(link='F')      
-
-    def test_F_distribution(self):
-        """Test Binomial distribution property"""
-        link = glm.BinomialLink(link='F', distribution=core.NormalDistribution())
-        self.assertEqual(str(link.distribution), "N(0.0, 1.0)")              
+        cls._link = glm.BinomialLink()                 
 
     @classmethod
     def tearDownClass(cls):
         """Test BinomialLink deletion"""
-        del cls._canonical_link 
-        del cls._logistic_link
+        del cls._link 
+
+@attr(linux=True,
+      osx=True,
+      win=True,
+      level=0)
+class TestBinomialFLink(unittest.TestCase, AbstractTestLink):
+    _mu = 0.5
+    _mu_prime = 0.25
+
+    @classmethod
+    def setUpClass(cls):
+        """Test BinomialLink construction"""
+        cls._link = glm.BinomialLink(link='F')                 
+
+    @classmethod
+    def tearDownClass(cls):
+        """Test BinomialLink deletion"""
+        del cls._link 
 
 @attr(linux=True,
       osx=True,
@@ -57,27 +68,27 @@ class TestBinomialRegression(unittest.TestCase):#, AbstractTestDiscreteRegressio
             if event.value > 0:
                 cls._data.Satellites.events[index] = core.DiscreteElementaryEvent(1)
 
-    # def test_Fisher_estimation(self):
-    #     """Test binomial regression Fisher estimation"""
-    #     data = self._data.extract(explanatories=[1],
-    #                               response=0)
-    #     fe = glm.binomial_estimation(algo='Fisher',
-    #                                  data=data,
-    #                                  kappa=1)
-    #     self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
-    #     self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
-    #     self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
+    def test_Fisher_estimation(self):
+        """Test binomial regression Fisher estimation"""
+        data = self._data.extract(explanatories=[1],
+                                  response=0)
+        fe = glm.binomial_estimation(algo='Fisher',
+                                     data=data,
+                                     kappa=1)
+        self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
+        self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
+        self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
 
-    # def test_Fisher_estimation(self):
-    #     """Test binomial regression steepest ascent estimation"""
-    #     data = self._data.extract(explanatories=[1],
-    #                               response=0)
-    #     fe = glm.binomial_estimation(algo='SA',
-    #                                  data=data)
-    #     self.assertEqual(fe.estimated.kappa, 1)
-    #     self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
-    #     self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
-    #     self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
+    def test_SA_estimation(self):
+        """Test binomial regression steepest ascent estimation"""
+        data = self._data.extract(explanatories=[1],
+                                  response=0)
+        fe = glm.binomial_estimation(algo='SA',
+                                     data=data)
+        self.assertEqual(fe.estimated.kappa, 1)
+        self.assertAlmostEqual(fe.estimated.predictor.alpha, -12.3508, places=4)
+        self.assertAlmostEqual(fe.estimated.predictor.delta[0], 0.4972, places=4)
+        self.assertAlmostEqual(fe.estimated.loglikelihood(data), -97.2263, places=4)
 
     @classmethod
     def tearDownClass(cls):

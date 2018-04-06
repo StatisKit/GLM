@@ -10,7 +10,7 @@ namespace statiskit
 {
     namespace glm
     {
-        template< class D, class B> class ScalarRegressionFisherEstimation  : public OptimizationEstimation< Eigen::VectorXd, D, B >
+        template< class D, class B> class ScalarRegressionFisherEstimation : public OptimizationEstimation< Eigen::VectorXd, D, B >
         {
             public:
                 ScalarRegressionFisherEstimation();

@@ -22,6 +22,12 @@ def load(*args):
                                          header=True,
                                          sep=' ',
                                          sample_spaces=sample_spaces)   
+    if 'cars.csv' in kwargs:
+        filepath = os.path.join(os.path.dirname(__file__), "cars.csv")
+        kwargs['cars.csv'] = read_csv(filepath,
+                                         header=True,
+                                         sep=',',
+                                         outcomes=["CATEGORICAL", "CATEGORICAL", "CATEGORICAL"])
 
     for arg in kwargs.keys():
         if kwargs[arg] is None:
