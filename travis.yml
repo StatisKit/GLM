@@ -11,8 +11,6 @@ services:
   
 env:
  - CONDA_RECIPE=bin/conda/libstatiskit_glm-dev
-   CONDA_VERSION=2
- - CONDA_RECIPE=bin/conda/libstatiskit_glm-dev
    CONDA_VERSION=3
  - CONDA_RECIPE=bin/conda/libstatiskit_glm
  - CONDA_RECIPE=bin/conda/python-statiskit_glm

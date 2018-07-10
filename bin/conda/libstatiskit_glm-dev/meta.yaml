@@ -7,6 +7,7 @@ source:
 
 build:
   number: 0
+  detect_binary_files_with_prefix: False
 
 about:
   home: http://statiskit-stl.readthedocs.org
@@ -15,6 +16,7 @@ about:
 
 requirements:
   build:
+    - python
     - libtoolchain
     - libtoolchain-dev
     - libstatiskit_stl-dev
