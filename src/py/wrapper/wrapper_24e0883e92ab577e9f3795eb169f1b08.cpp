@@ -29,13 +29,13 @@ void wrapper_24e0883e92ab577e9f3795eb169f1b08()
     boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
     boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
     boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::class_< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation, autowig::Held< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation >::Type, boost::python::bases< class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > > > class_24e0883e92ab577e9f3795eb169f1b08("NegativeBinomialRegressionFisherEstimation", "", boost::python::no_init);
+    boost::python::class_< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation, autowig::Held< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation >::Type, boost::python::bases< class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > > > class_24e0883e92ab577e9f3795eb169f1b08("NegativeBinomialRegressionFisherEstimation", "", boost::python::no_init);
     class_24e0883e92ab577e9f3795eb169f1b08.def(boost::python::init< class ::statiskit::glm::NegativeBinomialRegression const *, class ::statiskit::UnivariateConditionalData const * >(""));
     class_24e0883e92ab577e9f3795eb169f1b08.def(boost::python::init< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation const & >(""));
 
     if(autowig::Held< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation >::is_class)
     {
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation >::Type, autowig::Held< class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::NegativeBinomialRegressionFisherEstimation >::Type, autowig::Held< class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::NegativeBinomialRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > >::Type >();
     }
 
 }

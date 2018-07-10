@@ -20,6 +20,9 @@ namespace autowig
             virtual class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  inverse(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0) const
             { return this->get_override("inverse")(param_0); }
                         
+            virtual class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  evaluate(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0) const
+            { return this->get_override("evaluate")(param_0); }
+                        
 
         protected:
             

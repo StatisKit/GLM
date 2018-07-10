@@ -3,7 +3,11 @@ from statiskit.core import estimation
 from statiskit.core.data import UnivariateConditionalData
 from statiskit.core.estimation import (active_estimation_decorator,
                                        optimization_estimation_decorator)
-from .link import NominalLink, OrdinalLink
+from statiskit.core.distribution import (NormalDistribution,
+                                         LogisticDistribution,
+                                         LaplaceDistribution,
+                                         CauchyDistribution)
+from .link import NominalLink, OrdinalLink, BinaryLink
 from .predictor import ConstrainedVectorPredictor
 
 from . import _glm
@@ -15,22 +19,27 @@ from .__glm.statiskit.glm import (_ScalarRegressionFisherEstimation,
                                      BinomialRegressionSteepestAscentEstimation,
                                      NegativeBinomialRegressionFisherEstimation,
                                      NegativeBinomialRegressionX2Estimation,
+                                     BinaryRegressionFisherEstimation,
                                   _CategoricalRegressionFisherEstimation, _ConstrainedRegressionFisherEstimation,
                                          NominalCompleteRegressionFisherEstimation,
                                          NominalProportionalRegressionFisherEstimation,
                                          OrdinalCompleteRegressionFisherEstimation,
                                          OrdinalProportionalRegressionFisherEstimation,
                                          CumulativeCompleteRegressionFisherEstimation,
-                                         CumulativeProportionalRegressionFisherEstimation,                                                                                                                        
+                                         CumulativeProportionalRegressionFisherEstimation,                                                                                                                                                               
                                          NominalConstrainedRegressionFisherEstimation,
                                          OrdinalConstrainedRegressionFisherEstimation,
-                                         CumulativeConstrainedRegressionFisherEstimation)
+                                         CumulativeConstrainedRegressionFisherEstimation,
+                                   HierarchicalRegressionEstimation)
 
 __all__ = ['poisson_estimation',
            'binomial_estimation',
            'negative_binomial_estimation',
+           'binary_estimation',
            'nominal_estimation',
-           'ordinal_estimation']
+           'ordinal_estimation',
+           'hierarchical_estimation',
+           'NominalCompleteRegressionFisherEstimation']
 
 for cls in _ActiveEstimation:
     active_estimation_decorator(cls)
@@ -51,19 +60,17 @@ for cls in _ScalarRegressionFisherEstimation:
 
 for cls in _CategoricalRegressionFisherEstimation:
     cls.Estimator.link = property(cls.Estimator.get_link, cls.Estimator.set_link)
+    cls.Estimator.beta_init = property(cls.Estimator.get_beta_init, cls.Estimator.set_beta_init)
+    cls.Estimator.init = property(cls.Estimator.get_init, cls.Estimator.set_init)
     cls.loglikelihood = property(cls.get_loglikelihood)
     cls.loglikelihood_sequence = property(cls.get_loglikelihood_sequence)
-    del cls.Estimator.get_link, cls.Estimator.set_link, cls.get_loglikelihood, cls.get_loglikelihood_sequence
+    del cls.Estimator.get_link, cls.Estimator.set_link, cls.Estimator.get_beta_init, cls.Estimator.set_beta_init, cls.get_loglikelihood, cls.get_loglikelihood_sequence
 
 for cls in _ConstrainedRegressionFisherEstimation:
     cls.Estimator.intercept_constraint = property(cls.Estimator.get_intercept_constraint, cls.Estimator.set_intercept_constraint) 
     cls.Estimator.slope_constraint = property(cls.Estimator.get_slope_constraint, cls.Estimator.set_slope_constraint)
 #    cls.PartialProportionalEstimator.proportional = property(cls.PartialProportionalEstimator.get_proportional, cls.PartialProportionalEstimator.set_proportional)
     del cls.Estimator.get_intercept_constraint, cls.Estimator.set_intercept_constraint, cls.Estimator.get_slope_constraint, cls.Estimator.set_slope_constraint#, cls.PartialProportionalEstimator.get_proportional, cls.PartialProportionalEstimator.set_proportional
-
-for cls in (CumulativeCompleteRegressionFisherEstimation, CumulativeProportionalRegressionFisherEstimation, CumulativeConstrainedRegressionFisherEstimation):
-    cls.Estimator.beta_init = property(cls.Estimator.get_beta_init, cls.Estimator.set_beta_init)
-    del cls.Estimator.get_beta_init, cls.Estimator.set_beta_init
 
 def _data(data, mult, **kwargs):
     if data is not None and not isinstance(data, UnivariateConditionalData):
@@ -149,6 +156,17 @@ def negative_binomial_estimation(algo='X2', data=None, **kwargs):
                        algos,
                        **kwargs)
 
+def binary_estimation(algo='Fisher', data=None, **kwargs):
+    """
+    """
+    __data, kwargs = _data(data, False, **kwargs)
+    if 'distribution' in kwargs:
+        kwargs['link'] = BinaryLink(link = "F", distribution=kwargs.pop('distribution'))
+    return _estimation(algo, 
+                       __data,
+                       dict(Fisher = BinaryRegressionFisherEstimation.Estimator),
+                       **kwargs)
+
 def nominal_estimation(Z='complete', algo='Fisher', data=None, **kwargs):
     """
     """
@@ -172,7 +190,7 @@ def ordinal_estimation(Z='complete', algo='Fisher', data=None, **kwargs):
     algo = algo + '_' + Z
     if 'ratio' in kwargs:
         if kwargs['ratio'] == 'cumulative':
-            algo = algo + '_cumulative'
+            algo = algo + '_cumulative'      
         if 'distribution' in kwargs:
             kwargs['link'] = OrdinalLink(ratio=kwargs.pop('ratio'), distribution=kwargs.pop('distribution'))
         else:
@@ -191,5 +209,58 @@ def ordinal_estimation(Z='complete', algo='Fisher', data=None, **kwargs):
                             Fisher_constrained = OrdinalConstrainedRegressionFisherEstimation.Estimator,
                             Fisher_complete_cumulative = CumulativeCompleteRegressionFisherEstimation.Estimator,
                             Fisher_proportional_cumulative = CumulativeProportionalRegressionFisherEstimation.Estimator,
-                            Fisher_constrained_cumulative = CumulativeConstrainedRegressionFisherEstimation.Estimator),
+                            Fisher_constrained_cumulative = CumulativeConstrainedRegressionFisherEstimation.Estimator),                    
                        **kwargs)
+
+
+HierarchicalRegressionEstimation.Estimator.default_estimator = property(HierarchicalRegressionEstimation.Estimator.get_default_estimator, HierarchicalRegressionEstimation.Estimator.set_default_estimator)
+del HierarchicalRegressionEstimation.Estimator.get_default_estimator, HierarchicalRegressionEstimation.Estimator.set_default_estimator
+
+def wrapper__getitem__(f):
+    @wraps(f)
+    def __getitem__(self, value):
+        if isinstance(value, str):
+            return f(self, value)
+        else:
+            raise TypeError('\'value\' parameter')
+    return __getitem__
+
+HierarchicalRegressionEstimation.Estimator.__getitem__ = wrapper__getitem__(HierarchicalRegressionEstimation.Estimator.get_estimator)
+del HierarchicalRegressionEstimation.Estimator.get_estimator
+
+def wrapper__setitem__(f):
+    @wraps(f)
+    def __setitem__(self, value, estimator):
+        if isinstance(value, str):
+            return f(self, value, estimator)
+        else:
+            raise TypeError('\'value\' parameter')
+    return __setitem__
+
+HierarchicalRegressionEstimation.Estimator.__setitem__ = wrapper__setitem__(HierarchicalRegressionEstimation.Estimator.set_estimator)
+del HierarchicalRegressionEstimation.Estimator.set_estimator
+
+def wrapper__getitem__(f):
+    @wraps(f)
+    def __getitem__(self, value):
+        if isinstance(value, str):
+            return f(self, value)
+        else:
+            raise TypeError('\'value\' parameter')
+    return __getitem__
+
+HierarchicalRegressionEstimation.__getitem__ = wrapper__getitem__(HierarchicalRegressionEstimation.get_estimation)
+del HierarchicalRegressionEstimation.get_estimation
+
+def hierarchical_estimation(default = None, data = None, **kwargs):
+    lazy = kwargs.pop('lazy', False)
+    __data, kwargs = _data(data, False, **kwargs)
+    estimator = HierarchicalRegressionEstimation.Estimator()
+    if default is not None:
+        estimator.default_estimator = default
+    for arg in list(kwargs.keys()):
+        estimator[arg] = kwargs.pop(arg)
+    if __data:
+        return estimator(__data, lazy)
+    else:
+        return estimator

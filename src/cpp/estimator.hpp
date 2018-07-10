@@ -57,9 +57,9 @@ namespace statiskit
             {
                 Eigen::MatrixXd X = X_init(data);
                 Eigen::VectorXd y = y_init(data), w = w_init(data);
-                Eigen::VectorXd eta, mu = Eigen::VectorXd::Zero(y.size()), prime = Eigen::VectorXd::Zero(y.size()), prev, curr = Eigen::VectorXd::Zero(X.cols());
+                Eigen::VectorXd eta, mu = Eigen::VectorXd::Zero(y.size()), prime = Eigen::VectorXd::Zero(y.size()), prev, curr = Eigen::VectorXd::Zero(X.cols()); // TODO : initialize intercept equal to g(mean of y)
                 curr(0) = this->_link->evaluate(y.mean());
-                D* estimated = build_estimated(curr, *((data.get_explanatories())->get_sample_space()));
+                D* estimated = build_estimated(curr, data);//*((data.get_explanatories())->get_sample_space()));
                 std::unique_ptr< UnivariateConditionalDistributionEstimation > estimation;
                 if(!lazy)
                 { estimation = std::make_unique< ScalarRegressionFisherEstimation< D, B > >(estimated, &data); }
@@ -125,10 +125,49 @@ namespace statiskit
             }
 
         template<class D, class B>
-            Eigen::VectorXd ScalarRegressionFisherEstimation< D, B >::Estimator::y_init(const UnivariateConditionalData& data) const
+            Eigen::VectorXd ScalarRegressionFisherEstimation< D, B >::Estimator::w_init(const UnivariateConditionalData& data) const
+            {
+                Eigen::VectorXd w = Eigen::VectorXd::Ones(data.size());
+                std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
+                Index index = 0;
+                while(generator->is_valid())
+                { 
+                    w(index) = generator->weight();
+                    ++(*generator);
+                    ++index;
+                }
+                return w;
+            }
+ 
+        template<class D, class B>      
+            QuantitativeScalarRegressionFisherEstimation< D, B >::QuantitativeScalarRegressionFisherEstimation() : ScalarRegressionFisherEstimation< D, B >()
+            {}
+
+        template<class D, class B>
+            QuantitativeScalarRegressionFisherEstimation< D, B >::QuantitativeScalarRegressionFisherEstimation(D const * estimated, UnivariateConditionalData const * data) : ScalarRegressionFisherEstimation< D, B >(estimated, data)
+            {}
+
+        template<class D, class B>
+            QuantitativeScalarRegressionFisherEstimation< D, B >::QuantitativeScalarRegressionFisherEstimation(const QuantitativeScalarRegressionFisherEstimation  & estimation) : ScalarRegressionFisherEstimation< D, B >(estimation)
+            {}           
+
+        template<class D, class B>
+            QuantitativeScalarRegressionFisherEstimation< D, B >::Estimator::Estimator() : ScalarRegressionFisherEstimation< D, B >::Estimator()
+            {}
+        
+        template<class D, class B>
+            QuantitativeScalarRegressionFisherEstimation< D, B >::Estimator::~Estimator()
+            {}
+
+        template<class D, class B>
+            QuantitativeScalarRegressionFisherEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : ScalarRegressionFisherEstimation< D, B >::Estimator(estimator)
+            {}
+
+        template<class D, class B>
+            Eigen::VectorXd QuantitativeScalarRegressionFisherEstimation< D, B >::Estimator::y_init(const UnivariateConditionalData& data) const
             {
                 const UnivariateData* _data = data.get_response();
-                Eigen::VectorXd y = Eigen::VectorXd::Ones(_data->size());
+                Eigen::VectorXd y = Eigen::VectorXd::Zero(_data->size());
                 std::unique_ptr< UnivariateData::Generator > generator = _data->generator();
                 Index index = 0;
                 while(generator->is_valid())
@@ -144,21 +183,9 @@ namespace statiskit
                 return y;
             }
 
-        template<class D, class B>
-            Eigen::VectorXd ScalarRegressionFisherEstimation< D, B >::Estimator::w_init(const UnivariateConditionalData& data) const
-            {
-                Eigen::VectorXd w = Eigen::VectorXd::Ones(data.size());
-                std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
-                Index index = 0;
-                while(generator->is_valid())
-                { 
-                    w(index) = generator->weight();
-                    ++(*generator);
-                    ++index;
-                }
-                return w;
-            }
-         
+
+
+
         template< class D >      
             CategoricalRegressionFisherEstimation< D >::CategoricalRegressionFisherEstimation () :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >()
             {}
@@ -181,7 +208,10 @@ namespace statiskit
 
         template< class D >
             CategoricalRegressionFisherEstimation< D >::Estimator::Estimator() :  OptimizationEstimation< Eigen::VectorXd, D, CategoricalUnivariateConditionalDistributionEstimation >::Estimator()
-            { this->_maxits = 1e4; }
+            { 
+                this->_maxits = 1e4;
+                _init = initialization_type::OBSERVED; 
+            }
         
         template< class D >
             CategoricalRegressionFisherEstimation< D >::Estimator::~Estimator()
@@ -198,73 +228,122 @@ namespace statiskit
         template< class D >
             void CategoricalRegressionFisherEstimation< D >::Estimator::set_link(const typename D::link_type& link)
             { _link = link.copy().release(); }
-        
+
         template<class D >
             std::unique_ptr< UnivariateConditionalDistributionEstimation > CategoricalRegressionFisherEstimation< D >::Estimator::operator() (const UnivariateConditionalData& data, const bool& lazy) const
             {
-                std::unique_ptr< UnivariateConditionalDistributionEstimation > estimation;
-                if(lazy)
-                { estimation = std::make_unique< LazyEstimation< D, CategoricalUnivariateConditionalDistributionEstimation > >(static_cast< const D* >((*this)(data, false)->get_estimated())); }
-                else
-                {
-                    std::unique_ptr< CategoricalRegressionFisherEstimation< D > > _estimation = std::make_unique< CategoricalRegressionFisherEstimation< D > >(nullptr, &data);
-                    _estimation->_beta.clear();
-                    std::vector< Eigen::MatrixXd > Z = Z_init(data);
-                    std::vector< Eigen::VectorXd > y = y_init(data);
-                    std::vector< double > w = w_init(data);
-                    Eigen::VectorXd beta = beta_init(data);
-                    Eigen::MatrixXd ZG, ZGS, A;                
-                    Eigen::VectorXd b, eta, pi;
-                    double l_old, l_new = -1 * std::numeric_limits< double >::infinity();
-                    unsigned int its = 0;
-                    do
-                    { 
-                        _estimation->_beta.push_back(beta);
-                        l_old = l_new;
-                        l_new = 0;
+                std::vector< Eigen::MatrixXd > Z = Z_init(data);
+                std::vector< Eigen::VectorXd > y = y_init(data);
+                std::vector< double > w = w_init(data); 
+                Eigen::VectorXd beta_curr = beta_init(data), beta_prev;
+                D * estimated = build_estimated(beta_curr, *(data.get_explanatories()->get_sample_space()), *( data.get_response()->get_sample_space()));
 
-                    	A = Eigen::MatrixXd::Zero(beta.rows(), beta.rows());
-                    	b = Eigen::VectorXd::Zero(beta.rows());         
-                     
-                        for(Index k = 0; k < Z.size(); ++k)
-                        {
-    		                eta = Z[k] * beta;
-    		                pi = _link->inverse(eta);
+                std::unique_ptr< UnivariateConditionalDistributionEstimation > estimation;
+                if(!lazy)
+                { 
+                    estimation = std::make_unique< CategoricalRegressionFisherEstimation< D > >(estimated, &data); 
+                    static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_iterations.push_back(beta_curr);
+                }
+                else
+                { estimation = std::make_unique< LazyEstimation< D, CategoricalUnivariateConditionalDistributionEstimation > >(estimated); }
+
+                Eigen::MatrixXd ZG, ZGS, A;                
+                Eigen::VectorXd b, eta, pi;
+                double l_prev, l_curr = -1 * std::numeric_limits< double >::infinity(), L_curr;
+                unsigned int its = 0;
+                bool defined = true;
+                do
+                {
+                    l_prev = l_curr;
+                    l_curr = 0;
+
+                    beta_prev = beta_curr;
+
+                    A = Eigen::MatrixXd::Zero(beta_curr.rows(), beta_curr.rows());
+                    b = Eigen::VectorXd::Zero(beta_curr.rows());
+                    for(Index k = 0; k < Z.size(); ++k)
+                    {
+                        eta = Z[k] * beta_curr;
+                        //if(compatible(eta))
+                        //{
+                            pi = _link->inverse(eta);
+
+
+
+
+// for(unsigned int j=0; j<pi.size(); ++j)
+// {
+//     if(pi[j] == 0 || pi[j] == 1)
+//     { 
+//         std::cout << " indiv = " << k << std::endl; 
+//         std::cout << " category = " << j << std::endl;
+//         std::cout << " eta = " << std::endl;
+//         std::cout << eta << std::endl;
+//         std::cout << " pi = " << std::endl;
+//         std::cout << pi << std::endl;
+//     }
+// }
+// if(1-pi.sum() == 1)
+// { 
+//     std::cout << " indiv = " << k << std::endl; 
+//     std::cout << " category = " << pi.size()-1 << std::endl;
+// }
+// if(pi.sum() <= 0. || pi.sum() >= 1.)
+// {
+//     std::cout << " sum_1^(J-1) pi_j = " <<  pi.sum() << std::endl;
+// }
 
                             //// canonical link case :
                             // A += w[k] * Z[k].transpose().eval() * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ) * Z[k];
                             // b += w[k] * Z[k].transpose().eval() * (y[k] - pi);
 
-    		                ZG = Z[k].transpose().eval() * _link->inverse_derivative(eta);
+                            ZG = Z[k].transpose().eval() * _link->inverse_derivative(eta);
                             ZGS = ZG * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ).inverse();
-    		                A += w[k] * ZGS * ZG.transpose().eval();                             
-    		                b += w[k] * ZGS * (y[k] - pi);       
+                            A += w[k] * ZGS * ZG.transpose().eval();                             
+                            b += w[k] * ZGS * (y[k] - pi);       
 
-                            l_new += y[k].transpose().eval() * Eigen::VectorXd(pi.array().log()) + (1-y[k].sum())*std::log(1-pi.sum());                                  
-                        }
-                        _estimation->_loglikelihood_sequence.push_back(l_new);
-
-    					b += A * beta; 					
-                        beta = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::colPivHouseholderQr);
-                        ++its;
-
-                    }while((l_new-l_old)/std::abs(l_new)>this->_mindiff && its < 50); //while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
-    				_estimation->_Z = Z;
-    				_estimation->_y = y;
-    				_estimation->_w = w;
-                    if (l_new > l_old)
-                    {
-                        _estimation->_estimated = build_estimated(beta, *(data.get_explanatories()->get_sample_space()), *( data.get_response()->get_sample_space()));
-                        _estimation->_loglikelihood = l_new;
+                            l_curr += w[k] * ( y[k].transpose().eval() * Eigen::VectorXd(pi.array().log()) + (1-y[k].sum())*std::log(1-pi.sum()) ); 
+                        //}
+                        //else
+                        //{ defined = false; }                    
+      
                     }
-                    else
-                    {
-                        _estimation->_estimated = build_estimated(_estimation->_beta.back(), *(data.get_explanatories()->get_sample_space()), *( data.get_response()->get_sample_space() ) );
-                        _estimation->_loglikelihood = l_old;
-                    }
-                    estimation = std::move(_estimation);            
+
+                    //if(defined)
+                    //{
+                        static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_loglikelihood_sequence.push_back(l_curr);
+
+                        b += A * beta_curr;                  
+                        beta_curr = statiskit::linalg::solve(A, b, statiskit::linalg::solver_type::fullPivLu); //colPivHouseholderQr);
+                        if(!lazy)
+                        { static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_iterations.push_back(beta_curr); }
+                        ++its;                        
+                    //}
+
+// VectorPredictor* pred = estimated->get_predictor();
+// pred->set_beta(beta_curr);
+// //estimated->set_predictor(*pred);
+// L_curr = estimated->loglikelihood(data);
+// std::cout << "L_curr = " << L_curr << std::endl;
+
+std::cout << " | beta_curr - beta_prev | = " << statiskit::__impl::reldiff(beta_prev, beta_curr) << std::endl;
+                } while(this->run(its, statiskit::__impl::reldiff(beta_prev, beta_curr)) && (l_curr-l_prev)/std::abs(l_curr) > this->_mindiff && l_curr > l_prev && its < 10);//while((l_curr-l_prev)/std::abs(l_curr) > this->_mindiff && its < 1000); // && defined);//while(std::abs((l_curr-l_prev)/l_curr) > this->_mindiff && its < 50); //while(this->run(its, statiskit::__impl::reldiff(_estimation->_beta.back(), beta)));
+                
+                static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_Z = Z;
+                static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_y = y;
+                static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_w = w;
+                if (l_curr > l_prev) // && defined)
+                {
+                    estimated->get_predictor()->set_beta(beta_curr);
+                    static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_loglikelihood = l_curr;
                 }
-                return estimation;
+                else
+                {
+                    estimated->get_predictor()->set_beta(beta_prev);
+                    static_cast< CategoricalRegressionFisherEstimation< D >* >(estimation.get())->_loglikelihood = l_prev;
+                }           
+
+                return std::move(estimation);
             }
 
         template< class D >
@@ -304,17 +383,44 @@ namespace statiskit
                 return w;
             }
 
+        template<class D >
+            const Eigen::VectorXd& CategoricalRegressionFisherEstimation< D >::Estimator::get_beta_init() const
+            { return _beta_init; }
+                                             
+        template<class D >
+            void CategoricalRegressionFisherEstimation< D >::Estimator::set_beta_init(const Eigen::VectorXd& beta_init)
+            { 
+                _beta_init = beta_init; 
+                _init = initialization_type::GIVEN;
+            }
+
+        template<class D >
+            const typename CategoricalRegressionFisherEstimation< D >::Estimator::initialization_type& CategoricalRegressionFisherEstimation< D >::Estimator::get_init() const
+            { return _init; }
+
+        template<class D >
+            void CategoricalRegressionFisherEstimation< D >::Estimator::set_init(const CategoricalRegressionFisherEstimation< D >::Estimator::initialization_type& init)
+            { _init = init; }
+
         template< class D >
-            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation () : CategoricalRegressionFisherEstimation< D >()
+            bool CategoricalRegressionFisherEstimation< D >::Estimator::compatible(const Eigen::VectorXd& eta) const
+            { return true; }
+
+        template< class D >
+            CompleteRegressionFisherEstimation< D >::CompleteRegressionFisherEstimation() : CategoricalRegressionFisherEstimation< D >()
             {}
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation (D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation< D >(estimated, data)
+            CompleteRegressionFisherEstimation< D >::CompleteRegressionFisherEstimation(D const * estimated, UnivariateConditionalData const * data) : CategoricalRegressionFisherEstimation< D >(estimated, data)
             {}
 
         template< class D >
-            CompleteRegressionFisherEstimation < D >::CompleteRegressionFisherEstimation (const CompleteRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
+            CompleteRegressionFisherEstimation< D >::CompleteRegressionFisherEstimation(const CompleteRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
             {}
+
+        template< class D >
+        std::unique_ptr< UnivariateConditionalDistributionEstimation > CompleteRegressionFisherEstimation< D >::copy() const
+        { return std::make_unique< CompleteRegressionFisherEstimation< D > >(*this); }
 
         template< class D >
             CompleteRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation< D >::Estimator()
@@ -339,10 +445,10 @@ namespace statiskit
                 {
                     const MultivariateEvent* event = generator->event();
                     if(event)
-                    {      
-                        Z_k.block(0, J-1, J-1, (J-1) * p ) = Eigen::kroneckerProduct(identity, sample_space->encode(*event));
-                        Z.push_back(Z_k);
-                    }
+                    {  
+                       Z_k.block(0, J-1, J-1, (J-1) * p ) = Eigen::kroneckerProduct(identity, sample_space->encode(*event));
+                       Z.push_back(Z_k);
+                   }
                     else
                     {
                         Z_k.block(0, J-1, J-1, (J-1) * p ) = std::numeric_limits< double >::quiet_NaN() * Eigen::MatrixXd::Ones(J-1, (J-1) * p);
@@ -379,6 +485,10 @@ namespace statiskit
         template< class D >
             ProportionalRegressionFisherEstimation < D >::ProportionalRegressionFisherEstimation (const ProportionalRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
             {}
+
+        template< class D >
+        std::unique_ptr< UnivariateConditionalDistributionEstimation > ProportionalRegressionFisherEstimation< D >::copy() const
+        { return std::make_unique< ProportionalRegressionFisherEstimation< D > >(*this); }
 
         template< class D >
             ProportionalRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation< D >::Estimator()
@@ -444,6 +554,10 @@ namespace statiskit
         template< class D >
             ConstrainedRegressionFisherEstimation < D >::ConstrainedRegressionFisherEstimation (const ConstrainedRegressionFisherEstimation & estimation) : CategoricalRegressionFisherEstimation< D >(estimation)
             {}
+
+        template< class D >
+        std::unique_ptr< UnivariateConditionalDistributionEstimation > ConstrainedRegressionFisherEstimation< D >::copy() const
+        { return std::make_unique< ConstrainedRegressionFisherEstimation< D > >(*this); }
 
         template< class D >
             ConstrainedRegressionFisherEstimation < D >::Estimator::Estimator() : CategoricalRegressionFisherEstimation< D >::Estimator()
@@ -526,6 +640,7 @@ namespace statiskit
             Eigen::VectorXd ConstrainedRegressionFisherEstimation < D >::Estimator::beta_init(const UnivariateConditionalData& data) const
             {
                 Eigen::VectorXd beta = Eigen::VectorXd::Zero(_intercept_constraint.cols() + _slope_constraint.cols());
+                //(*_initialization)(beta);
                 return beta;
             }
 
@@ -587,8 +702,78 @@ namespace statiskit
                 const NominalSampleSpace& _response_space = static_cast< const NominalSampleSpace& >(response_space);
                 typename T::Estimator::predictor_type predictor = this->build_predictor(explanatory_space, _response_space.get_cardinality()-1);
                 predictor.set_beta(beta);
-                return new NominalRegression(_response_space.get_values(), predictor, *(this->_link));
+                NominalRegression * res = new NominalRegression(_response_space.get_values(), predictor, *(this->_link));
+                res->set_reference(_response_space.get_reference());
+                return res;
             }
+
+        template<class T >
+            Eigen::VectorXd NominalRegressionFisherEstimation < T >::Estimator::beta_init(const UnivariateConditionalData& data) const
+            {
+// std::cout << "1" << std::endl;
+ //                CategoricalUnivariateDistributionEstimation::Estimator estimator;
+ // std::cout << "2" << std::endl;               Eigen::VectorXd observed_pi = static_cast< const NominalDistribution* >((estimator( *(data.get_response()) ))->get_estimated())->get_pi();
+ // std::cout << "3" << std::endl;               std::set< std::string > categories = static_cast< const NominalDistribution* >((estimator( *(data.get_response()) ))->get_estimated())->get_values();
+ // std::cout << "4" << std::endl;               std::string reference = static_cast< const NominalSampleSpace* >( data.get_response()->get_sample_space() )->get_reference();
+ // std::cout << "5" << std::endl;               Eigen::VectorXd p = Eigen::VectorXd::Zero(observed_pi.size()-1);
+ // std::cout << "6" << std::endl;               Index d = distance(categories.cbegin(), categories.find(reference));   
+ // std::cout << "7" << std::endl;               if(d == p.size())
+ //                { p = observed_pi.segment(0,p.size()); }
+ //                else
+ //                {
+ //                    p.segment(0, d) = observed_pi.segment(0, d);
+ //                    p.segment(d, p.size()-d) = observed_pi.segment(d+1, p.size()-d);
+ //                }
+
+ //                //Eigen::VectorXd uniform_pi = Eigen::VectorXd::Constant(p.size(), 1./double(p.size()+1));              
+
+ //  std::cout << "8" << std::endl;              Eigen::VectorXd beta = T::Estimator::beta_init(data);
+ //                if ((*this)._beta_init.size() == beta.size())
+ //                { beta = (*this)._beta_init; }
+ //                else
+ //                { beta.segment(0, p.size()) = (*this)._link->evaluate(p); } // uniform_pi    
+ //   std::cout << "9" << std::endl;               return beta;
+
+
+                Eigen::VectorXd beta = T::Estimator::beta_init(data);
+                switch(this->get_init())
+                {
+                    case T::Estimator::initialization_type::OBSERVED:      
+                        {std::cout << "OBSERVED" << std::endl;
+                            CategoricalUnivariateDistributionEstimation::Estimator estimator;
+                            Eigen::VectorXd observed_pi = static_cast< const NominalDistribution* >((estimator( *(data.get_response()) ))->get_estimated())->get_pi();
+                            std::set< std::string > categories = static_cast< const NominalDistribution* >((estimator( *(data.get_response()) ))->get_estimated())->get_values();
+                            std::string reference = static_cast< const NominalSampleSpace* >( data.get_response()->get_sample_space() )->get_reference();
+                            Eigen::VectorXd p = Eigen::VectorXd::Zero(observed_pi.size()-1);
+                            Index d = distance(categories.cbegin(), categories.find(reference));   
+                            if(d == p.size())
+                            { p = observed_pi.segment(0,p.size()); }
+                            else
+                            {
+                                p.segment(0, d) = observed_pi.segment(0, d);
+                                p.segment(d, p.size()-d) = observed_pi.segment(d+1, p.size()-d);
+                            }
+                            beta.segment(0, p.size()) = (*this)._link->evaluate(p); 
+                            break;
+                        }
+                    case T::Estimator::initialization_type::UNIFORM:
+                        {std::cout << "UNIFORM" << std::endl;
+                            Index J = static_cast< const CategoricalSampleSpace* >( data.get_response()->get_sample_space() )->get_cardinality();
+                            Eigen::VectorXd p = Eigen::VectorXd::Constant(J-1, 1./double(J)); 
+                            beta.segment(0, p.size()) = (*this)._link->evaluate(p);
+                            break;
+                        }
+                    case T::Estimator::initialization_type::GIVEN:
+                        {std::cout << "GIVEN" << std::endl;
+                            if ((*this)._beta_init.size() == beta.size())
+                            { beta = (*this)._beta_init; }
+                            else
+                            { throw size_error("beta.size()", (*this)._beta_init.size(), beta.size()); }                    
+                            break;
+                        }
+                }
+                return beta;
+            }  
 
 
         template<class T >
@@ -618,7 +803,21 @@ namespace statiskit
                 typename T::Estimator::predictor_type predictor = this->build_predictor(explanatory_space, _response_space.get_cardinality()-1);
                 predictor.set_beta(beta);
                 return new OrdinalRegression(_response_space.get_ordered(), predictor, *(this->_link));
-            }  
+            } 
+
+        template<class T >
+            Eigen::VectorXd OrdinalRegressionFisherEstimation < T >::Estimator::beta_init(const UnivariateConditionalData& data) const
+            {
+                CategoricalUnivariateDistributionEstimation::Estimator estimator;
+                Eigen::VectorXd observed_pi = static_cast< const OrdinalDistribution* >((estimator( *(data.get_response()) ))->get_estimated())->get_ordered_pi();
+                //Eigen::VectorXd uniform_pi = Eigen::VectorXd::Constant(observed_pi.size()-1, 1./double(observed_pi.size()));              
+                Eigen::VectorXd beta = T::Estimator::beta_init(data);
+                if ((*this)._beta_init.size() == beta.size())
+                { beta = (*this)._beta_init; }
+                else
+                { beta.segment(0, observed_pi.size()-1) = (*this)._link->evaluate(observed_pi.segment(0,observed_pi.size()-1)); }       
+                return beta;
+            }             
 
         template<class T >
             CumulativeRegressionFisherEstimation < T >::CumulativeRegressionFisherEstimation () : OrdinalRegressionFisherEstimation < T >()
@@ -641,26 +840,18 @@ namespace statiskit
             {} 
 
         template<class T >
-            const Eigen::VectorXd& CumulativeRegressionFisherEstimation < T >::Estimator::get_beta_init() const
-            { return _beta_init; }
-                                             
-        template<class T >
-            void CumulativeRegressionFisherEstimation < T >::Estimator::set_beta_init(const Eigen::VectorXd& beta_init)
-            { _beta_init = beta_init; }
-
-        template<class T >
-            Eigen::VectorXd CumulativeRegressionFisherEstimation < T >::Estimator::beta_init(const UnivariateConditionalData& data) const
+            bool CumulativeRegressionFisherEstimation < T >::Estimator::compatible(const Eigen::VectorXd& eta) const
             {
-                Index J = static_cast< const CategoricalSampleSpace* >( data.get_response()->get_sample_space() )->get_cardinality();
-                Eigen::VectorXd beta = T::Estimator::beta_init(data);
-                if (_beta_init.size() == beta.size())
-                { beta = _beta_init; }
-                else
+                bool defined = true;
+                if(eta.size() > 1)
                 {
-                    for (Index j=0; j<(J-1); ++j)
-                    { beta[j] = LogisticDistribution().quantile(double(1+j) / double(J)); }
-                }                          
-                return beta;
+                    unsigned int j = 0;
+                    while(eta[j] < eta[j+1] && j < eta.size()-1)
+                    { ++j; }
+                    if(j < eta.size()-1)
+                    { defined = false; }                    
+                }
+                return defined;
             }
     }
 }
