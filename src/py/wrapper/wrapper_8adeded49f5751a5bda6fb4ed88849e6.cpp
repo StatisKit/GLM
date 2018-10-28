@@ -31,12 +31,14 @@ void wrapper_8adeded49f5751a5bda6fb4ed88849e6()
     boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
     double const & (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::*method_pointer_d8e7cc51298455d598ecb20ad7be582b)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::get_loglikelihood;
     class ::std::vector< double, class ::std::allocator< double > > const & (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::*method_pointer_ad16153accb15d779aa4229bc2cd9810)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::get_loglikelihood_sequence;
+    bool const & (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::NominalRegression >::*method_pointer_5fa02f13c3a059be8d56641aa7a3cab1)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >::get_converged;
     boost::python::class_< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression >, autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression > >::Type, boost::python::bases< struct ::statiskit::OptimizationEstimation< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >, class ::statiskit::glm::NominalRegression, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation > > > class_8adeded49f5751a5bda6fb4ed88849e6("_CategoricalRegressionFisherEstimation_8adeded49f5751a5bda6fb4ed88849e6", "", boost::python::no_init);
     class_8adeded49f5751a5bda6fb4ed88849e6.def(boost::python::init<  >(""));
     class_8adeded49f5751a5bda6fb4ed88849e6.def(boost::python::init< class ::statiskit::glm::NominalRegression const *, class ::statiskit::UnivariateConditionalData const * >(""));
     class_8adeded49f5751a5bda6fb4ed88849e6.def(boost::python::init< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression > const & >(""));
     class_8adeded49f5751a5bda6fb4ed88849e6.def("get_loglikelihood", method_pointer_d8e7cc51298455d598ecb20ad7be582b, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_8adeded49f5751a5bda6fb4ed88849e6.def("get_loglikelihood_sequence", method_pointer_ad16153accb15d779aa4229bc2cd9810, boost::python::return_value_policy< boost::python::return_by_value >(), "");
+    class_8adeded49f5751a5bda6fb4ed88849e6.def("get_converged", method_pointer_5fa02f13c3a059be8d56641aa7a3cab1, boost::python::return_value_policy< boost::python::return_by_value >(), "");
 
     if(autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::NominalRegression > >::is_class)
     {

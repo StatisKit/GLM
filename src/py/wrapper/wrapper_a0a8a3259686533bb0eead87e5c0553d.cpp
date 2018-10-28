@@ -20,12 +20,6 @@ namespace autowig
             virtual class ::statiskit::glm::OrdinalRegression * build_estimated(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0, struct ::statiskit::MultivariateSampleSpace const & param_1, struct ::statiskit::UnivariateSampleSpace const & param_2) const
             { return this->get_override("build_estimated")(param_0, param_1, param_2); }
                         
-            virtual class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  beta_init(class ::statiskit::UnivariateConditionalData const & param_0) const
-            { return this->get_override("beta_init")(param_0); }
-                        
-            virtual class ::std::vector< class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 >, class ::std::allocator< class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > > >  Z_init(class ::statiskit::UnivariateConditionalData const & param_0) const
-            { return this->get_override("Z_init")(param_0); }
-                        
 
         private:
             
@@ -63,17 +57,17 @@ void wrapper_a0a8a3259686533bb0eead87e5c0553d()
     boost::python::scope scope_e7c465f54bff53b2b62fea726a278b20 = module_e7c465f54bff53b2b62fea726a278b20;
     struct ::statiskit::glm::OrdinalLink const * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_2608eb86880654d4a3ba3d0c836c19ee)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::get_link;
     void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_81ea2953b2735786bc7122456c3eb2c5)(struct ::statiskit::glm::OrdinalLink const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::set_link;
-    class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_87e574258c48524886bc01f8a6b400d1)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::get_beta_init;
-    void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_9ded172671a1556ca30c4765cd3975f9)(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::set_beta_init;
-    enum ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::initialization_type const & (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_4d9b5560fd6d54a19f3e6b7c88d5e0fb)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::get_init;
-    void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_459bb6ed52905114b02685188a8a5dda)(enum ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::initialization_type const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::set_init;
+    struct ::statiskit::glm::Design const * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_16ef8a564f9b5803b23a5b35562f4d4f)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::get_design;
+    void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_f7ed4a95360b5352829d2da5db7ddb79)(struct ::statiskit::glm::Design const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::set_design;
+    struct ::statiskit::glm::CategoricalFisherInitialization const * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_18c83fa61fcc56188140c7920832c3b4)() const = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::get_initialization;
+    void  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*method_pointer_1e091e9383b25045bcbb4b27e735a011)(struct ::statiskit::glm::CategoricalFisherInitialization const &) = &::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator::set_initialization;
     boost::python::class_< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d, autowig::Held< autowig::Wrap_a0a8a3259686533bb0eead87e5c0553d >::Type, boost::python::bases< struct ::statiskit::OptimizationEstimation< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >, class ::statiskit::glm::OrdinalRegression, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation >::Estimator >, boost::noncopyable > class_a0a8a3259686533bb0eead87e5c0553d("Estimator", "", boost::python::no_init);
     class_a0a8a3259686533bb0eead87e5c0553d.def("get_link", method_pointer_2608eb86880654d4a3ba3d0c836c19ee, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_a0a8a3259686533bb0eead87e5c0553d.def("set_link", method_pointer_81ea2953b2735786bc7122456c3eb2c5, "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("get_beta_init", method_pointer_87e574258c48524886bc01f8a6b400d1, boost::python::return_value_policy< boost::python::return_by_value >(), "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("set_beta_init", method_pointer_9ded172671a1556ca30c4765cd3975f9, "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("get_init", method_pointer_4d9b5560fd6d54a19f3e6b7c88d5e0fb, boost::python::return_value_policy< boost::python::return_by_value >(), "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("set_init", method_pointer_459bb6ed52905114b02685188a8a5dda, "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("get_design", method_pointer_16ef8a564f9b5803b23a5b35562f4d4f, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("set_design", method_pointer_f7ed4a95360b5352829d2da5db7ddb79, "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("get_initialization", method_pointer_18c83fa61fcc56188140c7920832c3b4, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("set_initialization", method_pointer_1e091e9383b25045bcbb4b27e735a011, "");
 
     if(autowig::Held< class ::statiskit::glm::CategoricalRegressionFisherEstimation< class ::statiskit::glm::OrdinalRegression >::Estimator >::is_class)
     {

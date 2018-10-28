@@ -31,7 +31,6 @@ void wrapper_9561b22f72b95747b71c0dff7161cd37()
     boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
     boost::python::class_< struct ::statiskit::glm::OrdinalCanonicalLink, autowig::Held< struct ::statiskit::glm::OrdinalCanonicalLink >::Type, boost::python::bases< struct ::statiskit::glm::OrdinalLink > > class_9561b22f72b95747b71c0dff7161cd37("OrdinalCanonicalLink", "", boost::python::no_init);
     class_9561b22f72b95747b71c0dff7161cd37.def(boost::python::init<  >(""));
-    class_9561b22f72b95747b71c0dff7161cd37.def(boost::python::init< struct ::statiskit::glm::OrdinalCanonicalLink const & >(""));
 
     if(autowig::Held< struct ::statiskit::glm::OrdinalCanonicalLink >::is_class)
     {

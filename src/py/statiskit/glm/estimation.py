@@ -13,6 +13,7 @@ from .predictor import ConstrainedVectorPredictor
 from . import _glm
 from .__glm.statiskit import (_ActiveEstimation,
                               _OptimizationEstimation)
+
 from .__glm.statiskit.glm import (_ScalarRegressionFisherEstimation,
                                      PoissonRegressionFisherEstimation,
                                      BinomialRegressionFisherEstimation,
@@ -20,17 +21,18 @@ from .__glm.statiskit.glm import (_ScalarRegressionFisherEstimation,
                                      NegativeBinomialRegressionFisherEstimation,
                                      NegativeBinomialRegressionX2Estimation,
                                      BinaryRegressionFisherEstimation,
-                                  _CategoricalRegressionFisherEstimation, _ConstrainedRegressionFisherEstimation,
-                                         NominalCompleteRegressionFisherEstimation,
-                                         NominalProportionalRegressionFisherEstimation,
-                                         OrdinalCompleteRegressionFisherEstimation,
-                                         OrdinalProportionalRegressionFisherEstimation,
-                                         CumulativeCompleteRegressionFisherEstimation,
-                                         CumulativeProportionalRegressionFisherEstimation,                                                                                                                                                               
-                                         NominalConstrainedRegressionFisherEstimation,
-                                         OrdinalConstrainedRegressionFisherEstimation,
-                                         CumulativeConstrainedRegressionFisherEstimation,
-                                   HierarchicalRegressionEstimation)
+                                  _CategoricalRegressionFisherEstimation,
+                                         NominalRegressionFisherEstimation,
+                                         OrdinalRegressionFisherEstimation,
+                                  HierarchicalRegressionEstimation,
+                                  Design,
+                                         CompleteDesign,
+                                         ProportionalDesign,
+                                         ConstrainedDesign,
+                                 CategoricalFisherInitialization,
+                                         CategoricalFisherObservedInitialization,
+                                         CategoricalFisherUniformInitialization,
+                                         CategoricalFisherCustomInitialization)
 
 __all__ = ['poisson_estimation',
            'binomial_estimation',
@@ -38,8 +40,7 @@ __all__ = ['poisson_estimation',
            'binary_estimation',
            'nominal_estimation',
            'ordinal_estimation',
-           'hierarchical_estimation',
-           'NominalCompleteRegressionFisherEstimation']
+           'hierarchical_estimation']
 
 for cls in _ActiveEstimation:
     active_estimation_decorator(cls)
@@ -58,19 +59,31 @@ def scalar_regression_fihser_estimator_decorator(cls):
 for cls in _ScalarRegressionFisherEstimation:
     scalar_regression_fihser_estimator_decorator(cls.Estimator)
 
-for cls in _CategoricalRegressionFisherEstimation:
+def vector_regression_fisher_estimator_decorator(cls):
     cls.Estimator.link = property(cls.Estimator.get_link, cls.Estimator.set_link)
-    cls.Estimator.beta_init = property(cls.Estimator.get_beta_init, cls.Estimator.set_beta_init)
-    cls.Estimator.init = property(cls.Estimator.get_init, cls.Estimator.set_init)
-    cls.loglikelihood = property(cls.get_loglikelihood)
-    cls.loglikelihood_sequence = property(cls.get_loglikelihood_sequence)
-    del cls.Estimator.get_link, cls.Estimator.set_link, cls.Estimator.get_beta_init, cls.Estimator.set_beta_init, cls.get_loglikelihood, cls.get_loglikelihood_sequence
+    del cls.Estimator.get_link, cls.Estimator.set_link
 
-for cls in _ConstrainedRegressionFisherEstimation:
-    cls.Estimator.intercept_constraint = property(cls.Estimator.get_intercept_constraint, cls.Estimator.set_intercept_constraint) 
-    cls.Estimator.slope_constraint = property(cls.Estimator.get_slope_constraint, cls.Estimator.set_slope_constraint)
-#    cls.PartialProportionalEstimator.proportional = property(cls.PartialProportionalEstimator.get_proportional, cls.PartialProportionalEstimator.set_proportional)
-    del cls.Estimator.get_intercept_constraint, cls.Estimator.set_intercept_constraint, cls.Estimator.get_slope_constraint, cls.Estimator.set_slope_constraint#, cls.PartialProportionalEstimator.get_proportional, cls.PartialProportionalEstimator.set_proportional
+    cls.Estimator.design = property(cls.Estimator.get_design, cls.Estimator.set_design)
+    del cls.Estimator.get_design, cls.Estimator.set_design
+
+    cls.Estimator.initialization = property(cls.Estimator.get_initialization, cls.Estimator.set_initialization)
+    del cls.Estimator.get_initialization, cls.Estimator.set_initialization
+
+    cls.loglikelihood = property(cls.get_loglikelihood)
+    del cls.get_loglikelihood
+
+    cls.loglikelihood_sequence = property(cls.get_loglikelihood_sequence)
+    del cls.get_loglikelihood_sequence
+
+    # cls.information_inverse = property(cls.get_information_inverse)
+    # del cls.get_information_inverse
+
+    cls.converged = property(cls.get_converged)
+    del cls.get_converged
+
+for cls in _CategoricalRegressionFisherEstimation:
+    vector_regression_fisher_estimator_decorator(cls)
+
 
 def _data(data, mult, **kwargs):
     if data is not None and not isinstance(data, UnivariateConditionalData):
@@ -167,30 +180,60 @@ def binary_estimation(algo='Fisher', data=None, **kwargs):
                        dict(Fisher = BinaryRegressionFisherEstimation.Estimator),
                        **kwargs)
 
-def nominal_estimation(Z='complete', algo='Fisher', data=None, **kwargs):
+ConstrainedDesign.intercept_constraint = property(ConstrainedDesign.get_intercept_constraint, ConstrainedDesign.set_intercept_constraint)
+del ConstrainedDesign.get_intercept_constraint, ConstrainedDesign.set_intercept_constraint
+ConstrainedDesign.slope_constraint = property(ConstrainedDesign.get_slope_constraint, ConstrainedDesign.set_slope_constraint)
+del ConstrainedDesign.get_slope_constraint, ConstrainedDesign.set_slope_constraint
+
+CategoricalFisherCustomInitialization.beta = property(CategoricalFisherCustomInitialization.get_beta, CategoricalFisherCustomInitialization.set_beta)
+del CategoricalFisherCustomInitialization.get_beta, CategoricalFisherCustomInitialization.set_beta
+
+def _categorical_estimation(Z, init, cdata, **kwargs):
+    if Z == 'complete':
+        kwargs['design'] = CompleteDesign()
+    elif Z == 'proportional':
+        kwargs['design'] = ProportionalDesign()
+    elif Z == 'constrained':
+        design = ConstrainedDesign()
+        if 'partial_proportional' in kwargs:
+            design.slope_constraint = ConstrainedVectorPredictor.partial_proportional_constraint(cdata, kwargs.pop('partial_proportional'))
+        if 'slope_constraint' in kwargs:
+            design.slope_constraint = kwargs.pop('slope_constraint')
+        if 'intercept_constraint' in kwargs:
+            design.intercept_constraint = kwargs.pop('intercept_constraint')
+        kwargs['design'] = design
+    if init == 'observed':
+        kwargs['initialization'] = CategoricalFisherObservedInitialization()
+    elif init == 'uniform':
+        kwargs['initialization'] = CategoricalFisherUniformInitialization()
+    elif init == 'custom':
+        if 'beta' in kwargs:
+            kwargs['initialization'] = CategoricalFisherCustomInitialization(kwargs.pop('beta'))
+        else:
+            assert("beta parameter is missing")
+    return kwargs
+
+
+def nominal_estimation(Z='complete', algo='Fisher', init='observed', data=None, **kwargs):
     """
     """
     __data, kwargs = _data(data, False, **kwargs)
-    algo = algo + '_' + Z
+    kwargs = _categorical_estimation(Z, init, __data, **kwargs)
     if 'distribution' in kwargs:
         kwargs['link'] = NominalLink(ratio='reference', distribution=kwargs.pop('distribution'))
-    if 'partial_proportional' in kwargs:
-        kwargs['slope_constraint'] = ConstrainedVectorPredictor.partial_proportional_constraint(data, kwargs.pop('partial_proportional'))
+    else:
+        kwargs['link'] = NominalLink()
     return _estimation(algo, 
                        __data,
-                       dict(Fisher_complete = NominalCompleteRegressionFisherEstimation.Estimator,
-                            Fisher_proportional = NominalProportionalRegressionFisherEstimation.Estimator,
-                            Fisher_constrained = NominalConstrainedRegressionFisherEstimation.Estimator),
+                       dict(Fisher = NominalRegressionFisherEstimation.Estimator),
                        **kwargs)
 
-def ordinal_estimation(Z='complete', algo='Fisher', data=None, **kwargs):
+def ordinal_estimation(Z='complete', algo='Fisher', init='observed', data=None, **kwargs):
     """
     """
     __data, kwargs = _data(data, False, **kwargs)
-    algo = algo + '_' + Z
-    if 'ratio' in kwargs:
-        if kwargs['ratio'] == 'cumulative':
-            algo = algo + '_cumulative'      
+    kwargs = _categorical_estimation(Z, init, __data, **kwargs)
+    if 'ratio' in kwargs:      
         if 'distribution' in kwargs:
             kwargs['link'] = OrdinalLink(ratio=kwargs.pop('ratio'), distribution=kwargs.pop('distribution'))
         else:
@@ -200,18 +243,10 @@ def ordinal_estimation(Z='complete', algo='Fisher', data=None, **kwargs):
             kwargs['link'] = OrdinalLink(ratio='adjacent', distribution=kwargs.pop('distribution'))        
         else:
             kwargs['link'] = OrdinalLink()
-    if 'partial_proportional' in kwargs:
-        kwargs['slope_constraint'] = ConstrainedVectorPredictor.partial_proportional_constraint(__data, kwargs.pop('partial_proportional'))
     return _estimation(algo, 
                        __data,
-                       dict(Fisher_complete = OrdinalCompleteRegressionFisherEstimation.Estimator,
-                            Fisher_proportional = OrdinalProportionalRegressionFisherEstimation.Estimator,
-                            Fisher_constrained = OrdinalConstrainedRegressionFisherEstimation.Estimator,
-                            Fisher_complete_cumulative = CumulativeCompleteRegressionFisherEstimation.Estimator,
-                            Fisher_proportional_cumulative = CumulativeProportionalRegressionFisherEstimation.Estimator,
-                            Fisher_constrained_cumulative = CumulativeConstrainedRegressionFisherEstimation.Estimator),                    
+                       dict(Fisher = OrdinalRegressionFisherEstimation.Estimator),
                        **kwargs)
-
 
 HierarchicalRegressionEstimation.Estimator.default_estimator = property(HierarchicalRegressionEstimation.Estimator.get_default_estimator, HierarchicalRegressionEstimation.Estimator.set_default_estimator)
 del HierarchicalRegressionEstimation.Estimator.get_default_estimator, HierarchicalRegressionEstimation.Estimator.set_default_estimator
