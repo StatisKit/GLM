@@ -41,16 +41,43 @@ namespace statiskit
 		{ return std::make_unique< NegativeBinomialRegression >(*this); }
 		
         void NegativeBinomialRegression::update(const double& value) const
-        { _family->set_pi(value / (1 + value)); } 
+        { _family->set_pi(value / (1 + value)); }
+
+        BinaryRegression::BinaryRegression(const std::string& value, const std::string reference_value, const ScalarPredictor& predictor, const BinaryLink& link) :  CategoricalGeneralizedLinearModel< BinaryLink >(predictor, link)
+        { _family = new BinaryDistribution(value, reference_value); }
+                 
+        std::unique_ptr< UnivariateConditionalDistribution > BinaryRegression::copy() const
+        { return std::make_unique< BinaryRegression >(*this); }
+                           
+        void BinaryRegression::update(const double& value) const
+        { _family->set_pi(value); } 
         
         NominalRegression::NominalRegression(const std::set< std::string >& values, const VectorPredictor& predictor, const NominalLink& link) :  CategoricalGeneralizedLinearModel< NominalLink >(predictor, link)
-        { _family = new NominalDistribution(values); }
-        
+        { 
+            _family = new NominalDistribution(values); 
+            std::set< std::string >::const_iterator it = values.cend();
+            --it;
+            _reference = *(it);
+        }
+
+        void NominalRegression::set_reference(const std::string& value)
+        { _reference = value; }
+
 		std::unique_ptr< UnivariateConditionalDistribution > NominalRegression::copy() const
 		{ return std::make_unique< NominalRegression >(*this); }
 		
         void NominalRegression::update(const Eigen::VectorXd& values) const
-        { _family->set_pi(values); }   
+        {
+            std::set< std::string > categories = _family->get_values();
+            Index d = distance(categories.cbegin(), categories.find(_reference));
+            Eigen::VectorXd pi = Eigen::VectorXd::Zero(values.rows()+1);
+            pi[d] = 1-values.sum();
+            for(Index index = 0; index < d; ++index)
+            { pi[index] = values[index]; }
+            for(Index index = d + 1; index < pi.rows(); ++index)
+            { pi[index] = values[index-1] ;}
+            _family->set_pi(pi); 
+        }   
         
         OrdinalRegression::OrdinalRegression(const std::vector< std::string >& values, const VectorPredictor& predictor, const OrdinalLink& link) :  CategoricalGeneralizedLinearModel< OrdinalLink >(predictor, link)
         { _family = new OrdinalDistribution(values); }
@@ -59,7 +86,125 @@ namespace statiskit
 		{ return std::make_unique< OrdinalRegression >(*this); }
 		
         void OrdinalRegression::update(const Eigen::VectorXd& values) const
-        { _family->set_ordered_pi(values); }                                
+        { _family->set_ordered_pi(values); }
+
+        HierarchicalRegression::HierarchicalRegression(const HierarchicalSampleSpace& hss, const MultivariateSampleSpace& explanatory_space)
+        {
+            _hierarchical_distribution = new HierarchicalDistribution(hss);
+            unsigned int position = 0;
+            for(std::map< std::string, CategoricalSampleSpace* >::const_iterator it = hss.cbegin(), it_end = hss.cend(); it != it_end; ++it)
+            {
+                switch(it->second->get_ordering())
+                {
+                    case NONE:
+                        _regressions.push_back(new NominalRegression(it->second->get_values(), CompleteVectorPredictor(explanatory_space, it->second->get_values().size()-1), NominalCanonicalLink()));
+                        break;
+                    case TOTAL: 
+                        _regressions.push_back(new OrdinalRegression(static_cast< OrdinalSampleSpace* >(it->second)->get_ordered(), CompleteVectorPredictor(explanatory_space, it->second->get_values().size()-1), OrdinalCanonicalLink()));
+                        break;
+                    case PARTIAL:
+                        _regressions.push_back(new HierarchicalRegression(*(static_cast< HierarchicalSampleSpace* >(it->second)), explanatory_space));
+                        break;
+                }
+                ++position;
+            }
+            _explanatory_space = explanatory_space.copy().release();
+        }     
+
+        HierarchicalRegression::HierarchicalRegression(const HierarchicalRegression& hr)  
+        {
+            _hierarchical_distribution = hr._hierarchical_distribution;
+            _regressions = hr._regressions;
+        }                   
+
+        HierarchicalRegression::~HierarchicalRegression()
+        {
+            if(_hierarchical_distribution)
+            {
+                delete _hierarchical_distribution;
+                _hierarchical_distribution = nullptr;
+            }
+            for(unsigned int i = 0; i < _regressions.size(); ++i)
+            { 
+                if(_regressions[i])
+                {
+                    delete _regressions[i];
+                    _regressions[i] = nullptr;
+                }
+            }            
+        }
+
+        const UnivariateDistribution* HierarchicalRegression::operator() (const MultivariateEvent& event) const
+        {
+            unsigned int position = 0;
+            for(HierarchicalDistribution::iterator it = _hierarchical_distribution->begin(), it_end = _hierarchical_distribution->end(); it != it_end; ++it)
+            {
+                it->second = static_cast< CategoricalUnivariateDistribution* >(const_cast< UnivariateDistribution* >(_regressions[position]->operator()(event)));
+                ++position;
+            }
+            return _hierarchical_distribution;
+        }
+
+        const MultivariateSampleSpace* HierarchicalRegression::get_explanatory_space() const
+        { return _explanatory_space; }
+
+        unsigned int HierarchicalRegression::get_nb_parameters() const
+        {
+            unsigned int position = 0, nbp = 0;
+            for(HierarchicalDistribution::iterator it = _hierarchical_distribution->begin(), it_end = _hierarchical_distribution->end(); it != it_end; ++it)
+            {
+                nbp += _regressions[position]->get_nb_parameters();
+                ++position;
+            }
+            return nbp;            
+        }
+
+        const CategoricalUnivariateConditionalDistribution* HierarchicalRegression::get_regression(const std::string& value) const
+        { return _regressions[_hierarchical_distribution->index(value)]; }
+
+        void HierarchicalRegression::set_regression(const std::string& value, const CategoricalUnivariateConditionalDistribution& regression)
+        { _regressions[_hierarchical_distribution->index(value)] = static_cast< CategoricalUnivariateConditionalDistribution* >(regression.copy().release()); }
+
+        std::unique_ptr< UnivariateConditionalDistribution > HierarchicalRegression::copy() const
+        { return std::make_unique< HierarchicalRegression >(*this); }
+
+        HierarchicalRegression::HierarchicalDistribution::HierarchicalDistribution(const HierarchicalSampleSpace& hss) : statiskit::HierarchicalDistribution(hss)
+        {
+            std::map< std::string, CategoricalUnivariateDistribution* >::iterator it, it_end = _tree_distribution.end();
+            for(it = _tree_distribution.begin(); it != it_end; ++it)
+            { 
+                if(it->second)
+                {
+                    delete it->second;
+                    it->second = nullptr;
+                }
+            }             
+        }
+
+        HierarchicalRegression::HierarchicalDistribution::HierarchicalDistribution(const HierarchicalDistribution& hd) : statiskit::HierarchicalDistribution(hd)
+        {}
+
+        HierarchicalRegression::HierarchicalDistribution::~HierarchicalDistribution()
+        {
+            std::map< std::string, CategoricalUnivariateDistribution* >::iterator it, it_end = _tree_distribution.end();
+            for(it = _tree_distribution.begin(); it != it_end; ++it)
+            { 
+                if(it->second)
+                { it->second = nullptr; }
+            } 
+        }        
+
+        HierarchicalRegression::HierarchicalDistribution::iterator HierarchicalRegression::HierarchicalDistribution::begin()
+        { return _tree_distribution.begin(); }
+
+        HierarchicalRegression::HierarchicalDistribution::iterator HierarchicalRegression::HierarchicalDistribution::end()
+        { return _tree_distribution.end(); }
+
+        unsigned int HierarchicalRegression::HierarchicalDistribution::index(const std::string& value) const
+        {
+            HierarchicalDistribution::check_internal(value);
+            return std::distance(_tree_distribution.cbegin(), _tree_distribution.find(value));
+        }
 
         /* MultinomialSplittingOperator::MultinomialSplittingOperator(const VectorPredictor& predictor, const MultinomialSplittingLink& link) : MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >(predictor, link)
         {}

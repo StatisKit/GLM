@@ -22,7 +22,7 @@ namespace statiskit
                 GeneralizedLinearModel(const GeneralizedLinearModel<T, L>& glm);
                 virtual ~GeneralizedLinearModel();
                 
-                virtual const typename T::response_type* operator() (const MultivariateEvent& event) const;
+                virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const;
                 
                 // virtual std::unique_ptr< UnivariateSampleSpace > get_response_space() const;
                 
@@ -103,30 +103,47 @@ namespace statiskit
         
         template<class L>
         struct CategoricalGeneralizedLinearModel : GeneralizedLinearModel< CategoricalUnivariateConditionalDistribution, L >
-        { 
+        {
+            //typedef CategoricalEvent event_type; 
+
             CategoricalGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
             CategoricalGeneralizedLinearModel(const CategoricalGeneralizedLinearModel< L >& glm);
             virtual ~CategoricalGeneralizedLinearModel();
                     	
         	virtual unsigned int get_nb_parameters() const;
-        };             
-        
-        class STATISKIT_GLM_API NominalRegression : public CategoricalGeneralizedLinearModel< NominalLink >
+        };
+
+        class STATISKIT_GLM_API BinaryRegression : public CategoricalGeneralizedLinearModel< BinaryLink >
         {
-        	typedef CategoricalEvent event_type;
-        	
             public:
-                NominalRegression(const std::set< std::string >& values, const VectorPredictor& predictor, const NominalLink& link);
+                BinaryRegression(const std::string& value, const std::string reference_value, const ScalarPredictor& predictor, const BinaryLink& link);
                  
                 virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
                            
             private:
+                virtual void update(const double& value) const;
+        };       
+        
+        class STATISKIT_GLM_API NominalRegression : public CategoricalGeneralizedLinearModel< NominalLink >
+        {
+        	//typedef CategoricalEvent event_type;
+        	
+            public:
+                NominalRegression(const std::set< std::string >& values, const VectorPredictor& predictor, const NominalLink& link);
+
+                // std::string get_reference() const;
+                void set_reference(const std::string& value);
+                 
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
+                           
+            private:
+                std::string _reference;
                 virtual void update(const Eigen::VectorXd& values) const;                
         };
         
         class STATISKIT_GLM_API OrdinalRegression : public CategoricalGeneralizedLinearModel< OrdinalLink >
         {
-        	typedef CategoricalEvent event_type;
+        	//typedef CategoricalEvent event_type;
         	
             public:
                 OrdinalRegression(const std::vector< std::string >& values, const VectorPredictor& predictor, const OrdinalLink& link);
@@ -136,6 +153,51 @@ namespace statiskit
             private:
                 virtual void update(const Eigen::VectorXd& values) const;                
         };                                               
+
+
+        class STATISKIT_GLM_API HierarchicalRegression : public CategoricalUnivariateConditionalDistribution
+        {
+            //typedef CategoricalEvent event_type;
+            typedef statiskit::HierarchicalDistribution response_type;
+            
+            public:
+                HierarchicalRegression(const HierarchicalSampleSpace& hss, const MultivariateSampleSpace& explanatory_space);
+                HierarchicalRegression(const HierarchicalRegression& hr);
+                virtual ~HierarchicalRegression();
+
+                /// \Brief This is an operation of conditioning that returns the conditional distribution \f$ Y \vert \boldsymbol{X} = \boldsymbol{x} \f$.
+                virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const;
+
+                /// \Brief Get the sample space of the explanatory components \f$ \boldsymbol{X} \f$.
+                virtual const MultivariateSampleSpace* get_explanatory_space() const;
+
+                /// \Brief Get the number of parameters of the \f$ Y \vert \boldsymbol{X} \f$.
+                virtual unsigned int get_nb_parameters() const;
+
+                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;      
+
+                const CategoricalUnivariateConditionalDistribution* get_regression(const std::string& value) const;
+                void set_regression(const std::string& value, const CategoricalUnivariateConditionalDistribution& regression);           
+                           
+                class HierarchicalDistribution : public statiskit::HierarchicalDistribution
+                {
+                    public:
+                        typedef std::map< std::string, CategoricalUnivariateDistribution* >::iterator iterator;
+
+                        HierarchicalDistribution(const HierarchicalSampleSpace& hss);
+                        HierarchicalDistribution(const HierarchicalDistribution& hd);
+                        virtual ~HierarchicalDistribution();
+
+                        iterator begin();
+                        iterator end();
+                        unsigned int index(const std::string& value) const;
+                };
+
+            protected:
+                HierarchicalDistribution* _hierarchical_distribution;
+                std::vector< CategoricalUnivariateConditionalDistribution* > _regressions;        
+                MultivariateSampleSpace* _explanatory_space;
+        };
 
         /* struct STATISKIT_GLM_API SplittingOperator
         {

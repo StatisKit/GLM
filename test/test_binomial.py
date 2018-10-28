@@ -8,45 +8,6 @@ from nose.plugins.attrib import attr
 
 import math
 
-from test_link import AbstractTestLink
-from test_regression import AbstractTestDiscreteRegression
-
-@attr(linux=True,
-      osx=True,
-      win=True,
-      level=0)
-class TestBinomialCanonicalLink(unittest.TestCase, AbstractTestLink):
-    _mu = 0.5
-    _mu_prime = 0.25
-
-    @classmethod
-    def setUpClass(cls):
-        """Test BinomialLink construction"""
-        cls._link = glm.BinomialLink()                 
-
-    @classmethod
-    def tearDownClass(cls):
-        """Test BinomialLink deletion"""
-        del cls._link 
-
-@attr(linux=True,
-      osx=True,
-      win=True,
-      level=0)
-class TestBinomialFLink(unittest.TestCase, AbstractTestLink):
-    _mu = 0.5
-    _mu_prime = 0.25
-
-    @classmethod
-    def setUpClass(cls):
-        """Test BinomialLink construction"""
-        cls._link = glm.BinomialLink(link='F')                 
-
-    @classmethod
-    def tearDownClass(cls):
-        """Test BinomialLink deletion"""
-        del cls._link 
-
 @attr(linux=True,
       osx=True,
       win=True,

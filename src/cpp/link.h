@@ -28,10 +28,9 @@ namespace statiskit
             typedef ScalarPredictor predictor_type;
             typedef double expectation_type;
 
-            virtual double evaluate(const double& value) const = 0;
-
-            virtual double inverse(const double& value) const = 0;
-            virtual double inverse_derivative(const double& value) const = 0;
+            virtual double evaluate(const double& mu) const = 0;
+            virtual double inverse(const double& eta) const = 0;
+            virtual double inverse_derivative(const double& eta) const = 0;
         };        
 
         struct STATISKIT_GLM_API PoissonLink : ScalarLink
@@ -46,10 +45,9 @@ namespace statiskit
             PoissonCanonicalLink();
             virtual ~PoissonCanonicalLink();
 
-            virtual double evaluate(const double& value) const;
-
-            virtual double inverse(const double& value) const;
-            virtual double inverse_derivative(const double& value) const;
+            virtual double evaluate(const double& mu) const;
+            virtual double inverse(const double& eta) const;
+            virtual double inverse_derivative(const double& eta) const;
             
             virtual std::unique_ptr< PoissonLink > copy() const;
         };
@@ -60,10 +58,9 @@ namespace statiskit
             PoissonVLink(const PoissonVLink& link);
             virtual ~PoissonVLink();
 
-            virtual double evaluate(const double& value) const;
-
-	        virtual double inverse(const double& value) const;
-	        virtual double inverse_derivative(const double& value) const;
+            virtual double evaluate(const double& mu) const;
+	        virtual double inverse(const double& eta) const;
+	        virtual double inverse_derivative(const double& eta) const;
 
 	        virtual std::unique_ptr< PoissonLink > copy() const;
         };
@@ -75,32 +72,45 @@ namespace statiskit
             virtual std::unique_ptr< BinomialLink > copy() const = 0;
         };
 
-        struct STATISKIT_GLM_API BinomialCanonicalLink : BinomialLink
+        struct STATISKIT_GLM_API BinaryLink : ScalarLink
         {
-            BinomialCanonicalLink();
-            virtual ~BinomialCanonicalLink();
-
-            virtual double evaluate(const double& value) const;
-
-            virtual double inverse(const double& value) const;
-            virtual double inverse_derivative(const double& value) const;
+            typedef BinaryDistribution family_type;
             
-            virtual std::unique_ptr< BinomialLink > copy() const;
+            virtual std::unique_ptr< BinaryLink > copy() const = 0;
         };
-        
-        struct STATISKIT_GLM_API BinomialFLink : FLink<BinomialLink>
+
+        template<class T>
+        struct STATISKIT_GLM_API BinCanonicalLink : T
         {
-	    	BinomialFLink();
-            BinomialFLink(const BinomialFLink& link);
-	    	virtual ~BinomialFLink();
+            BinCanonicalLink();
+            virtual ~BinCanonicalLink();
 
-            virtual double evaluate(const double& value) const;
+            virtual double evaluate(const double& mu) const;
+            virtual double inverse(const double& eta) const;
+            virtual double inverse_derivative(const double& eta) const;
+            
+            virtual std::unique_ptr< T > copy() const;
+        };
 
-	        virtual double inverse(const double& value) const;
-	        virtual double inverse_derivative(const double& value) const;
+        typedef BinCanonicalLink< BinaryLink > BinaryCanonicalLink;
+        typedef BinCanonicalLink< BinomialLink > BinomialCanonicalLink;        
+        
+        template<class T>
+        struct STATISKIT_GLM_API BinFLink : FLink< T >
+        {
+            BinFLink();
+            BinFLink(const BinFLink& link);
+            virtual ~BinFLink();
 
-	        virtual std::unique_ptr< BinomialLink > copy() const;
-        };       
+            virtual double evaluate(const double& mu) const;
+            virtual double inverse(const double& eta) const;
+            virtual double inverse_derivative(const double& eta) const;
+
+            virtual std::unique_ptr< T > copy() const;
+        };
+
+        typedef BinFLink< BinaryLink > BinaryFLink;
+        typedef BinFLink< BinomialLink > BinomialFLink;       
 
         struct STATISKIT_GLM_API NegativeBinomialLink : ScalarLink
         {
@@ -114,10 +124,9 @@ namespace statiskit
             NegativeBinomialCanonicalLink();
             virtual ~NegativeBinomialCanonicalLink();
 
-            virtual double evaluate(const double& value) const;
-
-            virtual double inverse(const double& value) const;
-            virtual double inverse_derivative(const double& value) const;
+            virtual double evaluate(const double& mu) const;
+            virtual double inverse(const double& eta) const;
+            virtual double inverse_derivative(const double& eta) const;
             
 			virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };  
@@ -128,10 +137,9 @@ namespace statiskit
             NegativeBinomialULink(const NegativeBinomialULink& link);
             virtual ~NegativeBinomialULink();
 
-            virtual double evaluate(const double& value) const;
-
-            virtual double inverse(const double& value) const;
-            virtual double inverse_derivative(const double& value) const;
+            virtual double evaluate(const double& mu) const;
+            virtual double inverse(const double& eta) const;
+            virtual double inverse_derivative(const double& eta) const;
                         
             virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };
@@ -142,10 +150,9 @@ namespace statiskit
             NegativeBinomialVLink(const NegativeBinomialVLink& link);
             virtual ~NegativeBinomialVLink();
 
-            virtual double evaluate(const double& value) const;
-
-            virtual double inverse(const double& value) const;
-            virtual double inverse_derivative(const double& value) const;
+            virtual double evaluate(const double& mu) const;
+            virtual double inverse(const double& eta) const;
+            virtual double inverse_derivative(const double& eta) const;
                         
             virtual std::unique_ptr< NegativeBinomialLink > copy() const;
         };
@@ -155,8 +162,14 @@ namespace statiskit
             typedef VectorPredictor predictor_type;
             typedef Eigen::VectorXd expectation_type;
             
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const = 0;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const = 0;
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& mu) const = 0;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const = 0;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const = 0;
+
+            Eigen::VectorXd in_open_corner(const Eigen::VectorXd& p) const; // projection into a closed simplex strictly included in the open corner of hypercube.
+
+            double _epsilon_0 = 1e-10;
+            double _epsilon_1 = 1e-6;
         };
 
         struct STATISKIT_GLM_API NominalLink : VectorLink
@@ -171,8 +184,9 @@ namespace statiskit
             NominalCanonicalLink();
             virtual ~NominalCanonicalLink();
 
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& pi) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const;
 
             virtual std::unique_ptr< NominalLink > copy() const;
         };
@@ -183,8 +197,9 @@ namespace statiskit
             ReferenceLink(const ReferenceLink& link);
             virtual ~ReferenceLink();
 
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& pi) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const;
 
             virtual std::unique_ptr< NominalLink > copy() const;
         };
@@ -201,8 +216,9 @@ namespace statiskit
             OrdinalCanonicalLink();
             virtual ~OrdinalCanonicalLink();
 
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& values) const;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& pi) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };
@@ -213,8 +229,9 @@ namespace statiskit
             AdjacentLink(const AdjacentLink& link);
             virtual ~AdjacentLink();
 
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& pi) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };  
@@ -224,9 +241,10 @@ namespace statiskit
             CumulativeLink();
             CumulativeLink(const CumulativeLink& link);
             virtual ~CumulativeLink();
-
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& pi) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };
@@ -236,9 +254,10 @@ namespace statiskit
             SequentialLink();
             SequentialLink(const SequentialLink& link);
             virtual ~SequentialLink();
-
-            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& value) const;
-            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& values) const;
+            
+            virtual Eigen::VectorXd evaluate(const Eigen::VectorXd& pi) const;
+            virtual Eigen::VectorXd inverse(const Eigen::VectorXd& eta) const;
+            virtual Eigen::MatrixXd inverse_derivative(const Eigen::VectorXd& eta) const;
 
             virtual std::unique_ptr< OrdinalLink > copy() const;
         };                                                   

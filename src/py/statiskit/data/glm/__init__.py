@@ -1,5 +1,5 @@
 import os
-from statiskit.core import OrdinalSampleSpace, read_csv, controls
+from statiskit.core import OrdinalSampleSpace, HierarchicalSampleSpace, read_csv, controls
 
 def load(*args):
     """Load data used in the statiskit.glm package"""
@@ -21,13 +21,29 @@ def load(*args):
         kwargs['retinopathy.csv'] = read_csv(filepath,
                                          header=True,
                                          sep=' ',
-                                         sample_spaces=sample_spaces)   
+                                         sample_spaces=sample_spaces)
+
     if 'cars.csv' in kwargs:
         filepath = os.path.join(os.path.dirname(__file__), "cars.csv")
         kwargs['cars.csv'] = read_csv(filepath,
                                          header=True,
                                          sep=',',
                                          outcomes=["CATEGORICAL", "CATEGORICAL", "CATEGORICAL"])
+
+    if 'beetles.csv' in kwargs:
+        filepath = os.path.join(os.path.dirname(__file__), "beetles.csv")
+        kwargs['beetles.csv'] = read_csv(filepath,
+                                         header=True,
+                                         weights=True,
+                                         sep=',')#,
+                                         #outcomes=["CATEGORICAL", "CONTINUOUS", "DISCRETE"])
+
+    if 'beetles_repetition.csv' in kwargs:
+        filepath = os.path.join(os.path.dirname(__file__), "beetles_repetition.csv")
+        kwargs['beetles_repetition.csv'] = read_csv(filepath,
+                                         header=True,
+                                         sep=',')#,
+                                         #outcomes=["CATEGORICAL", "CONTINUOUS"])
 
     for arg in kwargs.keys():
         if kwargs[arg] is None:

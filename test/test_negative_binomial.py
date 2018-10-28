@@ -8,14 +8,14 @@
 
 # import math
 
-# from test_link import AbstractTestLink
+# from test_link import AbstractTestScalarLink
 # from test_regression import AbstractTestDiscreteRegression
 
 # # @attr(linux=True,
 # #       osx=True,
 # #       win=True,
 # #       level=0)
-# # class TestNegativeBinomialULink(unittest.TestCase, AbstractTestLink):
+# # class TestNegativeBinomialULink(unittest.TestCase, AbstractTestScalarLink):
 # #     _eta = 1.
 # #     _mu = math.exp(1)/(1-math.exp(1))
 # #     _mu_prime = math.exp(1)/(1-math.exp(1))**2

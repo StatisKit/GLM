@@ -34,7 +34,7 @@ namespace statiskit
                 if(_predictor)
                 {
                     delete _predictor;
-                    _link = nullptr;
+                    _predictor = nullptr;
                 }
                 if(_family)
                 {
@@ -44,9 +44,9 @@ namespace statiskit
             }
 
         template<class T, class L>
-            const typename T::response_type* GeneralizedLinearModel< T, L >::operator() (const MultivariateEvent& event) const
+            const UnivariateDistribution* GeneralizedLinearModel< T, L >::operator() (const MultivariateEvent& event) const
             {
-                update(_link->inverse((*_predictor)(event)));
+                update(_link->inverse((*_predictor)(event)));     
                 return _family;
             }
                 

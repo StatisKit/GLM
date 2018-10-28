@@ -10,14 +10,14 @@ namespace statiskit
         PoissonCanonicalLink::~PoissonCanonicalLink()
         {} 
 
-        double PoissonCanonicalLink::evaluate(const double& value) const
-        { return log(value); }
+        double PoissonCanonicalLink::evaluate(const double& mu) const
+        { return log(mu); }
 
-        double PoissonCanonicalLink::inverse(const double& value) const
-        { return exp(value); }
+        double PoissonCanonicalLink::inverse(const double& eta) const
+        { return exp(eta); }
 
-        double PoissonCanonicalLink::inverse_derivative(const double& value) const
-        { return exp(value); }
+        double PoissonCanonicalLink::inverse_derivative(const double& eta) const
+        { return exp(eta); }
 
         std::unique_ptr< PoissonLink > PoissonCanonicalLink::copy() const
         { return std::make_unique< PoissonCanonicalLink >(); } 
@@ -31,57 +31,17 @@ namespace statiskit
         PoissonVLink::~PoissonVLink()
         {} 
 
-        double PoissonVLink::evaluate(const double& value) const
-        { return _distribution->quantile(value / (1. + value)); }
+        double PoissonVLink::evaluate(const double& mu) const
+        { return _distribution->quantile(mu / (1. + mu)); }
 
-        double PoissonVLink::inverse(const double& value) const // v = F/(1-F)
-        { return _distribution->cdf(value) / ( 1-_distribution->cdf(value) ); } 
+        double PoissonVLink::inverse(const double& eta) const // v = F/(1-F)
+        { return _distribution->cdf(eta) / ( 1-_distribution->cdf(eta) ); } 
 
-        double PoissonVLink::inverse_derivative(const double& value) const
-        { return _distribution->pdf(value) / pow( 1-_distribution->cdf(value), 2); }        
+        double PoissonVLink::inverse_derivative(const double& eta) const
+        { return _distribution->pdf(eta) / pow( 1-_distribution->cdf(eta), 2); }        
 
         std::unique_ptr< PoissonLink > PoissonVLink::copy() const
-        { return std::make_unique< PoissonVLink >(*this); }        
-
-                       
-        BinomialCanonicalLink::BinomialCanonicalLink()
-        {}
-
-        BinomialCanonicalLink::~BinomialCanonicalLink()
-        {}  
-
-        double BinomialCanonicalLink::evaluate(const double& value) const
-        { return log(value / (1. - value)); }
-
-        double BinomialCanonicalLink::inverse(const double& value) const
-        { return 1. / (1 + exp(-value)); }
-        
-        double BinomialCanonicalLink::inverse_derivative(const double& value) const
-        { return exp(-value) / pow(1 + exp(-value), 2); }        
-
-        std::unique_ptr< BinomialLink > BinomialCanonicalLink::copy() const
-        { return std::make_unique< BinomialCanonicalLink >(*this); }
-                       
-        BinomialFLink::BinomialFLink() : FLink<BinomialLink>()
-        {}
-
-        BinomialFLink::BinomialFLink(const BinomialFLink& bflink) : FLink<BinomialLink>(bflink)
-        {}
-
-        BinomialFLink::~BinomialFLink()
-        {}  
-
-        double BinomialFLink::evaluate(const double& value) const
-        { return _distribution->quantile(value); }
-
-        double BinomialFLink::inverse(const double& value) const
-        { return _distribution->cdf(value); }
-        
-        double BinomialFLink::inverse_derivative(const double& value) const
-        { return _distribution->pdf(value); }        
-
-        std::unique_ptr< BinomialLink > BinomialFLink::copy() const
-        { return std::make_unique< BinomialFLink >(*this); }  
+        { return std::make_unique< PoissonVLink >(*this); }         
 
         NegativeBinomialCanonicalLink::NegativeBinomialCanonicalLink()
         {}
@@ -89,31 +49,31 @@ namespace statiskit
         NegativeBinomialCanonicalLink::~NegativeBinomialCanonicalLink()
         {} 
 
-        double NegativeBinomialCanonicalLink::evaluate(const double& value) const
+        double NegativeBinomialCanonicalLink::evaluate(const double& mu) const
         {
             double res;
-            if(boost::math::isfinite(value) && value > 0.)
-            { res = log(value / (1 + value)); }
+            if(boost::math::isfinite(mu) && mu > 0.)
+            { res = log(mu / (1 + mu)); }
             else
             { res = std::numeric_limits< double >::quiet_NaN(); }
             return res;
         }
 
-        double NegativeBinomialCanonicalLink::inverse(const double& value) const
+        double NegativeBinomialCanonicalLink::inverse(const double& eta) const
         {
             double res;
-            if(boost::math::isfinite(value) && value < 0.)
-            { res = exp(value) / (1 - exp(value)); }
+            if(boost::math::isfinite(eta) && eta < 0.)
+            { res = exp(eta) / (1 - exp(eta)); }
             else
             { res = std::numeric_limits< double >::quiet_NaN(); }
             return res;
         }
 
-        double NegativeBinomialCanonicalLink::inverse_derivative(const double& value) const
+        double NegativeBinomialCanonicalLink::inverse_derivative(const double& eta) const
         {
             double res;
-            if(boost::math::isfinite(value) && value < 0.)
-            { res = exp(value) / pow(1 - exp(value), 2); }
+            if(boost::math::isfinite(eta) && eta < 0.)
+            { res = exp(eta) / pow(1 - exp(eta), 2); }
             else
             { res = std::numeric_limits< double >::quiet_NaN(); }
             return res;
@@ -132,31 +92,31 @@ namespace statiskit
         NegativeBinomialULink::~NegativeBinomialULink()
         {}    
 
-        double NegativeBinomialULink::evaluate(const double& value) const
+        double NegativeBinomialULink::evaluate(const double& mu) const
         {
             double res;
-            if(boost::math::isfinite(value) && value > 0.)
-            { res = _distribution->quantile(value / (1. + 2 * value)); }
+            if(boost::math::isfinite(mu) && mu > 0.)
+            { res = _distribution->quantile(mu / (1. + 2 * mu)); }
             else
             { res = std::numeric_limits< double >::quiet_NaN(); }
             return res;
         } 
 
-        double NegativeBinomialULink::inverse(const double& value) const // return mu (and not pi)
+        double NegativeBinomialULink::inverse(const double& eta) const // return mu (and not pi)
         {
             double res;
-            if(boost::math::isfinite(value) && value < 0.)
-            { res = _distribution->cdf(value) / (1 - 2*_distribution->cdf(value)); }
+            if(boost::math::isfinite(eta) && eta < 0.)
+            { res = _distribution->cdf(eta) / (1 - 2*_distribution->cdf(eta)); }
             else
             { res = std::numeric_limits< double >::quiet_NaN(); }
             return res;
         } 
         
-        double NegativeBinomialULink::inverse_derivative(const double& value) const
+        double NegativeBinomialULink::inverse_derivative(const double& eta) const
         {
             double res;
-            if(boost::math::isfinite(value) && value < 0.)
-            { res = _distribution->pdf(value) / pow(1 - 2*_distribution->cdf(value), 2); }
+            if(boost::math::isfinite(eta) && eta < 0.)
+            { res = _distribution->pdf(eta) / pow(1 - 2*_distribution->cdf(eta), 2); }
             else
             { res = std::numeric_limits< double >::quiet_NaN(); }
             return res;
@@ -175,18 +135,33 @@ namespace statiskit
         NegativeBinomialVLink::~NegativeBinomialVLink()
         {}    
 
-        double NegativeBinomialVLink::evaluate(const double& value) const
-        { return _distribution->quantile(value / (1. + value)); }
+        double NegativeBinomialVLink::evaluate(const double& mu) const
+        { return _distribution->quantile(mu / (1. + mu)); }
 
-        double NegativeBinomialVLink::inverse(const double& value) const 
-        { return _distribution->cdf(value) / (1 - _distribution->cdf(value)); } 
+        double NegativeBinomialVLink::inverse(const double& eta) const 
+        { return _distribution->cdf(eta) / (1 - _distribution->cdf(eta)); } 
         
-        double NegativeBinomialVLink::inverse_derivative(const double& value) const
-        { return _distribution->pdf(value) / pow(1-_distribution->cdf(value), 2); }  
+        double NegativeBinomialVLink::inverse_derivative(const double& eta) const
+        { return _distribution->pdf(eta) / pow(1-_distribution->cdf(eta), 2); }  
 
         std::unique_ptr< NegativeBinomialLink > NegativeBinomialVLink::copy() const
         { return std::make_unique< NegativeBinomialVLink >(*this); }        
 
+
+        Eigen::VectorXd VectorLink::in_open_corner(const Eigen::VectorXd& p) const
+        {
+            Eigen::VectorXd pi = p;
+            Index J = pi.size() + 1;
+            for(Index j=0; j<J-1; ++j)
+            { pi[j] = std::max(_epsilon_0, std::min(pi[j], 1-_epsilon_1)); }
+            double sum = pi.sum();
+            if(sum > 1-_epsilon_1)
+            {
+                for(Index j=0; j<J-1; ++j)
+                { pi[j] *= (1.-_epsilon_1)/sum;  }
+            }
+            return pi;
+        }
 
         NominalCanonicalLink::NominalCanonicalLink()
         {}
@@ -194,16 +169,23 @@ namespace statiskit
         NominalCanonicalLink::~NominalCanonicalLink()
         {}
 
-        Eigen::VectorXd NominalCanonicalLink::inverse(const Eigen::VectorXd& values) const
+        Eigen::VectorXd NominalCanonicalLink::evaluate(const Eigen::VectorXd& pi) const
+        { 
+            Eigen::VectorXd eta = pi.array().log();
+            return  eta - Eigen::VectorXd::Constant(pi.size(), log(1-pi.sum()));
+        }
+
+        Eigen::VectorXd NominalCanonicalLink::inverse(const Eigen::VectorXd& eta) const
         {
-        	Eigen::VectorXd pi = values.array().exp();
+        	Eigen::VectorXd pi = eta.array().exp();
         	double norm = 1 + pi.sum();
-        	return pi/norm; 
+        	//return pi/norm;
+            return in_open_corner(pi/norm);
         }
         
-        Eigen::MatrixXd NominalCanonicalLink::inverse_derivative(const Eigen::VectorXd& values) const
+        Eigen::MatrixXd NominalCanonicalLink::inverse_derivative(const Eigen::VectorXd& eta) const
         {
-        	Eigen::VectorXd pi = inverse(values);
+        	Eigen::VectorXd pi = inverse(eta);
         	return ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() ); 
         }          
         
@@ -219,25 +201,33 @@ namespace statiskit
 
         ReferenceLink::~ReferenceLink()
         {}  
-
-        Eigen::VectorXd ReferenceLink::inverse(const Eigen::VectorXd& values) const
+ 
+        Eigen::VectorXd ReferenceLink::evaluate(const Eigen::VectorXd& pi) const
         {
-        	Eigen::VectorXd pi( values.size() );
-        	double norm = 1;
-        	for(size_t j=0; j<values.size(); ++j)
+            Eigen::VectorXd eta(pi.size());
+            for(size_t j=0; j<pi.size(); ++j)
+            { eta[j] = _distribution->quantile(pi[j]/(pi[j]+1-pi.sum())); }
+            return eta;             
+        }
+
+        Eigen::VectorXd ReferenceLink::inverse(const Eigen::VectorXd& eta) const
+        {
+        	Eigen::VectorXd pi( eta.size() );
+        	double norm = 1.;
+        	for(size_t j=0; j<eta.size(); ++j)
         	{
-        		pi[j] = _distribution->cdf( values(j) ) / ( 1-_distribution->cdf( values(j) ) );
+        		pi[j] = _distribution->cdf( eta(j) ) / ( 1-_distribution->cdf( eta(j) ) );
         		norm += pi[j];
         	}
-        	return pi/norm; 
+        	return in_open_corner(pi/norm); 
         }
         
-        Eigen::MatrixXd ReferenceLink::inverse_derivative(const Eigen::VectorXd& values) const
+        Eigen::MatrixXd ReferenceLink::inverse_derivative(const Eigen::VectorXd& eta) const
         {
-        	Eigen::VectorXd pi = inverse(values);
+        	Eigen::VectorXd pi = inverse(eta);
         	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(pi.rows(),pi.rows());
         	for(size_t j=0; j<pi.rows(); ++j)
-        	{ D(j,j) = _distribution->pdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
+        	{ D(j,j) = _distribution->pdf( eta(j) ) / ( std::max(this->_epsilon_0, std::min(1-this->_epsilon_1, _distribution->cdf(eta(j)))) * std::max(this->_epsilon_0, std::min(1-this->_epsilon_1, 1-_distribution->cdf(eta(j)))) ); }
         	return D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose().eval() );
         }                
 
@@ -249,19 +239,29 @@ namespace statiskit
         {}
 
         OrdinalCanonicalLink::~OrdinalCanonicalLink()
-        {}        
-            
-        Eigen::VectorXd OrdinalCanonicalLink::inverse(const Eigen::VectorXd& values) const
+        {}  
+
+        Eigen::VectorXd OrdinalCanonicalLink::evaluate(const Eigen::VectorXd& pi) const
         {
-            Eigen::MatrixXd Ones = Eigen::MatrixXd::Ones(values.rows(), values.rows());
-            Eigen::VectorXd pi = (Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Upper>(Ones) * values).array().exp(); // eta = (At)^-1 eta_prime
+            Eigen::VectorXd eta(pi.size());
+            Index J = pi.size()+1;
+            for(size_t j=0; j<J-2; ++j)
+            { eta[j] = log(pi[j]) - log(pi[j+1]); }
+            eta[J-2] = log(pi[J-2]) - log(1-pi.sum());
+            return eta;             
+        }
+
+        Eigen::VectorXd OrdinalCanonicalLink::inverse(const Eigen::VectorXd& eta) const
+        {
+            Eigen::MatrixXd Ones = Eigen::MatrixXd::Ones(eta.rows(), eta.rows());
+            Eigen::VectorXd pi = (Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Upper>(Ones) * eta).array().exp(); // eta = (At)^-1 eta_prime
         	double norm = 1 + pi.sum();
-        	return pi/norm;  
+        	return in_open_corner(pi/norm);  
         } 
         
-        Eigen::MatrixXd OrdinalCanonicalLink::inverse_derivative(const Eigen::VectorXd& values) const
+        Eigen::MatrixXd OrdinalCanonicalLink::inverse_derivative(const Eigen::VectorXd& eta) const
         {
-        	Eigen::VectorXd pi = inverse(values);
+        	Eigen::VectorXd pi = inverse(eta);
             Eigen::MatrixXd Ones = Eigen::MatrixXd::Ones(pi.rows(),pi.rows());
         	return Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Lower>(Ones) * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() ); 
         } 
@@ -277,29 +277,63 @@ namespace statiskit
         {}
 
         AdjacentLink::~AdjacentLink()
-        {}  
+        {} 
 
-        Eigen::VectorXd AdjacentLink::inverse(const Eigen::VectorXd& values) const
+        Eigen::VectorXd AdjacentLink::evaluate(const Eigen::VectorXd& pi) const
+        {
+            Eigen::VectorXd eta(pi.size());
+            Index J = pi.size()+1;
+            for(size_t j=0; j<J-2; ++j)
+            { eta[j] = _distribution->quantile(pi[j]/(pi[j]+pi[j+1])); }
+            eta[J-2] = _distribution->quantile(pi[J-2]/(pi[J-2]+1.-pi.sum()));
+            return eta;             
+        }
+
+        Eigen::VectorXd AdjacentLink::inverse(const Eigen::VectorXd& eta) const
         {    
-            Eigen::VectorXd pi( values.size() );
-            pi[values.size()-1] = _distribution->cdf( values(values.size()-1) ) / ( 1-_distribution->cdf( values(values.size()-1) ) );
-            double norm = 1 + pi[values.size()-1];   
-            for(size_t j=(values.size()-1); j>0; --j)
+            Eigen::VectorXd pi( eta.size() );
+            pi[eta.size()-1] = _distribution->cdf( eta(eta.size()-1) ) / ( 1-_distribution->cdf( eta(eta.size()-1) ) );
+            double norm = 1 + pi[eta.size()-1];   
+            for(size_t j=(eta.size()-1); j>0; --j)
             {
-                pi[j-1] = pi[j] * _distribution->cdf( values(j-1) ) / ( 1-_distribution->cdf( values(j-1) ) );
+                pi[j-1] = pi[j] * _distribution->cdf( eta(j-1) ) / ( 1-_distribution->cdf( eta(j-1) ) );
                 norm += pi[j-1];
             }                      
-            return pi/norm; // pi is ordered
+            return in_open_corner(pi/norm); // pi is ordered
         } 
 
-        Eigen::MatrixXd AdjacentLink::inverse_derivative(const Eigen::VectorXd& values) const
+        Eigen::MatrixXd AdjacentLink::inverse_derivative(const Eigen::VectorXd& eta) const
         {
-        	Eigen::VectorXd pi = inverse(values);
+        	Eigen::VectorXd pi = inverse(eta);
         	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(pi.rows(),pi.rows());
             Eigen::MatrixXd Ones = Eigen::MatrixXd::Ones(pi.rows(),pi.rows());
         	for(size_t j=0; j<pi.rows(); ++j)
-        	{ D(j,j) = _distribution->pdf( values(j) ) / ( _distribution->cdf( values(j) ) * ( 1-_distribution->cdf( values(j) ) ) ); }
-        	return Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Lower>(Ones) * D * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() );
+        	{ D(j,j) = _distribution->pdf( eta(j) ) /( std::max(this->_epsilon_0, std::min(1-this->_epsilon_1, _distribution->cdf(eta(j)))) * std::max(this->_epsilon_0, std::min(1-this->_epsilon_1, 1-_distribution->cdf(eta(j)))) ); }
+
+        	return D * Eigen::TriangularView<Eigen::MatrixXd, Eigen::UpLoType::Lower>(Ones) * ( Eigen::MatrixXd(pi.asDiagonal()) - pi * pi.transpose() );
+
+            // Eigen::VectorXd mu = inverse(eta);
+            // Eigen::MatrixXd diag_f = Eigen::MatrixXd::Zero(mu.rows(),mu.rows());
+            // for(size_t j=0; j<mu.rows(); ++j)
+            // { diag_f(j,j) = _distribution->pdf( eta(j) );}
+
+            // Eigen::MatrixXd M = Eigen::MatrixXd::Zero(mu.size(), mu.size());
+            // int i(0), j(0);
+            // double cste(1);
+
+            // for (i=0; i < mu.size()-1; i++)
+            // {
+            //     M(i,i) = mu[i+1]/((mu[i]+mu[i+1])*(mu[i]+mu[i+1]));
+            //     M(i+1,i) = -mu[i]/((mu[i]+mu[i+1])*(mu[i]+mu[i+1]));
+            //     cste -= mu[i];
+            // }
+
+            // for (j=0; j< mu.size()-1 ; j++)
+            //     M(j,mu.size()-1) = mu[mu.size()-1]/(cste*cste);
+
+            // M(mu.size()-1, mu.size()-1) = 1/cste;      
+
+            // return diag_f * M.inverse();
         } 
         
         std::unique_ptr< OrdinalLink > AdjacentLink::copy() const
@@ -315,22 +349,34 @@ namespace statiskit
         CumulativeLink::~CumulativeLink()
         {}  
 
-        Eigen::VectorXd CumulativeLink::inverse(const Eigen::VectorXd& values) const
+        Eigen::VectorXd CumulativeLink::evaluate(const Eigen::VectorXd& pi) const
         {
-            Eigen::VectorXd ordered_pi( values.size() );
-            ordered_pi[0] = _distribution->cdf( values(0) );
-            for(size_t j=1; j<values.size(); ++j)
-            { ordered_pi[j] = _distribution->cdf( values(j) ) - _distribution->cdf( values(j-1) ); }
-            return ordered_pi; 
+            Eigen::VectorXd eta(pi.size());
+            double cum_proba = 0.;
+            for(size_t j=0; j<pi.size(); ++j)
+            { 
+                cum_proba += pi[j];
+                eta[j] = _distribution->quantile(cum_proba); 
+            }
+            return eta;             
+        }
+
+        Eigen::VectorXd CumulativeLink::inverse(const Eigen::VectorXd& eta) const
+        {
+            Eigen::VectorXd ordered_pi( eta.size() );
+            ordered_pi[0] = _distribution->cdf( eta(0) );
+            for(size_t j=1; j<eta.size(); ++j)
+            { ordered_pi[j] = _distribution->cdf( eta(j) ) - _distribution->cdf( eta(j-1) ); }
+            return in_open_corner(ordered_pi); 
         } 
                
-        Eigen::MatrixXd CumulativeLink::inverse_derivative(const Eigen::VectorXd& values) const
+        Eigen::MatrixXd CumulativeLink::inverse_derivative(const Eigen::VectorXd& eta) const
         {
-            Eigen::MatrixXd R = Eigen::MatrixXd::Identity(values.rows(), values.rows());
-            R.block(0, 1, values.rows()-1, values.rows()-1) -= Eigen::MatrixXd::Identity(values.rows() -1, values.rows()-1);
-        	Eigen::MatrixXd F = Eigen::MatrixXd::Zero(values.rows(),values.rows());
-        	for(size_t j=0; j<values.rows(); ++j)
-        	{ F(j,j) = _distribution->pdf( values(j) ); }        	
+            Eigen::MatrixXd R = Eigen::MatrixXd::Identity(eta.rows(), eta.rows());
+            R.block(0, 1, eta.rows()-1, eta.rows()-1) -= Eigen::MatrixXd::Identity(eta.rows() -1, eta.rows()-1);
+        	Eigen::MatrixXd F = Eigen::MatrixXd::Zero(eta.rows(),eta.rows());
+        	for(size_t j=0; j<eta.rows(); ++j)
+        	{ F(j,j) = _distribution->pdf( eta(j) ); }        	
         	return (F * R);
         } 
         
@@ -347,49 +393,60 @@ namespace statiskit
         SequentialLink::~SequentialLink()
         {} 
 
-        Eigen::VectorXd SequentialLink::inverse(const Eigen::VectorXd& values) const
+        Eigen::VectorXd SequentialLink::evaluate(const Eigen::VectorXd& pi) const
         {
-        	Eigen::VectorXd ordered_pi( values.size() );
+            Eigen::VectorXd eta(pi.size());
+            double cum_proba = 0.;
+            for(size_t j=0; j<pi.size(); ++j)
+            { 
+                eta[j] = _distribution->quantile(pi[j]/std::max(this->_epsilon_0, 1-cum_proba)); 
+                cum_proba += pi[j];
+            }
+            return eta;             
+        }
+
+        Eigen::VectorXd SequentialLink::inverse(const Eigen::VectorXd& eta) const
+        {
+        	Eigen::VectorXd ordered_pi( eta.size() );
     		double product = 1;
-        	for(size_t j=0; j<values.size(); ++j)
+        	for(size_t j=0; j<eta.size(); ++j)
         	{ 
-        		ordered_pi[j] = product * _distribution->cdf( values(j) );
-        		product *= ( 1 - _distribution->cdf( values(j) ) );
+        		ordered_pi[j] = product * _distribution->cdf( eta(j) );
+        		product *= ( 1 - _distribution->cdf( eta(j) ) );
         	}			
         	    	
-        	return ordered_pi; 
-        }
+        	return in_open_corner(ordered_pi); 
+        }              
 
-     //    Eigen::MatrixXd SequentialLink::inverse_derivative(const Eigen::VectorXd& values) const
-     //    {
-    	// Eigen::MatrixXd M = Eigen::MatrixXd::Zero(values.rows(),values.rows());
-    	// Eigen::VectorXd pi = inverse(values);
-    	// double mu_ref(1), cste(0);
-    	// for (size_t j=0; j < pi.rows(); ++j)
-    	// {
-    	// 	mu_ref -= cste;
-    	// 	M(j,j) = 1/mu_ref;
-    	// 	for (size_t i=0; i<j; ++i)
-    	// 	{ M(i,j) = pi(j)/(mu_ref*mu_ref); }
-
-    	// 	cste = pi[j];
-    	// }
-    	// return M.inverse(); 
-     //    }                 
-
-        Eigen::MatrixXd SequentialLink::inverse_derivative(const Eigen::VectorXd& values) const
+        Eigen::MatrixXd SequentialLink::inverse_derivative(const Eigen::VectorXd& eta) const
         {
-        Eigen::MatrixXd M = Eigen::MatrixXd::Zero(values.rows(),values.rows());
-        double product = 1;
-        for (size_t j=0; j < values.rows(); ++j)
-        {
-            M(j,j) = _distribution->pdf(values(j)) * product;
-            for (size_t i=0; i<j; ++i)
-            //{ M(i,j) = -M(j,j) * _distribution->cdf(values(j)) / ( 1-_distribution->cdf(values(i)) ); }
-            { M(i,j) = - _distribution->pdf(values(i)) / ( 1-_distribution->cdf(values(i)) ) * _distribution->cdf(values(j)) * product ; }    
-            product *= ( 1 - _distribution->cdf( values(j) ) );
-        }
-        return M; 
+            Eigen::MatrixXd M = Eigen::MatrixXd::Zero(eta.rows(),eta.rows());
+            double product = 1.;
+            for (size_t j=0; j < eta.rows(); ++j)
+            {
+                M(j,j) = _distribution->pdf(eta(j)) * product;
+                for (size_t i=0; i<j; ++i)
+                { M(i,j) = - _distribution->pdf(eta(i))  * std::max(this->_epsilon_0, std::min(_distribution->cdf(eta(j)), 1-this->_epsilon_1)) * product / std::max(this->_epsilon_0, std::min( 1-_distribution->cdf(eta(i)), 1-this->_epsilon_1)); }    
+                product *= std::max(this->_epsilon_0, std::min( 1-_distribution->cdf(eta(j)), 1-this->_epsilon_1));
+            }
+            return M; 
+
+            // Eigen::VectorXd mu = inverse(eta);
+            // Eigen::MatrixXd M = Eigen::MatrixXd::Zero(mu.size(), mu.size());
+            // Eigen::MatrixXd diag_f = Eigen::MatrixXd::Zero(mu.size(), mu.size());
+            // int i(0), j(0);
+            // double mu_ref(1), cste(0);
+
+            // for (j=0; j < mu.size(); j++)
+            // {
+            //     mu_ref -= cste;
+            //     M(j,j) = 1/mu_ref;
+            //     for (i=0; i<j; i++)
+            //     { M(i,j) = mu[j]/(mu_ref*mu_ref); }
+            //     cste = mu[j];
+            //     diag_f(j,j) = _distribution->pdf(eta(j));
+            // }
+            // return diag_f * M.inverse();
         }
 
         std::unique_ptr< OrdinalLink > SequentialLink::copy() const

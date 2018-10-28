@@ -29,13 +29,13 @@ void wrapper_553bce355f285b778b4fc9f2e8800e96()
     boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
     boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
     boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::class_< struct ::statiskit::glm::PoissonRegressionFisherEstimation, autowig::Held< struct ::statiskit::glm::PoissonRegressionFisherEstimation >::Type, boost::python::bases< class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > > > class_553bce355f285b778b4fc9f2e8800e96("PoissonRegressionFisherEstimation", "", boost::python::no_init);
+    boost::python::class_< struct ::statiskit::glm::PoissonRegressionFisherEstimation, autowig::Held< struct ::statiskit::glm::PoissonRegressionFisherEstimation >::Type, boost::python::bases< class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > > > class_553bce355f285b778b4fc9f2e8800e96("PoissonRegressionFisherEstimation", "", boost::python::no_init);
     class_553bce355f285b778b4fc9f2e8800e96.def(boost::python::init< class ::statiskit::glm::PoissonRegression const *, class ::statiskit::UnivariateConditionalData const * >(""));
     class_553bce355f285b778b4fc9f2e8800e96.def(boost::python::init< struct ::statiskit::glm::PoissonRegressionFisherEstimation const & >(""));
 
     if(autowig::Held< struct ::statiskit::glm::PoissonRegressionFisherEstimation >::is_class)
     {
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::PoissonRegressionFisherEstimation >::Type, autowig::Held< class ::statiskit::glm::ScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > >::Type >();
+        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::PoissonRegressionFisherEstimation >::Type, autowig::Held< class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation > >::Type >();
     }
 
 }

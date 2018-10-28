@@ -9,6 +9,9 @@ from .__glm.statiskit.glm import(_FLink,
                                  BinomialLink,
                                      BinomialCanonicalLink,
                                      BinomialFLink,
+                                 BinaryLink,
+                                     BinaryCanonicalLink,
+                                     BinaryFLink,
                                  NegativeBinomialLink,
                                      NegativeBinomialCanonicalLink,
                                      NegativeBinomialULink,
@@ -25,6 +28,7 @@ from .__glm.statiskit.glm import(_FLink,
 
 __all__ = ['PoissonLink',
            'BinomialLink',
+           'BinaryLink',
            'NegativeBinomialLink',
            'NominalLink',
            'OrdinalLink']
@@ -66,6 +70,12 @@ def BinomialLink(link='canonical', **kwargs):
     """
     return _link(link, dict(canonical = BinomialCanonicalLink,
                             F = BinomialFLink), **kwargs)
+
+def BinaryLink(link='canonical', **kwargs): 
+    """
+    """
+    return _link(link, dict(canonical = BinaryCanonicalLink,
+                            F = BinaryFLink), **kwargs)
 
 def NegativeBinomialLink(link='canonical', **kwargs): 
     """

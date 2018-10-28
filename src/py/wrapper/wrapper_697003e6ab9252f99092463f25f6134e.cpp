@@ -17,11 +17,14 @@ namespace autowig
 
         protected:
             
-            virtual class ::statiskit::glm::BinomialRegression * build_estimated(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0, struct ::statiskit::MultivariateSampleSpace const & param_1) const
+            virtual class ::statiskit::glm::BinomialRegression * build_estimated(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0, class ::statiskit::UnivariateConditionalData const & param_1) const
             { return this->get_override("build_estimated")(param_0, param_1); }
                         
             virtual double  sigma_square(double const & param_0) const
             { return this->get_override("sigma_square")(param_0); }
+                        
+            virtual class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  y_init(class ::statiskit::UnivariateConditionalData const & param_0) const
+            { return this->get_override("y_init")(param_0); }
                         
 
         private:

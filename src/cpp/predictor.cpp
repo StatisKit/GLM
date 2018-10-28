@@ -95,10 +95,10 @@ namespace statiskit
         { _explanatory_space = explanatory_space.copy().release(); }
       
         VectorPredictor::~VectorPredictor()
-        {} 
+        { delete _explanatory_space; } 
         
         VectorPredictor::VectorPredictor(const VectorPredictor& predictor)
-        { _explanatory_space = predictor._explanatory_space; }
+        { _explanatory_space = predictor._explanatory_space->copy().release(); }
         
         const MultivariateSampleSpace* VectorPredictor::get_explanatory_space() const
         { return _explanatory_space; }
