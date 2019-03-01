@@ -16,13 +16,14 @@ Alias("cpp", targets)
 Alias("autowig", targets)
 Alias("install", targets)
 
-wigenv = cppenv.Clone(tools = ['wig'])
-wigenv.AppendUnique(CPPDEFINES=['EIGEN_NO_STATIC_ASSERT'])
-targets = wigenv.BoostPythonWIG('statiskit_glm', [target for target in targets if target.name.endswith('.h')],
-                                module='../py/wrapper/_glm.cpp',
-                                decorator='../py/statiskit/glm/_glm.py',
-                                controller='AutoWIG.py',
-                                depends=['statiskit_core'])
+wigenv = cppenv.Clone(tools = ['pybind11_wig'])
+wigenv.AppendUnique(CPPDEFINES=['AUTOWIG',
+                                'EIGEN_NO_STATIC_ASSERT'])
+targets = wigenv.PyBind11WIG('statiskit_glm', [target for target in targets if target.name.endswith('.h')],
+                             module='../py/wrapper/_glm.cpp',
+                             decorator='../py/statiskit/glm/_glm.py',
+                             controller='AutoWIG.py',
+                             depends=['statiskit_core'])
 Alias("autowig", targets)
 wigenv.Depends(targets, "cpp-dev")
 

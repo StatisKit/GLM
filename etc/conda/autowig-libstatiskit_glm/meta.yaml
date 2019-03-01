@@ -1,0 +1,37 @@
+package:
+  name: libstatiskit_glm-dev
+  version: {{ GIT_DESCRIBE_VERSION }}
+
+source:
+  path: ../../..
+
+build:
+  number: {{ GIT_DESCRIBE_NUMBER }}
+
+about:
+  home: http://statiskit-stl.readthedocs.org
+  license: Apache License 2.0
+  summary: C++ Development Files for Modeling Conditional Data Using Generalized Linear Models
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - libtoolchain
+    - libtoolchain-dev
+    - autowig-toolchain
+    - autowig-libstatiskit_stl
+    - autowig-libstatiskit_linalg
+  host:
+    - libstatiskit_stl-dev
+    - libstatiskit_linalg-dev
+    - libstatiskit_core-dev
+    - libstatiskit_glm-dev
+    - python
+  run:
+    - {{ pin_compatible('libstatiskit_core-dev', exact=True) }}
+    - {{ pin_compatible('libstatiskit_glm-dev', exact=True) }}
+    - {{ pin_compatible('autowig-libstatiskit_stl', exact=True) }}
+    - {{ pin_compatible('autowig-libstatiskit_linalg', exact=True) }}
+    - {{ pin_compatible('autowig-libstatiskit_core', exact=True) }}
+    - python

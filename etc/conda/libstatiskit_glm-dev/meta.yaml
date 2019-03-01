@@ -1,13 +1,12 @@
 package:
   name: libstatiskit_glm-dev
-  version: "1.0.0"
+  version: {{ GIT_DESCRIBE_VERSION }}
 
 source:
   path: ../../..
 
 build:
-  number: 0
-  detect_binary_files_with_prefix: False
+  number: {{ GIT_DESCRIBE_NUMBER }}
 
 about:
   home: http://statiskit-stl.readthedocs.org
@@ -16,15 +15,15 @@ about:
 
 requirements:
   build:
-    - python
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - libtoolchain
     - libtoolchain-dev
+  host:
     - libstatiskit_stl-dev
     - libstatiskit_linalg-dev
     - libstatiskit_core-dev
-    # - libboost_core-dev
   run:
-    - libstatiskit_stl-dev
-    - libstatiskit_linalg-dev
-    - libstatiskit_core-dev
-    - libboost_core-dev
+    - {{ pin_compatible('libstatiskit_stl-dev', exact=True) }}
+    - {{ pin_compatible('libstatiskit_linalg-dev', exact=True) }}
+    - {{ pin_compatible('libstatiskit_core-dev', exact=True) }}

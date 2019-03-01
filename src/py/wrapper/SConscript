@@ -4,17 +4,20 @@ from SCons.Errors import EnvironmentError
 
 try:
     Import("env")
-    pyenv = env.Clone(tools = ['boost_python'])
+    pyenv = env.Clone(tools = ['pybind11'])
 
-    pyenv.AppendUnique(LIBS  = ['statiskit_glm'],
-                       CPPFLAGS = ["-Wno-ignored-attributes"])
+    pyenv.AppendUnique(LIBS  = ['statiskit_glm'])
+    if env['SYSTEM'] == 'linux':
+        pyenv.AppendUnique(CCFLAGS = ['-Wno-attributes', '-Wno-ignored-attributes'])
+    elif env['SYSTEM'] == 'osx':
+        pyenv.AppendUnique(CCFLAGS = ['-Wno-delete-non-virtual-dtor'])
 
     exclude = """
     """.split()
 
     sources = [source for source in pyenv.Glob('*.*') if source.name not in exclude]
 
-    targets = pyenv.BoostPythonExtension("../statiskit/glm/__glm", sources)
+    targets = pyenv.PyBind11Extension("../statiskit/glm/__glm", sources)
     Alias("py", targets)
     Alias("install", targets)
     pyenv.Depends(targets, "cpp")

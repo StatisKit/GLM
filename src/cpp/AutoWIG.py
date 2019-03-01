@@ -1,4 +1,3 @@
-from scons_tools.site_autowig.controller.statiskit_stl import controller as stl_controller
-
 def controller(asg):
-    return stl_controller(asg)
+    from scons_tools.site_autowig.controller.statiskit_core import controller as core_controller
+    return statiskit_core(asg)

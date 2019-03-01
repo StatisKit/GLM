@@ -1,12 +1,12 @@
 package:
   name: python-statiskit_glm
-  version: "1.0.0"
+  version: {{ GIT_DESCRIBE_VERSION }}
 
 source:
   path: ../../..
 
 build:
-  number: 0
+  number: {{ GIT_DESCRIBE_NUMBER }}
 
 about:
   home: http://statiskit-glm.readthedocs.io
@@ -15,19 +15,23 @@ about:
 
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - libtoolchain
-    - libboost_core-dev
-    - libstatiskit_glm-dev
-    - libstatiskit_glm
-    - libboost_python-dev
-    - libboost_python
+    - python-toolchain
+  host:
+    - libpybind11-dev
+    - libstatiskit_stl-dev
+    - libstatiskit_stl
+    - libstatiskit_linalg-dev
+    - libstatiskit_linalg
+    - libstatiskit_core-dev
+    - libstatiskit_core
     - python
   run:
-    - libboost_python
-    - libstatiskit_glm
-    - python-statiskit_linalg
-    - python-statiskit_stl
-    - python-statiskit_core
+    - {{ pin_compatible('libstatiskit_stl', exact=True) }}
+    - {{ pin_compatible('libstatiskit_linalg', exact=True) }}
+    - {{ pin_compatible('libstatiskit_core', exact=True) }}
     - python
 
 test:                                               
