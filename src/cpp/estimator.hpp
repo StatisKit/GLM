@@ -1,3 +1,4 @@
+#ifndef AUTOWIG
 #ifndef STATISKIT_GLM_ESTIMATOR_HPP
 #define STATISKIT_GLM_ESTIMATOR_HPP
 
@@ -432,4 +433,5 @@ namespace statiskit
     }
 }
 
+#endif
 #endif

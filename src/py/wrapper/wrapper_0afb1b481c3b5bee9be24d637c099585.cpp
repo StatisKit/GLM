@@ -1,56 +1,66 @@
 #include "_glm.h"
 
-
-
 namespace autowig
 {
-    class Wrap_0afb1b481c3b5bee9be24d637c099585 : public ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >, public boost::python::wrapper< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >
+    typedef ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > class_type;
+
+    class Trampoline : public class_type
     {
         public:
-            
+            using ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::PolymorphicCopy;
 
-        protected:
-            
-            virtual class ::statiskit::glm::PoissonRegression * build_estimated(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0, class ::statiskit::UnivariateConditionalData const & param_1) const
-            { return this->get_override("build_estimated")(param_0, param_1); }
-                        
-            virtual double  sigma_square(double const & param_0) const
-            { return this->get_override("sigma_square")(param_0); }
-                        
-
-        private:
-            
-
+            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator > >  return_type_b01e532749ef5f6d8d19d0c84585e163;
+            virtual return_type_b01e532749ef5f6d8d19d0c84585e163 copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_b01e532749ef5f6d8d19d0c84585e163, class_type, copy, ); };
+            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  return_type_08470ac00c5c55d4a79840337ed9d4c9;
+            typedef class ::statiskit::UnivariateConditionalData const & param_08470ac00c5c55d4a79840337ed9d4c9_0_type;
+            virtual return_type_08470ac00c5c55d4a79840337ed9d4c9 y_init(param_08470ac00c5c55d4a79840337ed9d4c9_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_08470ac00c5c55d4a79840337ed9d4c9, class_type, y_init, param_0); };
+            typedef class ::statiskit::glm::PoissonRegression * return_type_89edada561a357fca8103d2dd8f6e18a;
+            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_89edada561a357fca8103d2dd8f6e18a_0_type;
+            typedef class ::statiskit::UnivariateConditionalData const & param_89edada561a357fca8103d2dd8f6e18a_1_type;
+            virtual return_type_89edada561a357fca8103d2dd8f6e18a build_estimated(param_89edada561a357fca8103d2dd8f6e18a_0_type param_0, param_89edada561a357fca8103d2dd8f6e18a_1_type param_1) const override { PYBIND11_OVERLOAD_PURE(return_type_89edada561a357fca8103d2dd8f6e18a, class_type, build_estimated, param_0, param_1); };
+            typedef double  return_type_c1c0d83a801f58f4894c0208ed22261f;
+            typedef double const & param_c1c0d83a801f58f4894c0208ed22261f_0_type;
+            virtual return_type_c1c0d83a801f58f4894c0208ed22261f sigma_square(param_c1c0d83a801f58f4894c0208ed22261f_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_c1c0d83a801f58f4894c0208ed22261f, class_type, sigma_square, param_0); };
+            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  return_type_153649b5f1c655cb97a8ea308d5a2883;
+            typedef class ::statiskit::UnivariateConditionalData const & param_153649b5f1c655cb97a8ea308d5a2883_0_type;
+            virtual return_type_153649b5f1c655cb97a8ea308d5a2883 w_init(param_153649b5f1c655cb97a8ea308d5a2883_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_153649b5f1c655cb97a8ea308d5a2883, class_type, w_init, param_0); };
+            typedef class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 >  return_type_5a60e32ae5925bcab8a8e91644d4d4c9;
+            typedef class ::statiskit::UnivariateConditionalData const & param_5a60e32ae5925bcab8a8e91644d4d4c9_0_type;
+            virtual return_type_5a60e32ae5925bcab8a8e91644d4d4c9 X_init(param_5a60e32ae5925bcab8a8e91644d4d4c9_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_5a60e32ae5925bcab8a8e91644d4d4c9, class_type, X_init, param_0); };
+            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistributionEstimation, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistributionEstimation > >  return_type_58f2cd0e9e8755dea311004b126a0812;
+            typedef class ::statiskit::UnivariateConditionalData const & param_58f2cd0e9e8755dea311004b126a0812_0_type;
+            typedef bool const & param_58f2cd0e9e8755dea311004b126a0812_1_type;
+            virtual return_type_58f2cd0e9e8755dea311004b126a0812 operator()(param_58f2cd0e9e8755dea311004b126a0812_0_type param_0, param_58f2cd0e9e8755dea311004b126a0812_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_58f2cd0e9e8755dea311004b126a0812, class_type, operator(), param_0, param_1); };
+            typedef ::uintptr_t  return_type_ed723b56ee6d50838db979e102419f39;
+            virtual return_type_ed723b56ee6d50838db979e102419f39 identifier() const override { PYBIND11_OVERLOAD(return_type_ed723b56ee6d50838db979e102419f39, class_type, identifier, ); };
+            typedef class ::std::unordered_set< unsigned long int, struct ::std::hash< unsigned long int >, struct ::std::equal_to< unsigned long int >, class ::std::allocator< unsigned long int > >  return_type_7ba100805cd95f1cba468c9ce84eb72c;
+            virtual return_type_7ba100805cd95f1cba468c9ce84eb72c children() const override { PYBIND11_OVERLOAD(return_type_7ba100805cd95f1cba468c9ce84eb72c, class_type, children, ); };
     };
 
-}
-
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> autowig::Wrap_0afb1b481c3b5bee9be24d637c099585 const volatile * get_pointer<autowig::Wrap_0afb1b481c3b5bee9be24d637c099585 const volatile >(autowig::Wrap_0afb1b481c3b5bee9be24d637c099585 const volatile *c) { return c; }
-    template <> struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > const volatile * get_pointer<struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > const volatile >(struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > const volatile *c) { return c; }
-}
-    #endif
-#endif
-
-
-
-void wrapper_0afb1b481c3b5bee9be24d637c099585()
-{
-
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
-    boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
-    boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::class_< autowig::Wrap_0afb1b481c3b5bee9be24d637c099585, autowig::Held< autowig::Wrap_0afb1b481c3b5bee9be24d637c099585 >::Type, boost::python::bases< class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >, boost::noncopyable > class_0afb1b481c3b5bee9be24d637c099585("_PolymorphicCopy_0afb1b481c3b5bee9be24d637c099585", "", boost::python::no_init);
-
-    if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::is_class)
+    class Publicist : public class_type
     {
-        boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_0afb1b481c3b5bee9be24d637c099585 >::Type, autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type >();
-        boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type, autowig::Held< class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >::Type >();
-    }
+        public:
+            using class_type::y_init;
+            using class_type::build_estimated;
+            using class_type::sigma_square;
+            using class_type::w_init;
+            using class_type::X_init;
+            using class_type::identifier;
+            using class_type::children;
+    };
+}
+
+
+namespace autowig {
+}
+
+void wrapper_0afb1b481c3b5bee9be24d637c099585(pybind11::module& module)
+{
+
+    pybind11::class_<struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateConditionalDistributionEstimation::Estimator, class ::statiskit::glm::PoissonRegressionFisherEstimation::Estimator, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > >::Type, class ::statiskit::glm::QuantitativeScalarRegressionFisherEstimation< class ::statiskit::glm::PoissonRegression, struct ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator > class_0afb1b481c3b5bee9be24d637c099585(module, "_PolymorphicCopy_0afb1b481c3b5bee9be24d637c099585", "");
+    class_0afb1b481c3b5bee9be24d637c099585.def("_build_estimated", &autowig::Publicist::build_estimated, pybind11::return_value_policy::reference_internal, "");
+    class_0afb1b481c3b5bee9be24d637c099585.def("_sigma_square", &autowig::Publicist::sigma_square, "");
+    class_0afb1b481c3b5bee9be24d637c099585.def("_w_init", &autowig::Publicist::w_init, "");
+    class_0afb1b481c3b5bee9be24d637c099585.def("_x__init", &autowig::Publicist::X_init, "");
 
 }

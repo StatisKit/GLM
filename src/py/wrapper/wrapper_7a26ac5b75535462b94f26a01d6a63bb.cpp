@@ -1,53 +1,31 @@
 #include "_glm.h"
 
-
-
 namespace autowig
 {
-    class Wrap_7a26ac5b75535462b94f26a01d6a63bb : public ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization >, public boost::python::wrapper< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >
+    typedef ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > class_type;
+
+    class Trampoline : public class_type
     {
         public:
-            
-            virtual void  operator()(class ::statiskit::UnivariateConditionalData const & param_0, class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > & param_1, struct ::statiskit::glm::VectorLink const & param_2) const
-            { this->get_override("operator()")(param_0, param_1, param_2); }
-                        
+            using ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization >::PolymorphicCopy;
 
-        protected:
-            
-
-        private:
-            
-
+            typedef class ::std::unique_ptr< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::std::default_delete< struct ::statiskit::glm::CategoricalFisherInitialization > >  return_type_dd7d542ed70c58bdad1a2117b2069ea8;
+            virtual return_type_dd7d542ed70c58bdad1a2117b2069ea8 copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_dd7d542ed70c58bdad1a2117b2069ea8, class_type, copy, ); };
+            typedef void  return_type_f020b7c9271f52fe84de964f8f02d96e;
+            typedef class ::statiskit::UnivariateConditionalData const & param_f020b7c9271f52fe84de964f8f02d96e_0_type;
+            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > & param_f020b7c9271f52fe84de964f8f02d96e_1_type;
+            typedef struct ::statiskit::glm::VectorLink const & param_f020b7c9271f52fe84de964f8f02d96e_2_type;
+            virtual return_type_f020b7c9271f52fe84de964f8f02d96e operator()(param_f020b7c9271f52fe84de964f8f02d96e_0_type param_0, param_f020b7c9271f52fe84de964f8f02d96e_1_type param_1, param_f020b7c9271f52fe84de964f8f02d96e_2_type param_2) const override { PYBIND11_OVERLOAD_PURE(return_type_f020b7c9271f52fe84de964f8f02d96e, class_type, operator(), param_0, param_1, param_2); };
     };
-
 }
 
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> autowig::Wrap_7a26ac5b75535462b94f26a01d6a63bb const volatile * get_pointer<autowig::Wrap_7a26ac5b75535462b94f26a01d6a63bb const volatile >(autowig::Wrap_7a26ac5b75535462b94f26a01d6a63bb const volatile *c) { return c; }
-    template <> struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > const volatile * get_pointer<struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > const volatile >(struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > const volatile *c) { return c; }
+
+namespace autowig {
 }
-    #endif
-#endif
 
-
-
-void wrapper_7a26ac5b75535462b94f26a01d6a63bb()
+void wrapper_7a26ac5b75535462b94f26a01d6a63bb(pybind11::module& module)
 {
 
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
-    boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
-    boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::class_< autowig::Wrap_7a26ac5b75535462b94f26a01d6a63bb, autowig::Held< autowig::Wrap_7a26ac5b75535462b94f26a01d6a63bb >::Type, boost::python::bases< struct ::statiskit::glm::CategoricalFisherInitialization >, boost::noncopyable > class_7a26ac5b75535462b94f26a01d6a63bb("_PolymorphicCopy_7a26ac5b75535462b94f26a01d6a63bb", "", boost::python::no_init);
-
-    if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >::is_class)
-    {
-        boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_7a26ac5b75535462b94f26a01d6a63bb >::Type, autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >::Type >();
-        boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >::Type, autowig::Held< struct ::statiskit::glm::CategoricalFisherInitialization >::Type >();
-    }
+    pybind11::class_<struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >::Type, struct ::statiskit::glm::CategoricalFisherInitialization > class_7a26ac5b75535462b94f26a01d6a63bb(module, "_PolymorphicCopy_7a26ac5b75535462b94f26a01d6a63bb", "");
 
 }

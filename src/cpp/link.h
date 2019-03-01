@@ -72,12 +72,12 @@ namespace statiskit
             virtual std::unique_ptr< BinomialLink > copy() const = 0;
         };
 
-        struct STATISKIT_GLM_API BinaryLink : ScalarLink
-        {
-            typedef BinaryDistribution family_type;
+        // struct STATISKIT_GLM_API BinaryLink : ScalarLink
+        // {
+        //     typedef BinaryDistribution family_type;
             
-            virtual std::unique_ptr< BinaryLink > copy() const = 0;
-        };
+        //     virtual std::unique_ptr< BinaryLink > copy() const = 0;
+        // };
 
         template<class T>
         struct STATISKIT_GLM_API BinCanonicalLink : T
@@ -92,7 +92,7 @@ namespace statiskit
             virtual std::unique_ptr< T > copy() const;
         };
 
-        typedef BinCanonicalLink< BinaryLink > BinaryCanonicalLink;
+        // typedef BinCanonicalLink< BinaryLink > BinaryCanonicalLink;
         typedef BinCanonicalLink< BinomialLink > BinomialCanonicalLink;        
         
         template<class T>
@@ -109,7 +109,7 @@ namespace statiskit
             virtual std::unique_ptr< T > copy() const;
         };
 
-        typedef BinFLink< BinaryLink > BinaryFLink;
+        // typedef BinFLink< BinaryLink > BinaryFLink;
         typedef BinFLink< BinomialLink > BinomialFLink;       
 
         struct STATISKIT_GLM_API NegativeBinomialLink : ScalarLink

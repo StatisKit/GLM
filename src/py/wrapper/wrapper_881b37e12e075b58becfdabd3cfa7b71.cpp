@@ -1,73 +1,40 @@
 #include "_glm.h"
 
-
-
 namespace autowig
 {
-    class Wrap_881b37e12e075b58becfdabd3cfa7b71 : public ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >, public boost::python::wrapper< struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > >
+    typedef ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > class_type;
+
+    class Trampoline : public class_type
     {
         public:
-            
-            virtual class ::std::unique_ptr< struct ::statiskit::glm::BinomialLink, struct ::std::default_delete< struct ::statiskit::glm::BinomialLink > >  copy() const
-            {
-                 ::std::unique_ptr< struct ::statiskit::glm::BinomialLink, struct ::std::default_delete< struct ::statiskit::glm::BinomialLink > > ::element_type* result = this->get_override("copy")();
-                 return ::std::unique_ptr< struct ::statiskit::glm::BinomialLink, struct ::std::default_delete< struct ::statiskit::glm::BinomialLink > > (result);
-            }
-                        
-            virtual double  inverse_derivative(double const & param_0) const
-            { return this->get_override("inverse_derivative")(param_0); }
-                        
-            virtual double  inverse(double const & param_0) const
-            { return this->get_override("inverse")(param_0); }
-                        
-            virtual double  evaluate(double const & param_0) const
-            { return this->get_override("evaluate")(param_0); }
-                        
+            using ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >::FLink;
 
-        protected:
-            
-
-        private:
-            
-
+            typedef class ::std::unique_ptr< struct ::statiskit::glm::BinomialLink, struct ::std::default_delete< struct ::statiskit::glm::BinomialLink > >  return_type_cbd6cb94f82859609c826f08d198eb34;
+            virtual return_type_cbd6cb94f82859609c826f08d198eb34 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_cbd6cb94f82859609c826f08d198eb34, class_type, copy, ); };
+            typedef double  return_type_9ba4fc1dd4f652f392ce40b2bf511b7b;
+            typedef double const & param_9ba4fc1dd4f652f392ce40b2bf511b7b_0_type;
+            virtual return_type_9ba4fc1dd4f652f392ce40b2bf511b7b inverse_derivative(param_9ba4fc1dd4f652f392ce40b2bf511b7b_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_9ba4fc1dd4f652f392ce40b2bf511b7b, class_type, inverse_derivative, param_0); };
+            typedef double  return_type_fc86be68d84e511e9a34503a8754077a;
+            typedef double const & param_fc86be68d84e511e9a34503a8754077a_0_type;
+            virtual return_type_fc86be68d84e511e9a34503a8754077a inverse(param_fc86be68d84e511e9a34503a8754077a_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_fc86be68d84e511e9a34503a8754077a, class_type, inverse, param_0); };
+            typedef double  return_type_5dcdc12fa57c5edc9de0e319163d1cca;
+            typedef double const & param_5dcdc12fa57c5edc9de0e319163d1cca_0_type;
+            virtual return_type_5dcdc12fa57c5edc9de0e319163d1cca evaluate(param_5dcdc12fa57c5edc9de0e319163d1cca_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_5dcdc12fa57c5edc9de0e319163d1cca, class_type, evaluate, param_0); };
     };
-
 }
 
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> autowig::Wrap_881b37e12e075b58becfdabd3cfa7b71 const volatile * get_pointer<autowig::Wrap_881b37e12e075b58becfdabd3cfa7b71 const volatile >(autowig::Wrap_881b37e12e075b58becfdabd3cfa7b71 const volatile *c) { return c; }
-    template <> struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > const volatile * get_pointer<struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > const volatile >(struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > const volatile *c) { return c; }
+struct ::statiskit::ContinuousUnivariateDistribution * (::statiskit::glm::FLink< ::statiskit::glm::BinomialLink >::*method_pointer_41a55f69b9fa5c2abc2cf1d613b570d1)()= &::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >::get_distribution;
+void  (::statiskit::glm::FLink< ::statiskit::glm::BinomialLink >::*method_pointer_7845a8bbe90f55478bb988e9a2f5525d)(struct ::statiskit::ContinuousUnivariateDistribution const &)= &::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >::set_distribution;
+
+namespace autowig {
 }
-    #endif
-#endif
 
-
-
-void wrapper_881b37e12e075b58becfdabd3cfa7b71()
+void wrapper_881b37e12e075b58becfdabd3cfa7b71(pybind11::module& module)
 {
 
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
-    boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
-    boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    std::string name_dfc470f00ed658a8838b0d698570f3bc = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".glm");
-    boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
-    boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
-    struct ::statiskit::ContinuousUnivariateDistribution * (::statiskit::glm::FLink< ::statiskit::glm::BinomialLink >::*method_pointer_41a55f69b9fa5c2abc2cf1d613b570d1)() = &::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >::get_distribution;
-    void  (::statiskit::glm::FLink< ::statiskit::glm::BinomialLink >::*method_pointer_7845a8bbe90f55478bb988e9a2f5525d)(struct ::statiskit::ContinuousUnivariateDistribution const &) = &::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >::set_distribution;
-    boost::python::class_< autowig::Wrap_881b37e12e075b58becfdabd3cfa7b71, autowig::Held< autowig::Wrap_881b37e12e075b58becfdabd3cfa7b71 >::Type, boost::python::bases< struct ::statiskit::glm::BinomialLink >, boost::noncopyable > class_881b37e12e075b58becfdabd3cfa7b71("_FLink_881b37e12e075b58becfdabd3cfa7b71", "", boost::python::no_init);
-    class_881b37e12e075b58becfdabd3cfa7b71.def("get_distribution", method_pointer_41a55f69b9fa5c2abc2cf1d613b570d1, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
+    pybind11::class_<struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > >::Type, struct ::statiskit::glm::BinomialLink > class_881b37e12e075b58becfdabd3cfa7b71(module, "_FLink_881b37e12e075b58becfdabd3cfa7b71", "");
+    class_881b37e12e075b58becfdabd3cfa7b71.def(pybind11::init<  >());
+    class_881b37e12e075b58becfdabd3cfa7b71.def("get_distribution", method_pointer_41a55f69b9fa5c2abc2cf1d613b570d1, pybind11::return_value_policy::reference_internal, "");
     class_881b37e12e075b58becfdabd3cfa7b71.def("set_distribution", method_pointer_7845a8bbe90f55478bb988e9a2f5525d, "");
-
-    if(autowig::Held< struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > >::is_class)
-    {
-        boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_881b37e12e075b58becfdabd3cfa7b71 >::Type, autowig::Held< struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > >::Type >();
-        boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::FLink< struct ::statiskit::glm::BinomialLink > >::Type, autowig::Held< struct ::statiskit::glm::BinomialLink >::Type >();
-    }
 
 }

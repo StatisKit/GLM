@@ -1,63 +1,44 @@
 #include "_glm.h"
 
-
-
 namespace autowig
 {
-    class Wrap_1012a62884255e6391bbbc369818186d : public ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink >, public boost::python::wrapper< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >
+    typedef ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > class_type;
+
+    class Trampoline : public class_type
     {
         public:
-            
-            virtual class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > >  copy() const
-            {
-                 ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > > ::element_type* result = this->get_override("copy")();
-                 return ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > > (result);
-            }
-                        
+            using ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink >::UnivariateDiscreteGeneralizedLinearModel;
 
-        protected:
-            
-            virtual void  update(double const & param_0) const
-            { this->get_override("update")(param_0); }
-                        
-
-        private:
-            
-
+            typedef unsigned int  return_type_15cca94c837e5487a4ec0120f05016b4;
+            virtual return_type_15cca94c837e5487a4ec0120f05016b4 get_nb_parameters() const override { PYBIND11_OVERLOAD(return_type_15cca94c837e5487a4ec0120f05016b4, class_type, get_nb_parameters, ); };
+            typedef void  return_type_e5f9bf150c5f5c539f67723982ecb53f;
+            typedef double const & param_e5f9bf150c5f5c539f67723982ecb53f_0_type;
+            virtual return_type_e5f9bf150c5f5c539f67723982ecb53f update(param_e5f9bf150c5f5c539f67723982ecb53f_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_e5f9bf150c5f5c539f67723982ecb53f, class_type, update, param_0); };
+            typedef struct ::statiskit::MultivariateSampleSpace const * return_type_284e4feaba7b5b5a88a28d146983e886;
+            virtual return_type_284e4feaba7b5b5a88a28d146983e886 get_explanatory_space() const override { PYBIND11_OVERLOAD(return_type_284e4feaba7b5b5a88a28d146983e886, class_type, get_explanatory_space, ); };
+            typedef struct ::statiskit::UnivariateDistribution const * return_type_839427dc13a25d09aaa0fa0c226ca422;
+            typedef struct ::statiskit::MultivariateEvent const & param_839427dc13a25d09aaa0fa0c226ca422_0_type;
+            virtual return_type_839427dc13a25d09aaa0fa0c226ca422 operator()(param_839427dc13a25d09aaa0fa0c226ca422_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_839427dc13a25d09aaa0fa0c226ca422, class_type, operator(), param_0); };
+            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > >  return_type_2d42bbbaff065a9cb38813f62e9dafda;
+            virtual return_type_2d42bbbaff065a9cb38813f62e9dafda copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_2d42bbbaff065a9cb38813f62e9dafda, class_type, copy, ); };
     };
 
-}
-
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> autowig::Wrap_1012a62884255e6391bbbc369818186d const volatile * get_pointer<autowig::Wrap_1012a62884255e6391bbbc369818186d const volatile >(autowig::Wrap_1012a62884255e6391bbbc369818186d const volatile *c) { return c; }
-    template <> struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > const volatile * get_pointer<struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > const volatile >(struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > const volatile *c) { return c; }
-}
-    #endif
-#endif
-
-
-
-void wrapper_1012a62884255e6391bbbc369818186d()
-{
-
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
-    boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
-    boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    std::string name_dfc470f00ed658a8838b0d698570f3bc = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".glm");
-    boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
-    boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::class_< autowig::Wrap_1012a62884255e6391bbbc369818186d, autowig::Held< autowig::Wrap_1012a62884255e6391bbbc369818186d >::Type, boost::python::bases< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::glm::PoissonLink > >, boost::noncopyable > class_1012a62884255e6391bbbc369818186d("_UnivariateDiscreteGeneralizedLinearModel_1012a62884255e6391bbbc369818186d", "", boost::python::no_init);
-
-    if(autowig::Held< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >::is_class)
+    class Publicist : public class_type
     {
-        boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_1012a62884255e6391bbbc369818186d >::Type, autowig::Held< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >::Type >();
-        boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >::Type, autowig::Held< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::glm::PoissonLink > >::Type >();
-    }
+        public:
+            using class_type::update;
+    };
+}
+
+
+namespace autowig {
+}
+
+void wrapper_1012a62884255e6391bbbc369818186d(pybind11::module& module)
+{
+
+    pybind11::class_<struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >::Type, class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::glm::PoissonLink > > class_1012a62884255e6391bbbc369818186d(module, "_UnivariateDiscreteGeneralizedLinearModel_1012a62884255e6391bbbc369818186d", "");
+    class_1012a62884255e6391bbbc369818186d.def(pybind11::init< class ::statiskit::glm::ScalarPredictor const &, struct ::statiskit::glm::PoissonLink const & >());
+    class_1012a62884255e6391bbbc369818186d.def("_update", &autowig::Publicist::update, "");
 
 }

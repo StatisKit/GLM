@@ -1,40 +1,16 @@
 #include "_glm.h"
 
+class ::statiskit::glm::VectorPredictor & (::std::unique_ptr< ::statiskit::glm::VectorPredictor, ::std::default_delete< ::statiskit::glm::VectorPredictor > >::*method_pointer_00f8549a427757b9b472d460cb638d3c)()const= &::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::operator*;
+::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::pointer  (::std::unique_ptr< ::statiskit::glm::VectorPredictor, ::std::default_delete< ::statiskit::glm::VectorPredictor > >::*method_pointer_daadaaca12da5db9bff5471441d7e35e)()const= &::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::get;
+::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::pointer  (::std::unique_ptr< ::statiskit::glm::VectorPredictor, ::std::default_delete< ::statiskit::glm::VectorPredictor > >::*method_pointer_54c92b6960ed5d0ead2b2b687a6f6425)()= &::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::release;
+void  (::std::unique_ptr< ::statiskit::glm::VectorPredictor, ::std::default_delete< ::statiskit::glm::VectorPredictor > >::*method_pointer_2bf22429811a57fa854897b30e5fe6f0)(::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::pointer )= &::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::reset;
+void  (::std::unique_ptr< ::statiskit::glm::VectorPredictor, ::std::default_delete< ::statiskit::glm::VectorPredictor > >::*method_pointer_d1700e0b78e45099b2b6fa9a708ff36e)(class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > &)= &::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >::swap;
 
-
-namespace autowig
-{
-
+namespace autowig {
     void method_decorator_00f8549a427757b9b472d460cb638d3c(class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > const & instance, const class ::statiskit::glm::VectorPredictor & param_out) { instance.operator*() = param_out; }
 }
 
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > const volatile * get_pointer<class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > const volatile >(class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > const volatile *c) { return c; }
-}
-    #endif
-#endif
-
-
-
-void wrapper_d6fed8f1ec0351e1ba728433abdffa52()
+void wrapper_d6fed8f1ec0351e1ba728433abdffa52(pybind11::module& module)
 {
 
-    std::string name_a5e4e9231d6351ccb0e06756b389f0af = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".std");
-    boost::python::object module_a5e4e9231d6351ccb0e06756b389f0af(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_a5e4e9231d6351ccb0e06756b389f0af.c_str()))));
-    boost::python::scope().attr("std") = module_a5e4e9231d6351ccb0e06756b389f0af;
-    boost::python::scope scope_a5e4e9231d6351ccb0e06756b389f0af = module_a5e4e9231d6351ccb0e06756b389f0af;
-    struct unique_ptr_d6fed8f1ec0351e1ba728433abdffa52_to_python
-    {
-        static PyObject* convert(class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > const & unique_ptr_d6fed8f1ec0351e1ba728433abdffa52)
-        {
-            //return boost::python::incref(boost::python::object(const_cast< class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > & >(unique_ptr_d6fed8f1ec0351e1ba728433abdffa52).release()).ptr());
-            std::shared_ptr< class ::statiskit::glm::VectorPredictor  > shared_ptr_d6fed8f1ec0351e1ba728433abdffa52(std::move(const_cast< class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > > & >(unique_ptr_d6fed8f1ec0351e1ba728433abdffa52)));
-            return boost::python::incref(boost::python::object(shared_ptr_d6fed8f1ec0351e1ba728433abdffa52).ptr());
-        }
-    };
-
-    boost::python::to_python_converter< class ::std::unique_ptr< class ::statiskit::glm::VectorPredictor, struct ::std::default_delete< class ::statiskit::glm::VectorPredictor > >, unique_ptr_d6fed8f1ec0351e1ba728433abdffa52_to_python >();
 }

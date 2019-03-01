@@ -1,40 +1,16 @@
 #include "_glm.h"
 
+struct ::statiskit::glm::NegativeBinomialLink & (::std::unique_ptr< ::statiskit::glm::NegativeBinomialLink, ::std::default_delete< ::statiskit::glm::NegativeBinomialLink > >::*method_pointer_a5d9431b763d5d2080db8c636b8ac06f)()const= &::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::operator*;
+::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::pointer  (::std::unique_ptr< ::statiskit::glm::NegativeBinomialLink, ::std::default_delete< ::statiskit::glm::NegativeBinomialLink > >::*method_pointer_0f2b6d9850b95f0fb436569a26060974)()const= &::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::get;
+::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::pointer  (::std::unique_ptr< ::statiskit::glm::NegativeBinomialLink, ::std::default_delete< ::statiskit::glm::NegativeBinomialLink > >::*method_pointer_a51024698bc45371a2dd751f3d6fd7e5)()= &::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::release;
+void  (::std::unique_ptr< ::statiskit::glm::NegativeBinomialLink, ::std::default_delete< ::statiskit::glm::NegativeBinomialLink > >::*method_pointer_28e18f34362f5fe9bf157a4038220527)(::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::pointer )= &::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::reset;
+void  (::std::unique_ptr< ::statiskit::glm::NegativeBinomialLink, ::std::default_delete< ::statiskit::glm::NegativeBinomialLink > >::*method_pointer_0aa28c7a49c053048d806bb3d4ae4196)(class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > &)= &::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >::swap;
 
-
-namespace autowig
-{
-
+namespace autowig {
     void method_decorator_a5d9431b763d5d2080db8c636b8ac06f(class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > const & instance, const struct ::statiskit::glm::NegativeBinomialLink & param_out) { instance.operator*() = param_out; }
 }
 
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > const volatile * get_pointer<class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > const volatile >(class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > const volatile *c) { return c; }
-}
-    #endif
-#endif
-
-
-
-void wrapper_a9a889ee6e1650d58054f8929e40ddc9()
+void wrapper_a9a889ee6e1650d58054f8929e40ddc9(pybind11::module& module)
 {
 
-    std::string name_a5e4e9231d6351ccb0e06756b389f0af = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".std");
-    boost::python::object module_a5e4e9231d6351ccb0e06756b389f0af(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_a5e4e9231d6351ccb0e06756b389f0af.c_str()))));
-    boost::python::scope().attr("std") = module_a5e4e9231d6351ccb0e06756b389f0af;
-    boost::python::scope scope_a5e4e9231d6351ccb0e06756b389f0af = module_a5e4e9231d6351ccb0e06756b389f0af;
-    struct unique_ptr_a9a889ee6e1650d58054f8929e40ddc9_to_python
-    {
-        static PyObject* convert(class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > const & unique_ptr_a9a889ee6e1650d58054f8929e40ddc9)
-        {
-            //return boost::python::incref(boost::python::object(const_cast< class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > & >(unique_ptr_a9a889ee6e1650d58054f8929e40ddc9).release()).ptr());
-            std::shared_ptr< struct ::statiskit::glm::NegativeBinomialLink  > shared_ptr_a9a889ee6e1650d58054f8929e40ddc9(std::move(const_cast< class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > > & >(unique_ptr_a9a889ee6e1650d58054f8929e40ddc9)));
-            return boost::python::incref(boost::python::object(shared_ptr_a9a889ee6e1650d58054f8929e40ddc9).ptr());
-        }
-    };
-
-    boost::python::to_python_converter< class ::std::unique_ptr< struct ::statiskit::glm::NegativeBinomialLink, struct ::std::default_delete< struct ::statiskit::glm::NegativeBinomialLink > >, unique_ptr_a9a889ee6e1650d58054f8929e40ddc9_to_python >();
 }

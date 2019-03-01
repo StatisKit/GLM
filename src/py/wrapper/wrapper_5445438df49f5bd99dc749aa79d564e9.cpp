@@ -1,63 +1,44 @@
 #include "_glm.h"
 
-
-
 namespace autowig
 {
-    class Wrap_5445438df49f5bd99dc749aa79d564e9 : public ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink >, public boost::python::wrapper< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >
+    typedef ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > class_type;
+
+    class Trampoline : public class_type
     {
         public:
-            
-            virtual class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > >  copy() const
-            {
-                 ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > > ::element_type* result = this->get_override("copy")();
-                 return ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > > (result);
-            }
-                        
+            using ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink >::CategoricalGeneralizedLinearModel;
 
-        protected:
-            
-            virtual void  update(class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_0) const
-            { this->get_override("update")(param_0); }
-                        
-
-        private:
-            
-
+            typedef unsigned int  return_type_b4c9e4239f7658ca8493b8fe02339e74;
+            virtual return_type_b4c9e4239f7658ca8493b8fe02339e74 get_nb_parameters() const override { PYBIND11_OVERLOAD(return_type_b4c9e4239f7658ca8493b8fe02339e74, class_type, get_nb_parameters, ); };
+            typedef void  return_type_5dcd137cdbd853e9a7dac00a71bb7b5c;
+            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_5dcd137cdbd853e9a7dac00a71bb7b5c_0_type;
+            virtual return_type_5dcd137cdbd853e9a7dac00a71bb7b5c update(param_5dcd137cdbd853e9a7dac00a71bb7b5c_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_5dcd137cdbd853e9a7dac00a71bb7b5c, class_type, update, param_0); };
+            typedef struct ::statiskit::MultivariateSampleSpace const * return_type_9962634c32dd5aeab0ace57d0ae0ae00;
+            virtual return_type_9962634c32dd5aeab0ace57d0ae0ae00 get_explanatory_space() const override { PYBIND11_OVERLOAD(return_type_9962634c32dd5aeab0ace57d0ae0ae00, class_type, get_explanatory_space, ); };
+            typedef struct ::statiskit::UnivariateDistribution const * return_type_e93ebfb702eb5779bafe91362828e2ea;
+            typedef struct ::statiskit::MultivariateEvent const & param_e93ebfb702eb5779bafe91362828e2ea_0_type;
+            virtual return_type_e93ebfb702eb5779bafe91362828e2ea operator()(param_e93ebfb702eb5779bafe91362828e2ea_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_e93ebfb702eb5779bafe91362828e2ea, class_type, operator(), param_0); };
+            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateConditionalDistribution > >  return_type_2d42bbbaff065a9cb38813f62e9dafda;
+            virtual return_type_2d42bbbaff065a9cb38813f62e9dafda copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_2d42bbbaff065a9cb38813f62e9dafda, class_type, copy, ); };
     };
 
-}
-
-#if defined(_MSC_VER)
-    #if (_MSC_VER == 1900)
-namespace boost
-{
-    template <> autowig::Wrap_5445438df49f5bd99dc749aa79d564e9 const volatile * get_pointer<autowig::Wrap_5445438df49f5bd99dc749aa79d564e9 const volatile >(autowig::Wrap_5445438df49f5bd99dc749aa79d564e9 const volatile *c) { return c; }
-    template <> struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > const volatile * get_pointer<struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > const volatile >(struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > const volatile *c) { return c; }
-}
-    #endif
-#endif
-
-
-
-void wrapper_5445438df49f5bd99dc749aa79d564e9()
-{
-
-    std::string name_fa414b05d29e5f4ea0b6d6cb5cf81b01 = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".statiskit");
-    boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
-    boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    std::string name_dfc470f00ed658a8838b0d698570f3bc = boost::python::extract< std::string >(boost::python::scope().attr("__name__") + ".glm");
-    boost::python::object module_dfc470f00ed658a8838b0d698570f3bc(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dfc470f00ed658a8838b0d698570f3bc.c_str()))));
-    boost::python::scope().attr("glm") = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::scope scope_dfc470f00ed658a8838b0d698570f3bc = module_dfc470f00ed658a8838b0d698570f3bc;
-    boost::python::class_< autowig::Wrap_5445438df49f5bd99dc749aa79d564e9, autowig::Held< autowig::Wrap_5445438df49f5bd99dc749aa79d564e9 >::Type, boost::python::bases< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::glm::NominalLink > >, boost::noncopyable > class_5445438df49f5bd99dc749aa79d564e9("_CategoricalGeneralizedLinearModel_5445438df49f5bd99dc749aa79d564e9", "", boost::python::no_init);
-
-    if(autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >::is_class)
+    class Publicist : public class_type
     {
-        boost::python::implicitly_convertible< autowig::Held< autowig::Wrap_5445438df49f5bd99dc749aa79d564e9 >::Type, autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >::Type >();
-        boost::python::register_ptr_to_python< autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >::Type >();
-        boost::python::implicitly_convertible< autowig::Held< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >::Type, autowig::Held< class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::glm::NominalLink > >::Type >();
-    }
+        public:
+            using class_type::update;
+    };
+}
+
+
+namespace autowig {
+}
+
+void wrapper_5445438df49f5bd99dc749aa79d564e9(pybind11::module& module)
+{
+
+    pybind11::class_<struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >::Type, class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::glm::NominalLink > > class_5445438df49f5bd99dc749aa79d564e9(module, "_CategoricalGeneralizedLinearModel_5445438df49f5bd99dc749aa79d564e9", "");
+    class_5445438df49f5bd99dc749aa79d564e9.def(pybind11::init< class ::statiskit::glm::VectorPredictor const &, struct ::statiskit::glm::NominalLink const & >());
+    class_5445438df49f5bd99dc749aa79d564e9.def("_update", &autowig::Publicist::update, "");
 
 }

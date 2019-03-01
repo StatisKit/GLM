@@ -113,16 +113,16 @@ namespace statiskit
         	virtual unsigned int get_nb_parameters() const;
         };
 
-        class STATISKIT_GLM_API BinaryRegression : public CategoricalGeneralizedLinearModel< BinaryLink >
-        {
-            public:
-                BinaryRegression(const std::string& value, const std::string reference_value, const ScalarPredictor& predictor, const BinaryLink& link);
+        // class STATISKIT_GLM_API BinaryRegression : public CategoricalGeneralizedLinearModel< BinaryLink >
+        // {
+        //     public:
+        //         BinaryRegression(const std::string& value, const std::string reference_value, const ScalarPredictor& predictor, const BinaryLink& link);
                  
-                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
+        //         virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;    
                            
-            private:
-                virtual void update(const double& value) const;
-        };       
+        //     private:
+        //         virtual void update(const double& value) const;
+        // };       
         
         class STATISKIT_GLM_API NominalRegression : public CategoricalGeneralizedLinearModel< NominalLink >
         {
@@ -155,49 +155,49 @@ namespace statiskit
         };                                               
 
 
-        class STATISKIT_GLM_API HierarchicalRegression : public CategoricalUnivariateConditionalDistribution
-        {
-            //typedef CategoricalEvent event_type;
-            typedef statiskit::HierarchicalDistribution response_type;
+        // class STATISKIT_GLM_API HierarchicalRegression : public CategoricalUnivariateConditionalDistribution
+        // {
+        //     //typedef CategoricalEvent event_type;
+        //     typedef statiskit::HierarchicalDistribution response_type;
             
-            public:
-                HierarchicalRegression(const HierarchicalSampleSpace& hss, const MultivariateSampleSpace& explanatory_space);
-                HierarchicalRegression(const HierarchicalRegression& hr);
-                virtual ~HierarchicalRegression();
+        //     public:
+        //         HierarchicalRegression(const HierarchicalSampleSpace& hss, const MultivariateSampleSpace& explanatory_space);
+        //         HierarchicalRegression(const HierarchicalRegression& hr);
+        //         virtual ~HierarchicalRegression();
 
-                /// \Brief This is an operation of conditioning that returns the conditional distribution \f$ Y \vert \boldsymbol{X} = \boldsymbol{x} \f$.
-                virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const;
+        //         /// \Brief This is an operation of conditioning that returns the conditional distribution \f$ Y \vert \boldsymbol{X} = \boldsymbol{x} \f$.
+        //         virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const;
 
-                /// \Brief Get the sample space of the explanatory components \f$ \boldsymbol{X} \f$.
-                virtual const MultivariateSampleSpace* get_explanatory_space() const;
+        //         /// \Brief Get the sample space of the explanatory components \f$ \boldsymbol{X} \f$.
+        //         virtual const MultivariateSampleSpace* get_explanatory_space() const;
 
-                /// \Brief Get the number of parameters of the \f$ Y \vert \boldsymbol{X} \f$.
-                virtual unsigned int get_nb_parameters() const;
+        //         /// \Brief Get the number of parameters of the \f$ Y \vert \boldsymbol{X} \f$.
+        //         virtual unsigned int get_nb_parameters() const;
 
-                virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;      
+        //         virtual std::unique_ptr< UnivariateConditionalDistribution > copy() const;      
 
-                const CategoricalUnivariateConditionalDistribution* get_regression(const std::string& value) const;
-                void set_regression(const std::string& value, const CategoricalUnivariateConditionalDistribution& regression);           
+        //         const CategoricalUnivariateConditionalDistribution* get_regression(const std::string& value) const;
+        //         void set_regression(const std::string& value, const CategoricalUnivariateConditionalDistribution& regression);           
                            
-                class HierarchicalDistribution : public statiskit::HierarchicalDistribution
-                {
-                    public:
-                        typedef std::map< std::string, CategoricalUnivariateDistribution* >::iterator iterator;
+        //         class HierarchicalDistribution : public statiskit::HierarchicalDistribution
+        //         {
+        //             public:
+        //                 typedef std::map< std::string, CategoricalUnivariateDistribution* >::iterator iterator;
 
-                        HierarchicalDistribution(const HierarchicalSampleSpace& hss);
-                        HierarchicalDistribution(const HierarchicalDistribution& hd);
-                        virtual ~HierarchicalDistribution();
+        //                 HierarchicalDistribution(const HierarchicalSampleSpace& hss);
+        //                 HierarchicalDistribution(const HierarchicalDistribution& hd);
+        //                 virtual ~HierarchicalDistribution();
 
-                        iterator begin();
-                        iterator end();
-                        unsigned int index(const std::string& value) const;
-                };
+        //                 iterator begin();
+        //                 iterator end();
+        //                 unsigned int index(const std::string& value) const;
+        //         };
 
-            protected:
-                HierarchicalDistribution* _hierarchical_distribution;
-                std::vector< CategoricalUnivariateConditionalDistribution* > _regressions;        
-                MultivariateSampleSpace* _explanatory_space;
-        };
+        //     protected:
+        //         HierarchicalDistribution* _hierarchical_distribution;
+        //         std::vector< CategoricalUnivariateConditionalDistribution* > _regressions;        
+        //         MultivariateSampleSpace* _explanatory_space;
+        // };
 
         /* struct STATISKIT_GLM_API SplittingOperator
         {

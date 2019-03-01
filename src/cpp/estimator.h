@@ -187,27 +187,27 @@ namespace statiskit
             };
         };
 
-        struct STATISKIT_GLM_API BinaryRegressionFisherEstimation : ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >
-        {
-            BinaryRegressionFisherEstimation(BinaryRegression const * estimated, UnivariateConditionalData const * data);
-            BinaryRegressionFisherEstimation(const BinaryRegressionFisherEstimation & estimation);
+        // struct STATISKIT_GLM_API BinaryRegressionFisherEstimation : ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >
+        // {
+        //     BinaryRegressionFisherEstimation(BinaryRegression const * estimated, UnivariateConditionalData const * data);
+        //     BinaryRegressionFisherEstimation(const BinaryRegressionFisherEstimation & estimation);
 
-            virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > copy() const;
+        //     virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > copy() const;
 
-            class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >::Estimator >
-            {
-                public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);
+        //     class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >::Estimator >
+        //     {
+        //         public:
+        //             Estimator();
+        //             Estimator(const Estimator& estimator);
 
-                protected:
-                    virtual Eigen::VectorXd y_init(const UnivariateConditionalData& data) const;
+        //         protected:
+        //             virtual Eigen::VectorXd y_init(const UnivariateConditionalData& data) const;
                     
-                    virtual double sigma_square(const double& mu) const;
+        //             virtual double sigma_square(const double& mu) const;
                     
-                    virtual BinaryRegression * build_estimated(const Eigen::VectorXd& beta, const UnivariateConditionalData& data) const;                                        
-            };
-        };
+        //             virtual BinaryRegression * build_estimated(const Eigen::VectorXd& beta, const UnivariateConditionalData& data) const;                                        
+        //     };
+        // };
 
         struct STATISKIT_GLM_API CategoricalFisherInitialization
         {
@@ -394,45 +394,45 @@ namespace statiskit
                 }; 
         };
 
-        class STATISKIT_GLM_API HierarchicalRegressionEstimation : public ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >
-        {
-            public:
-                typedef HierarchicalRegression estimated_type;
+        // class STATISKIT_GLM_API HierarchicalRegressionEstimation : public ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >
+        // {
+        //     public:
+        //         typedef HierarchicalRegression estimated_type;
                 
-                HierarchicalRegressionEstimation();
-                HierarchicalRegressionEstimation(HierarchicalRegression const * estimated, data_type const * data);            
-                HierarchicalRegressionEstimation(const HierarchicalRegressionEstimation& estimation);
-                virtual ~HierarchicalRegressionEstimation();
+        //         HierarchicalRegressionEstimation();
+        //         HierarchicalRegressionEstimation(HierarchicalRegression const * estimated, data_type const * data);            
+        //         HierarchicalRegressionEstimation(const HierarchicalRegressionEstimation& estimation);
+        //         virtual ~HierarchicalRegressionEstimation();
 
-                virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > copy() const;
+        //         virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > copy() const;
 
-                const UnivariateConditionalDistributionEstimation* get_estimation(const std::string& value) const;
+        //         const UnivariateConditionalDistributionEstimation* get_estimation(const std::string& value) const;
 
-                class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ActiveEstimation< HierarchicalRegression, UnivariateConditionalDistributionEstimation >::Estimator >
-                {
-                    public: 
-                        Estimator();
-                        Estimator(const Estimator& estimator);
-                        virtual ~Estimator();
+        //         class STATISKIT_GLM_API Estimator : public PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ActiveEstimation< HierarchicalRegression, UnivariateConditionalDistributionEstimation >::Estimator >
+        //         {
+        //             public: 
+        //                 Estimator();
+        //                 Estimator(const Estimator& estimator);
+        //                 virtual ~Estimator();
                         
-                        virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const data_type& data, const bool& lazy=true) const;
+        //                 virtual std::unique_ptr< UnivariateConditionalDistributionEstimation > operator() (const data_type& data, const bool& lazy=true) const;
 
-                        const CategoricalUnivariateConditionalDistributionEstimation::Estimator* get_default_estimator() const;
-                        void set_default_estimator(const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator);
+        //                 const CategoricalUnivariateConditionalDistributionEstimation::Estimator* get_default_estimator() const;
+        //                 void set_default_estimator(const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator);
 
-                        const CategoricalUnivariateConditionalDistributionEstimation::Estimator* get_estimator(const std::string& value) const;
-                        void set_estimator(const std::string& value, const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator);
+        //                 const CategoricalUnivariateConditionalDistributionEstimation::Estimator* get_estimator(const std::string& value) const;
+        //                 void set_estimator(const std::string& value, const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator);
 
-                        //const data_type& partition(const std::string& value, const data_type& data);
+        //                 //const data_type& partition(const std::string& value, const data_type& data);
 
-                    protected:
-                        CategoricalUnivariateConditionalDistributionEstimation::Estimator* _default_estimator;
-                        std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* > _estimators;
-                };
+        //             protected:
+        //                 CategoricalUnivariateConditionalDistributionEstimation::Estimator* _default_estimator;
+        //                 std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* > _estimators;
+        //         };
 
-            protected:
-                std::map< std::string, UnivariateConditionalDistributionEstimation* > _estimations;
-        };
+        //     protected:
+        //         std::map< std::string, UnivariateConditionalDistributionEstimation* > _estimations;
+        // };
 
 //typedef CumulativeRegressionFisherEstimation < ConstrainedRegressionFisherEstimation < OrdinalRegression > >::PartialProportionalEstimator CumulativePartialProportionalFisherEstimator;
 

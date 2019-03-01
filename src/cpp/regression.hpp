@@ -1,3 +1,4 @@
+#ifndef AUTOWIG
 #ifndef STATISKIT_GLM_REGRESSION_HPP
 #define STATISKIT_GLM_REGRESSION_HPP
 
@@ -253,4 +254,6 @@ namespace statiskit
         //     { return _family->get_nb_components(); }
     }
 }
+
+#endif
 #endif

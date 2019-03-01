@@ -1,3 +1,4 @@
+#ifndef AUTOWIG
 #ifndef STATISKIT_GLM_LINK_HPP
 #define STATISKIT_GLM_LINK_HPP
 
@@ -79,4 +80,5 @@ namespace statiskit
     }
 }
 
+#endif
 #endif
