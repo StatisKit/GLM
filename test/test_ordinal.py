@@ -30,12 +30,12 @@ class TestCanonicalOrdinalRegressionEstimation(TestCanonicalNominalRegressionEst
 
     def test_Fisher(self):
         """Test Fisher scoring estimation for canonical ordinal regression with complete design"""
-        mle = glm.ordinal_estimation(data=self._data, response = 0, explanatories = {1,2})
+        mle = glm.ordinal_estimation(data=self._data, response = 0, explanatories = {1, 2})
         alpha = mle.estimated.predictor.alpha
         delta = mle.estimated.predictor.delta
         self.assertAlmostEqual(mle.loglikelihood, self._loglikelihood, places=2)
         self._data.AirConditioning.sample_space = self._data.AirConditioning.sample_space.as_nominal()
-        mle = glm.nominal_estimation(data=self._data, response = 0, explanatories = {1,2})
+        mle = glm.nominal_estimation(data=self._data, response = 0, explanatories = {1, 2})
         self.assertAlmostEqual(mle.loglikelihood, self._loglikelihood, places=2)
 
 
@@ -54,7 +54,7 @@ class TestCumulativeRegressionEstimation(TestCanonicalOrdinalRegressionEstimatio
         #ipdb.set_trace()
         # beta_init = linalg.Vector([-0.66, 0.66, 0., 0., 0.])
         # mle = glm.ordinal_estimation(ratio='cumulative', Z='proportional', data=self._data, response = 0, explanatories = {1,2}, beta_init=beta_init)
-        mle = glm.ordinal_estimation(ratio='cumulative', Z='proportional', data=self._data, response = 0, explanatories = {1,2})
+        mle = glm.ordinal_estimation(ratio='cumulative', Z='proportional', data=self._data, response = 0, explanatories = {1, 2})
         alpha = mle.estimated.predictor.alpha
         delta = mle.estimated.predictor.delta
         self.assertAlmostEqual(mle.loglikelihood, self._loglikelihood, places=3)
@@ -102,8 +102,8 @@ class TestHierarchicalRegressionEstimation(unittest.TestCase):
         cls._data_ordinal = data.load('retinopathy')
         cls._data_hierarchical = data.load('retinopathy')
         sample_spaces = []
-        ss1 = core.NominalSampleSpace(['0', '12'])
-        ss2 = core.NominalSampleSpace(['1', '2'])
+        ss1 = core.NominalSampleSpace('0', '12')
+        ss2 = core.NominalSampleSpace('1', '2')
         hss = core.HierarchicalSampleSpace(ss1)
         hss.partition('12', ss2)
         sample_spaces.append(hss)

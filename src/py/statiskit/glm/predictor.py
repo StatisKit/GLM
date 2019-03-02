@@ -1,6 +1,9 @@
 from functools import wraps
+from statiskit import stl
 from statiskit.core.event import (MultivariateEvent,
                                     VectorEvent)
+
+from statiskit.core.__core.statiskit import (Indices)
 
 from . import _glm
 from .__glm.statiskit.glm import (ScalarPredictor, 
@@ -11,9 +14,9 @@ from .__glm.statiskit.glm import (ScalarPredictor,
                                       ConstrainedVectorPredictor)
 
 __all__ = ['CompleteScalarPredictor',
-            'CompleteVectorPredictor',
-            'ProportionalVectorPredictor',
-            'ConstrainedVectorPredictor']
+           'CompleteVectorPredictor',
+           'ProportionalVectorPredictor',
+           'ConstrainedVectorPredictor']
 
 
 ScalarPredictor.explanatory_space = property(ScalarPredictor.get_explanatory_space)
@@ -54,3 +57,14 @@ def wrapper_call(f):
 
 ScalarPredictor.__call__ = wrapper_call(ScalarPredictor.__call__)
 VectorPredictor.__call__ = wrapper_call(VectorPredictor.__call__)
+
+def wrapper(f):
+    @wraps(f)
+    def partial_proportional_constraint(data, proportional):
+        if not isinstance(proportional, Indices):
+            proportional = Indices(*list(proportional))
+        return f(data, proportional)
+    return partial_proportional_constraint
+
+ConstrainedVectorPredictor.partial_proportional_constraint = staticmethod(wrapper(ConstrainedVectorPredictor.partial_proportional_constraint))
+del wrapper

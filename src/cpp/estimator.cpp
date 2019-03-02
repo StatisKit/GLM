@@ -241,59 +241,61 @@ namespace statiskit
             return estimation;
         }
 
-        // BinaryRegressionFisherEstimation::BinaryRegressionFisherEstimation(BinaryRegression const * estimated, UnivariateConditionalData const * data) : ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
-        // {}
+        BinaryRegressionFisherEstimation::BinaryRegressionFisherEstimation(BinaryRegression const * estimated, UnivariateConditionalData const * data) : ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
+        {}
 
-        // BinaryRegressionFisherEstimation::BinaryRegressionFisherEstimation(const BinaryRegressionFisherEstimation & estimation) : ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
-        // {}
+        BinaryRegressionFisherEstimation::BinaryRegressionFisherEstimation(const BinaryRegressionFisherEstimation & estimation) : ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
+        {}
 
-        // std::unique_ptr< UnivariateConditionalDistributionEstimation > BinaryRegressionFisherEstimation::copy() const
-        // { return std::make_unique< BinaryRegressionFisherEstimation >(*this); }
+        std::unique_ptr< UnivariateConditionalDistributionEstimation > BinaryRegressionFisherEstimation::copy() const
+        { return std::make_unique< BinaryRegressionFisherEstimation >(*this); }
 
-        // BinaryRegressionFisherEstimation::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >::Estimator >()
-        // { _link = new BinaryCanonicalLink(); }
+        BinaryRegressionFisherEstimation::Estimator::Estimator() : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >::Estimator >()
+        { _link = new BinaryCanonicalLink(); }
         
-        // BinaryRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
-        // {}
+        BinaryRegressionFisherEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ScalarRegressionFisherEstimation< BinaryRegression, CategoricalUnivariateConditionalDistributionEstimation >::Estimator >(estimator)
+        {}
 
-        // double BinaryRegressionFisherEstimation::Estimator::sigma_square(const double& mu) const
-        // { return mu * (1 - mu); }
+        double BinaryRegressionFisherEstimation::Estimator::sigma_square(const double& mu) const
+        { return mu * (1 - mu); }
         
-        // BinaryRegression * BinaryRegressionFisherEstimation::Estimator::build_estimated(const Eigen::VectorXd& beta, const UnivariateConditionalData& data) const
-        // {
-        //     CompleteScalarPredictor predictor = CompleteScalarPredictor(*(data.get_explanatories()->get_sample_space()));
-        //     predictor.set_beta(beta);
-        //     const NominalSampleSpace* sample_space = static_cast< const NominalSampleSpace* >( data.get_response()->get_sample_space() );
-        //     std::set< std::string > values = sample_space->get_values();
-        //     if(values.size() != 2)
-        //     { throw size_error("values", values.size(), 2); }
-        //     std::set< std::string >::const_iterator it = values.cbegin();
-        //     if(*it == sample_space->get_reference())
-        //     { ++it; }
-        //     return new BinaryRegression(*it, sample_space->get_reference(), predictor, *_link); 
-        // }
+        BinaryRegression * BinaryRegressionFisherEstimation::Estimator::build_estimated(const Eigen::VectorXd& beta, const UnivariateConditionalData& data) const
+        {
+            CompleteScalarPredictor predictor = CompleteScalarPredictor(*(data.get_explanatories()->get_sample_space()));
+            predictor.set_beta(beta);
+            const NominalSampleSpace* sample_space = static_cast< const NominalSampleSpace* >( data.get_response()->get_sample_space() );
+            std::set< std::string > values = sample_space->get_values();
+            if(values.size() != 2)
+            { throw size_error("values", values.size(), 2); }
+            std::set< std::string >::const_iterator it = values.cbegin();
+            if(*it == sample_space->get_reference())
+            { ++it; }
+            return new BinaryRegression(*it, sample_space->get_reference(), predictor, *_link); 
+        }
         
-        // Eigen::VectorXd BinaryRegressionFisherEstimation::Estimator::y_init(const UnivariateConditionalData& data) const
-        // {
-        //     const UnivariateData* _data = data.get_response();
-        //     Eigen::VectorXd y = Eigen::VectorXd::Zero(_data->size());
-        //     std::unique_ptr< UnivariateData::Generator > generator = _data->generator();
-        //     Index index = 0;
-        //     while(generator->is_valid())
-        //     {
-        //         const UnivariateEvent* event = generator->event();
-        //         if(event && event->get_event() == ELEMENTARY)
-        //         {
-        //             if(static_cast< const CategoricalElementaryEvent* >(event)->get_value() != static_cast< const NominalSampleSpace* >(_data->get_sample_space())->get_reference())
-        //             { y(index) = 1; }
-        //         }
-        //         else
-        //         { y(index) = std::numeric_limits< double >::quiet_NaN(); }
-        //         ++(*generator);
-        //         ++index;
-        //     }
-        //     return y;
-        // }
+        Eigen::VectorXd BinaryRegressionFisherEstimation::Estimator::y_init(const UnivariateConditionalData& data) const
+        {
+            const UnivariateData* _data = data.get_response();
+            Eigen::VectorXd y = Eigen::VectorXd::Zero(_data->size());
+            std::unique_ptr< UnivariateData::Generator > generator = _data->generator();
+            Index index = 0;
+            while(generator->is_valid())
+            {
+                const UnivariateEvent* event = generator->event();
+                if(event && event->get_event() == ELEMENTARY)
+                {
+                    if(static_cast< const CategoricalElementaryEvent* >(event)->get_value() != static_cast< const NominalSampleSpace* >(_data->get_sample_space())->get_reference())
+                    { y(index) = 1; }
+                }
+                else
+                { y(index) = std::numeric_limits< double >::quiet_NaN(); }
+                ++(*generator);
+                ++index;
+            }
+            return y;
+        }
+
+
 
         CategoricalFisherInitialization::CategoricalFisherInitialization()
         {}
@@ -602,128 +604,128 @@ namespace statiskit
             return new OrdinalRegression(_response_space.get_ordered(), *predictor, *(this->_link));
         }
 
-        // HierarchicalRegressionEstimation::HierarchicalRegressionEstimation() : ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >()
-        // { _estimations.clear(); }
+        HierarchicalRegressionEstimation::HierarchicalRegressionEstimation() : ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >()
+        { _estimations.clear(); }
 
-        // HierarchicalRegressionEstimation::HierarchicalRegressionEstimation(HierarchicalRegression const * estimated, data_type const * data) : ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
-        // { _estimations.clear(); }
+        HierarchicalRegressionEstimation::HierarchicalRegressionEstimation(HierarchicalRegression const * estimated, data_type const * data) : ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimated, data)
+        { _estimations.clear(); }
 
-        // HierarchicalRegressionEstimation::HierarchicalRegressionEstimation(const HierarchicalRegressionEstimation& estimation) : ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
-        // {
-        //     _estimations.clear();
-        //     //for(std::map< std::string, UnivariateConditionalDistributionEstimation* >::const_iterator it = estimation._estimations.cbegin(), it_end = estimation._estimations.cend(); it != it_end; ++it)            
-        //     //{ _estimations[it->first] = static_cast< UnivariateConditionalDistributionEstimation* >(it->second->copy().release()); }
-        // }
+        HierarchicalRegressionEstimation::HierarchicalRegressionEstimation(const HierarchicalRegressionEstimation& estimation) : ActiveEstimation< HierarchicalRegression, CategoricalUnivariateConditionalDistributionEstimation >(estimation)
+        {
+            _estimations.clear();
+            //for(std::map< std::string, UnivariateConditionalDistributionEstimation* >::const_iterator it = estimation._estimations.cbegin(), it_end = estimation._estimations.cend(); it != it_end; ++it)            
+            //{ _estimations[it->first] = static_cast< UnivariateConditionalDistributionEstimation* >(it->second->copy().release()); }
+        }
 
-        // HierarchicalRegressionEstimation::~HierarchicalRegressionEstimation()
-        // {
-        //     for(std::map< std::string, UnivariateConditionalDistributionEstimation* >::iterator it = _estimations.begin(), it_end = _estimations.end(); it != it_end; ++it)            
-        //     {
-        //         delete it->second;
-        //         it->second = nullptr;
-        //     }
-        //     _estimations.clear();
-        // }
+        HierarchicalRegressionEstimation::~HierarchicalRegressionEstimation()
+        {
+            for(std::map< std::string, UnivariateConditionalDistributionEstimation* >::iterator it = _estimations.begin(), it_end = _estimations.end(); it != it_end; ++it)            
+            {
+                delete it->second;
+                it->second = nullptr;
+            }
+            _estimations.clear();
+        }
 
-        // std::unique_ptr< UnivariateConditionalDistributionEstimation > HierarchicalRegressionEstimation::copy() const
-        // { return std::make_unique< HierarchicalRegressionEstimation >(*this); }
+        std::unique_ptr< UnivariateConditionalDistributionEstimation > HierarchicalRegressionEstimation::copy() const
+        { return std::make_unique< HierarchicalRegressionEstimation >(*this); }
 
-        // const UnivariateConditionalDistributionEstimation* HierarchicalRegressionEstimation::get_estimation(const std::string& value) const
-        // {
-        //     std::map< std::string, UnivariateConditionalDistributionEstimation* >::const_iterator it = _estimations.find(value); 
-        //     if(it != _estimations.cend())
-        //     { return it->second; }
-        //     else
-        //     { throw in_set_error("value", value, __impl::keys(_estimations), false); }
-        // }
+        const UnivariateConditionalDistributionEstimation* HierarchicalRegressionEstimation::get_estimation(const std::string& value) const
+        {
+            std::map< std::string, UnivariateConditionalDistributionEstimation* >::const_iterator it = _estimations.find(value); 
+            if(it != _estimations.cend())
+            { return it->second; }
+            else
+            { throw in_set_error("value", value, __impl::keys(_estimations), false); }
+        }
 
-        // HierarchicalRegressionEstimation::Estimator::Estimator()
-        // {
-        //     _default_estimator = new NominalRegressionFisherEstimation::Estimator();
-        //     _estimators.clear();
-        // }
+        HierarchicalRegressionEstimation::Estimator::Estimator()
+        {
+            _default_estimator = new NominalRegressionFisherEstimation::Estimator();
+            _estimators.clear();
+        }
 
-        // HierarchicalRegressionEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ActiveEstimation< HierarchicalRegression, UnivariateConditionalDistributionEstimation >::Estimator >(estimator)
-        // {
-        //     if(estimator._default_estimator)
-        //     { _default_estimator = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator._default_estimator->copy().release()); }
-        //     else
-        //     { _default_estimator = nullptr; }
-        //     _estimators.clear();
-        //     for(std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::const_iterator it = estimator._estimators.cbegin(), it_end = estimator._estimators.cend(); it != it_end; ++it)
-        //     { _estimators[it->first] = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(it->second->copy().release()); }
-        // }
+        HierarchicalRegressionEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateConditionalDistributionEstimation::Estimator, Estimator, ActiveEstimation< HierarchicalRegression, UnivariateConditionalDistributionEstimation >::Estimator >(estimator)
+        {
+            if(estimator._default_estimator)
+            { _default_estimator = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator._default_estimator->copy().release()); }
+            else
+            { _default_estimator = nullptr; }
+            _estimators.clear();
+            for(std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::const_iterator it = estimator._estimators.cbegin(), it_end = estimator._estimators.cend(); it != it_end; ++it)
+            { _estimators[it->first] = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(it->second->copy().release()); }
+        }
 
-        // HierarchicalRegressionEstimation::Estimator::~Estimator()
-        // {
-        //     delete _default_estimator;
-        //     _default_estimator = nullptr;
-        //     for(std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::iterator it = _estimators.begin(), it_end = _estimators.end(); it != it_end; ++it)            
-        //     {
-        //         delete it->second;
-        //         it->second = nullptr;
-        //     }
-        //     _estimators.clear();
-        // }
+        HierarchicalRegressionEstimation::Estimator::~Estimator()
+        {
+            delete _default_estimator;
+            _default_estimator = nullptr;
+            for(std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::iterator it = _estimators.begin(), it_end = _estimators.end(); it != it_end; ++it)            
+            {
+                delete it->second;
+                it->second = nullptr;
+            }
+            _estimators.clear();
+        }
 
-        // const CategoricalUnivariateConditionalDistributionEstimation::Estimator* HierarchicalRegressionEstimation::Estimator::get_default_estimator() const
-        // { return _default_estimator; }
+        const CategoricalUnivariateConditionalDistributionEstimation::Estimator* HierarchicalRegressionEstimation::Estimator::get_default_estimator() const
+        { return _default_estimator; }
 
-        // void HierarchicalRegressionEstimation::Estimator::set_default_estimator(const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator)
-        // {
-        //     if(_default_estimator)
-        //     { delete _default_estimator; }
-        //     if(estimator)
-        //     { _default_estimator = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator->copy().release()); }
-        //     else
-        //     { _default_estimator = nullptr; }
-        // }
+        void HierarchicalRegressionEstimation::Estimator::set_default_estimator(const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator)
+        {
+            if(_default_estimator)
+            { delete _default_estimator; }
+            if(estimator)
+            { _default_estimator = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator->copy().release()); }
+            else
+            { _default_estimator = nullptr; }
+        }
 
-        // const CategoricalUnivariateConditionalDistributionEstimation::Estimator* HierarchicalRegressionEstimation::Estimator::get_estimator(const std::string& value) const
-        // {
-        //     std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::const_iterator it = _estimators.find(value);
-        //     if(it == _estimators.cend())
-        //     { return nullptr; }
-        //     else
-        //     { return it->second; }
-        // }
+        const CategoricalUnivariateConditionalDistributionEstimation::Estimator* HierarchicalRegressionEstimation::Estimator::get_estimator(const std::string& value) const
+        {
+            std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::const_iterator it = _estimators.find(value);
+            if(it == _estimators.cend())
+            { return nullptr; }
+            else
+            { return it->second; }
+        }
                          
-        // void HierarchicalRegressionEstimation::Estimator::set_estimator(const std::string& value, const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator)
-        // {
-        //     if(estimator)
-        //     {
-        //         std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::iterator it = _estimators.find(value);
-        //         if(it == _estimators.end())
-        //         { _estimators[value] = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator->copy().release()); }
-        //         else
-        //         { 
-        //             delete it->second;
-        //             it->second = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator->copy().release());
-        //         }                    
-        //     }
-        // }
+        void HierarchicalRegressionEstimation::Estimator::set_estimator(const std::string& value, const CategoricalUnivariateConditionalDistributionEstimation::Estimator* estimator)
+        {
+            if(estimator)
+            {
+                std::map< std::string, CategoricalUnivariateConditionalDistributionEstimation::Estimator* >::iterator it = _estimators.find(value);
+                if(it == _estimators.end())
+                { _estimators[value] = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator->copy().release()); }
+                else
+                { 
+                    delete it->second;
+                    it->second = static_cast< CategoricalUnivariateConditionalDistributionEstimation::Estimator* >(estimator->copy().release());
+                }                    
+            }
+        }
                 
-        // std::unique_ptr< UnivariateConditionalDistributionEstimation > HierarchicalRegressionEstimation::Estimator::operator() (const data_type& data, const bool& lazy) const
-        // {
-        //     HierarchicalRegression* estimated = new HierarchicalRegression(*(static_cast< const HierarchicalSampleSpace* >(data.get_response()->get_sample_space())), *(data.get_explanatories()->get_sample_space()));
-        //     HierarchicalRegressionEstimation* estimation = new HierarchicalRegressionEstimation(estimated, &data);
+        std::unique_ptr< UnivariateConditionalDistributionEstimation > HierarchicalRegressionEstimation::Estimator::operator() (const data_type& data, const bool& lazy) const
+        {
+            HierarchicalRegression* estimated = new HierarchicalRegression(*(static_cast< const HierarchicalSampleSpace* >(data.get_response()->get_sample_space())), *(data.get_explanatories()->get_sample_space()));
+            HierarchicalRegressionEstimation* estimation = new HierarchicalRegressionEstimation(estimated, &data);
 
-        //     const HierarchicalSampleSpace* hss = static_cast< const HierarchicalSampleSpace* >((data.get_response())->get_sample_space());
-        //     for(HierarchicalSampleSpace::const_iterator it = hss->cbegin(), it_end = hss->cend(); it != it_end; ++it)
-        //     {
-        //         UnivariateConditionalData current_data = hss->split(it->first, data);
-        //         if(_estimators.find(it->first) == _estimators.cend())
-        //         { 
-        //             UnivariateConditionalDistributionEstimation* current_estimation = ((*_default_estimator)(current_data, lazy)).release();
-        //             estimation->_estimations[it->first] = current_estimation; 
-        //             estimated->set_regression(it->first, *(static_cast< const CategoricalUnivariateConditionalDistribution* >(current_estimation->get_estimated())));
-        //         }
-        //         else
-        //         { estimation->_estimations[it->first] = ((*(_estimators.find(it->first)->second))(current_data, lazy)).release(); }
-        //     }
+            const HierarchicalSampleSpace* hss = static_cast< const HierarchicalSampleSpace* >((data.get_response())->get_sample_space());
+            for(HierarchicalSampleSpace::const_iterator it = hss->cbegin(), it_end = hss->cend(); it != it_end; ++it)
+            {
+                UnivariateConditionalData current_data = hss->split(it->first, data);
+                if(_estimators.find(it->first) == _estimators.cend())
+                { 
+                    UnivariateConditionalDistributionEstimation* current_estimation = ((*_default_estimator)(current_data, lazy)).release();
+                    estimation->_estimations[it->first] = current_estimation; 
+                    estimated->set_regression(it->first, *(static_cast< const CategoricalUnivariateConditionalDistribution* >(current_estimation->get_estimated())));
+                }
+                else
+                { estimation->_estimations[it->first] = ((*(_estimators.find(it->first)->second))(current_data, lazy)).release(); }
+            }
 
-        //     return std::unique_ptr< HierarchicalRegressionEstimation >(estimation);
+            return std::unique_ptr< HierarchicalRegressionEstimation >(estimation);
 
-        // }               
+        }               
     }
 }

@@ -16,7 +16,7 @@ class TestPredictor(object):
         sample_spaces = []
         sample_spaces.append(core.controls.ZZ)
         sample_spaces.append(core.controls.RR)
-        cls._vector_sample_spaces = core.VectorSampleSpace(sample_spaces)
+        cls._vector_sample_spaces = core.VectorSampleSpace(*sample_spaces)
        
 
 @attr(linux=True,

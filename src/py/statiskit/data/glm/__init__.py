@@ -12,7 +12,7 @@ def load(*args):
 
     if 'retinopathy.csv' in kwargs:
         sample_spaces = []
-        ordinal_sample_space = OrdinalSampleSpace(['0','1','2'])
+        ordinal_sample_space = OrdinalSampleSpace('0','1','2')
         sample_spaces.append(ordinal_sample_space)
         sample_spaces.append(controls.ZZ)
         for i in [0,1,2]:

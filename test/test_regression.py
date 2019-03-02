@@ -17,7 +17,7 @@ class AbstractTestUnivariateRegression(object):
         sample_spaces = []
         sample_spaces.append(core.controls.ZZ)
         sample_spaces.append(core.controls.RR)
-        cls._vector_sample_spaces = core.VectorSampleSpace(sample_spaces)
+        cls._vector_sample_spaces = core.VectorSampleSpace(*sample_spaces)
         cls._pred = glm.CompleteScalarPredictor(cls._vector_sample_spaces)
         cls._pred.alpha = cls._alpha
         cls._pred.delta = cls._delta
@@ -67,7 +67,7 @@ class AbstractTestCategoricalRegression(object):
         sample_spaces = []
         sample_spaces.append(core.controls.ZZ)
         sample_spaces.append(core.controls.RR)
-        cls._vector_sample_spaces = core.VectorSampleSpace(sample_spaces)
+        cls._vector_sample_spaces = core.VectorSampleSpace(*sample_spaces)
         cls._pred = glm.CompleteVectorPredictor(cls._vector_sample_spaces, 2)
         cls._pred.alpha = cls._alpha
         cls._pred.delta = cls._delta
@@ -93,7 +93,8 @@ class TestReferenceRegression(unittest.TestCase, AbstractTestCategoricalRegressi
     def setUpClass(cls):
         """Test reference regression construction"""
         cls.predictor_init()
-        cls._model = glm.NominalRegression(cls._categories, cls._pred, cls._canonical_link)
+        nss = core.NominalSampleSpace(*cls._categories)
+        cls._model = glm.NominalRegression(nss, cls._pred, cls._canonical_link)
 
     def test_get_nb_parameters(self):
         """Test reference regression get number of parameters"""
@@ -126,7 +127,8 @@ class TestAdjacentRegression(TestReferenceRegression):
     def setUpClass(cls):
         """Test adjacent regression construction"""
         cls.predictor_init()
-        cls._model = glm.OrdinalRegression(cls._categories, cls._pred, cls._canonical_link)
+        oss = core.OrdinalSampleSpace(*cls._categories)
+        cls._model = glm.OrdinalRegression(oss, cls._pred, cls._canonical_link)
 
     def test_conditional(self):
         """Test ordinal regression conditional operator"""
@@ -155,7 +157,8 @@ class TestCumulativeRegression(TestAdjacentRegression):
     def setUpClass(cls):
         """Test cumulative regression construction"""
         cls.predictor_init()
-        cls._model = glm.OrdinalRegression(cls._categories, cls._pred, cls._canonical_link)
+        oss = core.OrdinalSampleSpace(*cls._categories)
+        cls._model = glm.OrdinalRegression(oss, cls._pred, cls._canonical_link)
 
     @classmethod
     def tearDownClass(cls):
@@ -177,7 +180,8 @@ class TestSequentialRegression(TestAdjacentRegression):
     def setUpClass(cls):
         """Test cumulative regression construction"""
         cls.predictor_init()
-        cls._model = glm.OrdinalRegression(cls._categories, cls._pred, cls._canonical_link)
+        oss = core.OrdinalSampleSpace(*cls._categories)
+        cls._model = glm.OrdinalRegression(oss, cls._pred, cls._canonical_link)
 
     @classmethod
     def tearDownClass(cls):
@@ -208,8 +212,8 @@ class TestHierarchicalRegression(unittest.TestCase, AbstractTestCategoricalRegre
 
     @classmethod
     def hierarchical_sample_space_init(cls):
-        ordinal_space = core.OrdinalSampleSpace(cls._categories_root)
-        nominal_space = core.NominalSampleSpace(cls._categories_B)
+        ordinal_space = core.OrdinalSampleSpace(*cls._categories_root)
+        nominal_space = core.NominalSampleSpace(*cls._categories_B)
         cls._hss = core.HierarchicalSampleSpace(ordinal_space)
         cls._hss.partition('B', nominal_space)       
            

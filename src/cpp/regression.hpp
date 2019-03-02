@@ -254,6 +254,5 @@ namespace statiskit
         //     { return _family->get_nb_components(); }
     }
 }
-
 #endif
 #endif
