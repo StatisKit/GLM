@@ -1,52 +1,64 @@
 language: cpp
 
+sudo: required
+
+git:
+  depth: false
+
 os:
   - linux
   - osx
+  - windows
 
-sudo: required
+dist: trusty
 
-services:
-  - docker
-  
+osx_image: xcode8.3
+
 env:
- - CONDA_RECIPE=bin/conda/libstatiskit_glm-dev
-   CONDA_VERSION=3
- - CONDA_RECIPE=bin/conda/libstatiskit_glm
- - CONDA_RECIPE=bin/conda/python-statiskit_glm
-   CONDA_VERSION=2
- - CONDA_RECIPE=bin/conda/python-statiskit_glm
-   CONDA_VERSION=3
-   
-install:
-  - git clone https://github.com/StatisKit/travis-ci.git
+  - CONDA_RECIPE=etc/conda/libstatiskit_glm-dev
+  - CONDA_RECIPE=etc/conda/autowig-libstatiskit_glm
+  - CONDA_RECIPE=etc/conda/libstatiskit_glm
+  - CONDA_RECIPE=etc/conda/python-statiskit_glm
+      
+matrix:
+  exclude:
+    - os: osx
+      env: CONDA_RECIPE=etc/conda/autowig-libstatiskit_glm
+    - os: windows
+      env: CONDA_RECIPE=etc/conda/autowig-libstatiskit_glm
+
+before_install:
+  - git clone https://github.com/StatisKit/travis-ci.git --depth=1
   - cd travis-ci
-  - source install.sh
+  - ./before_install
+
+install:
+  - ./install
 
 before_script:
-  - source before_script.sh
+  - ./before_script
 
 script:
-  - source script.sh
+  - ./script
 
 after_success:
-  - source after_success.sh
+  - ./after_success
 
 after_failure:
-  - source after_failure.sh
+  - ./after_failure
 
 before_deploy:
-  - source before_deploy.sh
+  - ./before_deploy
 
 deploy:
   skip_cleanup: true
   provider: script
   on:
-      branch: master
-  script: bash deploy_script.sh
+      all_branches: true
+  script: ./deploy_script
 
 after_deploy:
-  - source after_deploy.sh
+  - ./after_deploy
 
 after_script:
-  - source after_script.sh
+  - ./after_script
