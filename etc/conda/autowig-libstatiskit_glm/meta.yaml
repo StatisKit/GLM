@@ -36,5 +36,4 @@ requirements:
     - {{ pin_compatible('libstatiskit_core-dev', exact=True) }}
     - {{ pin_compatible('autowig-libstatiskit_core', exact=True) }}
     - {{ pin_compatible('libstatiskit_glm-dev', exact=True) }}
-    - {{ pin_compatible('autowig-libstatiskit_glm', exact=True) }}
     - python
