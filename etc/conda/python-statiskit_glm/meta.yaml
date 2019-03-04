@@ -27,11 +27,14 @@ requirements:
     - libstatiskit_linalg
     - libstatiskit_core-dev
     - libstatiskit_core
+    - libstatiskit_glm-dev
+    - libstatiskit_glm
     - python
   run:
-    - {{ pin_compatible('libstatiskit_stl', exact=True) }}
-    - {{ pin_compatible('libstatiskit_linalg', exact=True) }}
-    - {{ pin_compatible('libstatiskit_core', exact=True) }}
+    - {{ pin_compatible('python-statiskit_stl', exact=True) }}
+    - {{ pin_compatible('python-statiskit_linalg', exact=True) }}
+    - {{ pin_compatible('python-statiskit_core', exact=True) }}
+    - {{ pin_compatible('libstatiskit_glm', exact=True) }}
     - python
 
 test:                                               
