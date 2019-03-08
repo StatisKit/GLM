@@ -67,10 +67,10 @@ void wrapper_697003e6ab9252f99092463f25f6134e(pybind11::module& module)
     class_697003e6ab9252f99092463f25f6134e.def("set_solver", method_pointer_4d022555fe045fc396f6f54ff55e3b3f, "");
     class_697003e6ab9252f99092463f25f6134e.def("get_link", method_pointer_cdb2c071bdb3582a82f1b4086935f138, pybind11::return_value_policy::reference_internal, "");
     class_697003e6ab9252f99092463f25f6134e.def("set_link", method_pointer_4de3b52a1a8654f18979454d7bd8cb2e, "");
-    class_697003e6ab9252f99092463f25f6134e.def("_build_estimated", &autowig::Publicist::build_estimated, pybind11::return_value_policy::reference_internal, "");
-    class_697003e6ab9252f99092463f25f6134e.def("_sigma_square", &autowig::Publicist::sigma_square, "");
-    class_697003e6ab9252f99092463f25f6134e.def("_w_init", &autowig::Publicist::w_init, "");
-    class_697003e6ab9252f99092463f25f6134e.def("_y_init", &autowig::Publicist::y_init, "");
-    class_697003e6ab9252f99092463f25f6134e.def("_x__init", &autowig::Publicist::X_init, "");
+    class_697003e6ab9252f99092463f25f6134e.def("_build_estimated", static_cast< class ::statiskit::glm::BinomialRegression * (::statiskit::glm::ScalarRegressionFisherEstimation< ::statiskit::glm::BinomialRegression, ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator::*) (class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const &, class ::statiskit::UnivariateConditionalData const &) const >(&autowig::Publicist::build_estimated), pybind11::return_value_policy::reference_internal, "");
+    class_697003e6ab9252f99092463f25f6134e.def("_sigma_square", static_cast< double  (::statiskit::glm::ScalarRegressionFisherEstimation< ::statiskit::glm::BinomialRegression, ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator::*) (double const &) const >(&autowig::Publicist::sigma_square), "");
+    class_697003e6ab9252f99092463f25f6134e.def("_w_init", static_cast< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  (::statiskit::glm::ScalarRegressionFisherEstimation< ::statiskit::glm::BinomialRegression, ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator::*) (class ::statiskit::UnivariateConditionalData const &) const >(&autowig::Publicist::w_init), "");
+    class_697003e6ab9252f99092463f25f6134e.def("_y_init", static_cast< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  (::statiskit::glm::ScalarRegressionFisherEstimation< ::statiskit::glm::BinomialRegression, ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator::*) (class ::statiskit::UnivariateConditionalData const &) const >(&autowig::Publicist::y_init), "");
+    class_697003e6ab9252f99092463f25f6134e.def("_x__init", static_cast< class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 >  (::statiskit::glm::ScalarRegressionFisherEstimation< ::statiskit::glm::BinomialRegression, ::statiskit::DiscreteUnivariateConditionalDistributionEstimation >::Estimator::*) (class ::statiskit::UnivariateConditionalData const &) const >(&autowig::Publicist::X_init), "");
 
 }

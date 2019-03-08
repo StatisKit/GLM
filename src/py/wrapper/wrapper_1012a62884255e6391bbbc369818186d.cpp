@@ -39,6 +39,6 @@ void wrapper_1012a62884255e6391bbbc369818186d(pybind11::module& module)
 
     pybind11::class_<struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::PoissonLink > >::Type, class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::glm::PoissonLink > > class_1012a62884255e6391bbbc369818186d(module, "_UnivariateDiscreteGeneralizedLinearModel_1012a62884255e6391bbbc369818186d", "");
     class_1012a62884255e6391bbbc369818186d.def(pybind11::init< class ::statiskit::glm::ScalarPredictor const &, struct ::statiskit::glm::PoissonLink const & >());
-    class_1012a62884255e6391bbbc369818186d.def("_update", &autowig::Publicist::update, "");
+    class_1012a62884255e6391bbbc369818186d.def("_update", static_cast< void  (::statiskit::glm::GeneralizedLinearModel< ::statiskit::DiscreteUnivariateConditionalDistribution, ::statiskit::glm::PoissonLink >::*) (double const &) const >(&autowig::Publicist::update), "");
 
 }

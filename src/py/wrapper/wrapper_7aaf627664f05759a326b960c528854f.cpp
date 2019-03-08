@@ -47,6 +47,6 @@ void wrapper_7aaf627664f05759a326b960c528854f(pybind11::module& module)
     class_7aaf627664f05759a326b960c528854f.def("set_predictor", method_pointer_35e26f71c78d51eaa36da790376c4991, "");
     class_7aaf627664f05759a326b960c528854f.def("get_link", method_pointer_e738506a70365dde84e3e426fd2fa2c9, pybind11::return_value_policy::reference_internal, "");
     class_7aaf627664f05759a326b960c528854f.def("set_link", method_pointer_e938f210b2b35ba8b9235f90dbb5706d, "");
-    class_7aaf627664f05759a326b960c528854f.def("_update", &autowig::Publicist::update, "");
+    class_7aaf627664f05759a326b960c528854f.def("_update", static_cast< void  (::statiskit::glm::GeneralizedLinearModel< ::statiskit::CategoricalUnivariateConditionalDistribution, ::statiskit::glm::NominalLink >::*) (class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const &) const >(&autowig::Publicist::update), "");
 
 }

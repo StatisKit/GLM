@@ -39,6 +39,6 @@ void wrapper_e33d5d3f144d5e2c990c41b9da47def0(pybind11::module& module)
 
     pybind11::class_<struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::NegativeBinomialLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::UnivariateDiscreteGeneralizedLinearModel< struct ::statiskit::glm::NegativeBinomialLink > >::Type, class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::DiscreteUnivariateConditionalDistribution, struct ::statiskit::glm::NegativeBinomialLink > > class_e33d5d3f144d5e2c990c41b9da47def0(module, "_UnivariateDiscreteGeneralizedLinearModel_e33d5d3f144d5e2c990c41b9da47def0", "");
     class_e33d5d3f144d5e2c990c41b9da47def0.def(pybind11::init< class ::statiskit::glm::ScalarPredictor const &, struct ::statiskit::glm::NegativeBinomialLink const & >());
-    class_e33d5d3f144d5e2c990c41b9da47def0.def("_update", &autowig::Publicist::update, "");
+    class_e33d5d3f144d5e2c990c41b9da47def0.def("_update", static_cast< void  (::statiskit::glm::GeneralizedLinearModel< ::statiskit::DiscreteUnivariateConditionalDistribution, ::statiskit::glm::NegativeBinomialLink >::*) (double const &) const >(&autowig::Publicist::update), "");
 
 }

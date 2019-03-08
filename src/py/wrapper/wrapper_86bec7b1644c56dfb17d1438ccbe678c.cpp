@@ -32,5 +32,6 @@ void wrapper_86bec7b1644c56dfb17d1438ccbe678c(pybind11::module& module)
 {
 
     pybind11::class_<struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::Design, class ::statiskit::glm::ConstrainedDesign, struct ::statiskit::glm::Design >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::Design, class ::statiskit::glm::ConstrainedDesign, struct ::statiskit::glm::Design > >::Type, struct ::statiskit::glm::Design > class_86bec7b1644c56dfb17d1438ccbe678c(module, "_PolymorphicCopy_86bec7b1644c56dfb17d1438ccbe678c", "");
+    class_86bec7b1644c56dfb17d1438ccbe678c.def(pybind11::init<  >());
 
 }

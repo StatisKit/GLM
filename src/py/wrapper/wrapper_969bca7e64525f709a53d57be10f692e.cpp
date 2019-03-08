@@ -39,6 +39,6 @@ void wrapper_969bca7e64525f709a53d57be10f692e(pybind11::module& module)
 
     pybind11::class_<struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::BinaryLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::BinaryLink > >::Type, class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::glm::BinaryLink > > class_969bca7e64525f709a53d57be10f692e(module, "_CategoricalGeneralizedLinearModel_969bca7e64525f709a53d57be10f692e", "");
     class_969bca7e64525f709a53d57be10f692e.def(pybind11::init< class ::statiskit::glm::ScalarPredictor const &, struct ::statiskit::glm::BinaryLink const & >());
-    class_969bca7e64525f709a53d57be10f692e.def("_update", &autowig::Publicist::update, "");
+    class_969bca7e64525f709a53d57be10f692e.def("_update", static_cast< void  (::statiskit::glm::GeneralizedLinearModel< ::statiskit::CategoricalUnivariateConditionalDistribution, ::statiskit::glm::BinaryLink >::*) (double const &) const >(&autowig::Publicist::update), "");
 
 }

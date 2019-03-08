@@ -64,8 +64,8 @@ void wrapper_a0a8a3259686533bb0eead87e5c0553d(pybind11::module& module)
     class_a0a8a3259686533bb0eead87e5c0553d.def("set_design", method_pointer_f7ed4a95360b5352829d2da5db7ddb79, "");
     class_a0a8a3259686533bb0eead87e5c0553d.def("get_initialization", method_pointer_18c83fa61fcc56188140c7920832c3b4, pybind11::return_value_policy::reference_internal, "");
     class_a0a8a3259686533bb0eead87e5c0553d.def("set_initialization", method_pointer_1e091e9383b25045bcbb4b27e735a011, "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("_build_estimated", &autowig::Publicist::build_estimated, pybind11::return_value_policy::reference_internal, "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("_w_init", &autowig::Publicist::w_init, "");
-    class_a0a8a3259686533bb0eead87e5c0553d.def("_y_init", &autowig::Publicist::y_init, "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("_build_estimated", static_cast< class ::statiskit::glm::OrdinalRegression * (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*) (class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const &, struct ::statiskit::MultivariateSampleSpace const &, struct ::statiskit::UnivariateSampleSpace const &) const >(&autowig::Publicist::build_estimated), pybind11::return_value_policy::reference_internal, "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("_w_init", static_cast< class ::std::vector< double, class ::std::allocator< double > >  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*) (class ::statiskit::UnivariateConditionalData const &) const >(&autowig::Publicist::w_init), "");
+    class_a0a8a3259686533bb0eead87e5c0553d.def("_y_init", static_cast< class ::std::vector< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >, class ::std::allocator< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > > >  (::statiskit::glm::CategoricalRegressionFisherEstimation< ::statiskit::glm::OrdinalRegression >::Estimator::*) (class ::statiskit::UnivariateConditionalData const &) const >(&autowig::Publicist::y_init), "");
 
 }

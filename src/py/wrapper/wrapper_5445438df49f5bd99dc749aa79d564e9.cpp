@@ -39,6 +39,6 @@ void wrapper_5445438df49f5bd99dc749aa79d564e9(pybind11::module& module)
 
     pybind11::class_<struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::glm::CategoricalGeneralizedLinearModel< struct ::statiskit::glm::NominalLink > >::Type, class ::statiskit::glm::GeneralizedLinearModel< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::glm::NominalLink > > class_5445438df49f5bd99dc749aa79d564e9(module, "_CategoricalGeneralizedLinearModel_5445438df49f5bd99dc749aa79d564e9", "");
     class_5445438df49f5bd99dc749aa79d564e9.def(pybind11::init< class ::statiskit::glm::VectorPredictor const &, struct ::statiskit::glm::NominalLink const & >());
-    class_5445438df49f5bd99dc749aa79d564e9.def("_update", &autowig::Publicist::update, "");
+    class_5445438df49f5bd99dc749aa79d564e9.def("_update", static_cast< void  (::statiskit::glm::GeneralizedLinearModel< ::statiskit::CategoricalUnivariateConditionalDistribution, ::statiskit::glm::NominalLink >::*) (class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const &) const >(&autowig::Publicist::update), "");
 
 }

@@ -27,5 +27,6 @@ void wrapper_7a26ac5b75535462b94f26a01d6a63bb(pybind11::module& module)
 {
 
     pybind11::class_<struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization >, autowig::Trampoline, autowig::HolderType< struct ::statiskit::PolymorphicCopy< struct ::statiskit::glm::CategoricalFisherInitialization, struct ::statiskit::glm::CategoricalFisherUniformInitialization, struct ::statiskit::glm::CategoricalFisherInitialization > >::Type, struct ::statiskit::glm::CategoricalFisherInitialization > class_7a26ac5b75535462b94f26a01d6a63bb(module, "_PolymorphicCopy_7a26ac5b75535462b94f26a01d6a63bb", "");
+    class_7a26ac5b75535462b94f26a01d6a63bb.def(pybind11::init<  >());
 
 }
