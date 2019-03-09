@@ -43,14 +43,14 @@ namespace statiskit
         };
        
         template<class L>
-            struct UnivariateDiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
-            { 
-                UnivariateDiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
-                UnivariateDiscreteGeneralizedLinearModel(const UnivariateDiscreteGeneralizedLinearModel< L >& glm);
-                virtual ~UnivariateDiscreteGeneralizedLinearModel();
+        struct UnivariateDiscreteGeneralizedLinearModel : GeneralizedLinearModel< DiscreteUnivariateConditionalDistribution, L >
+        { 
+            UnivariateDiscreteGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            UnivariateDiscreteGeneralizedLinearModel(const UnivariateDiscreteGeneralizedLinearModel< L >& glm);
+            virtual ~UnivariateDiscreteGeneralizedLinearModel();
 
-            	virtual unsigned int get_nb_parameters() const;
-            };
+        	virtual unsigned int get_nb_parameters() const;
+        };
             
         class STATISKIT_GLM_API PoissonRegression : public UnivariateDiscreteGeneralizedLinearModel< PoissonLink >
         {
@@ -215,13 +215,13 @@ namespace statiskit
         }; */
 
         template<class T, class L>
-            struct MultivariateGeneralizedLinearModel : GeneralizedLinearModel< T, L >
-            {
-                MultivariateGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
-                MultivariateGeneralizedLinearModel(const MultivariateGeneralizedLinearModel<T, L>& glm);
+        struct MultivariateGeneralizedLinearModel : GeneralizedLinearModel< T, L >
+        {
+            MultivariateGeneralizedLinearModel(const typename L::predictor_type& predictor, const L& link);
+            MultivariateGeneralizedLinearModel(const MultivariateGeneralizedLinearModel<T, L>& glm);
 
-                virtual Index get_nb_components() const = 0;
-            };
+            virtual Index get_nb_components() const = 0;
+        };
 
         /* class STATISKIT_GLM_API MultinomialSplittingOperator : public MultivariateGeneralizedLinearModel< SplittingOperator, MultinomialSplittingLink >
         {

@@ -80,7 +80,7 @@ namespace statiskit
         };
 
         template<class T>
-        struct STATISKIT_GLM_API BinCanonicalLink : T
+        struct BinCanonicalLink : T
         {
             BinCanonicalLink();
             virtual ~BinCanonicalLink();
@@ -96,7 +96,7 @@ namespace statiskit
         typedef BinCanonicalLink< BinomialLink > BinomialCanonicalLink;        
         
         template<class T>
-        struct STATISKIT_GLM_API BinFLink : FLink< T >
+        struct BinFLink : FLink< T >
         {
             BinFLink();
             BinFLink(const BinFLink& link);
