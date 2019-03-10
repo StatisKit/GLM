@@ -23,10 +23,13 @@ requirements:
     - libpybind11-dev
     - libstatiskit_stl-dev
     - libstatiskit_stl
+    - python-statiskit_stl
     - libstatiskit_linalg-dev
     - libstatiskit_linalg
+    - python-statiskit_linalg
     - libstatiskit_core-dev
     - libstatiskit_core
+    - python-statiskit_core
     - libstatiskit_glm-dev
     - libstatiskit_glm
     - python
