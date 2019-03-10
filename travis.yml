@@ -26,7 +26,9 @@ matrix:
       env: CONDA_RECIPE=etc/conda/autowig-libstatiskit_glm
     - os: windows
       env: CONDA_RECIPE=etc/conda/autowig-libstatiskit_glm
-
+    - os: windows
+      env: CONDA_RECIPE=etc/conda/python-statiskit_glm
+      
 before_install:
   - git clone https://github.com/StatisKit/travis-ci.git --depth=1
   - cd travis-ci

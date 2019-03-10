@@ -1,22 +1,16 @@
-# image: Visual Studio 2015 Update 2
-image: Visual Studio 2013
+image: Visual Studio 2017
 
 platform:
   - x64
 
 environment:
   matrix:
-    - CONDA_RECIPE: bin/conda/libstatiskit_glm-dev
-      CONDA_VERSION: 3
-    - CONDA_RECIPE: bin/conda/libstatiskit_glm
-    # - CONDA_RECIPE: bin/conda/python-statiskit_glm
-    #   CONDA_VERSION: 2
-    - CONDA_RECIPE: bin/conda/python-statiskit_glm
-      CONDA_VERSION: 3
-
+    - CONDA_RECIPE: etc/conda/python-statiskit_glm
+   
 install:
   - git clone https://github.com/StatisKit/appveyor-ci.git
   - cd appveyor-ci
+  - call before_install.bat
   - call install.bat
     
 before_build:
@@ -50,4 +44,3 @@ on_failure:
 
 on_finish:
   - call on_finish.bat
-    
